@@ -7,9 +7,9 @@
       while(!feof($handle)){
         $resstr = $resstr. fgets($handle);
       }
-      $res = json_decode($resstr);
+      header("HTTP/1.1 200 OK");
       header("Access-Control-Allow-Origin: *");
-      echo $res;
+      echo $resstr;
     }else{
       header("HTTP/1.1 400 Bad Request");
     }
