@@ -1,4 +1,4 @@
-import {Server} from 'https://js.sabae.cc/Server.js';
+import { Server } from 'https://js.sabae.cc/Server.js';
 
 class Body extends Server {
   async api(path, prm) {

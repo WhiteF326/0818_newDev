@@ -1,24 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>プログラミングゲーム（仮）</title>
 </head>
-<script type="module">
-    import { fetchJSON } from "https://js.sabae.cc/fetchJSON.js";
-    document.getElementById("sub").onclick = async () => {
-        document.body.appendChild(document.createTextNode(
-            await fetchJSON("api/stage", { "name": document.getElementById("n").value })
-        ));
-    }
-</script>
 
 <body>
-    <input type="text" id="n" name="name">
-    <button id="sub">send</button>
+  <script type="module">
+    import { fetchJSON } from "https://js.sabae.cc/fetchJSON.js";
+    window.onload = async () => {
+      // get map
+      const stagename = 1;
+
+      // マップタイルの表示
+      const mapstr = await fetchJSON("api/stage", { "name": stagename });
+      const map = JSON.parse(mapstr)["stage"];
+
+      // tile size
+      const tilesize = 32;
+
+      // canvas設定
+      const canvas = document.getElementById("canvas");
+      canvas.width = tilesize * map[0].length; // canvasの横幅
+      canvas.height = tilesize * map.length; // canvasの縦幅
+
+      // コンテキスト取得
+      const ctx = canvas.getContext('2d');
+
+      // マップタイル用Imageオブジェクトの生成
+      const maptileWall = new Image();
+      // maptile_wall.src = 'img/map01.png';
+      maptileWall.setAttribute('src', './img/map01.png');
+
+      const maptileFloor = new Image();
+      // maptile_floor.src = 'img/map02.png';
+      maptileFloor.setAttribute('src', './img/map02.png');
+
+      function render(){
+        for (let y = 0; y < map.length; y++) {
+          for (let x = 0; x < map[y].length; x++) {
+            if (map[y][x] === 0) {
+              ctx.drawImage(
+                maptileWall,
+                0, 0,
+                maptileWall.naturalWidth, maptileWall.naturalHeight,
+                tilesize * x, tilesize * y,
+                tilesize, tilesize,
+              );
+            }
+            if (map[y][x] === 1) {
+              ctx.drawImage(
+                maptileFloor,
+                0, 0,
+                maptileFloor.naturalWidth, maptileFloor.naturalHeight,
+                tilesize * x, tilesize * y,
+                tilesize, tilesize,
+              );
+            }
+          }
+        }
+        requestAnimationFrame (render);
+      }
+
+      requestAnimationFrame (render);
+    }
+  </script>
+
+  <canvas id="canvas"></canvas>
 </body>
 
 </html>
