@@ -11,11 +11,13 @@
     import { fetchJSON } from "https://js.sabae.cc/fetchJSON.js";
     window.onload = async () => {
       // get map
-      const stagename = 1;
+      const stagename = 2;
 
       // マップタイルの表示
       const mapstr = await fetchJSON("api/stage", { "name": stagename });
       const map = JSON.parse(mapstr)["stage"];
+      const start = JSON.parse(mapstr)["start"];
+      const goal = JSON.parse(mapstr)["goal"];
 
       // tile size
       const tilesize = 32;
@@ -37,6 +39,13 @@
       // maptile_floor.src = 'img/map02.png';
       maptileFloor.setAttribute('src', './img/map02.png');
 
+      const maptileStart = new Image();
+      maptileStart.setAttribute('src', './img/start.png');
+
+      const maptileGoal = new Image();
+      maptileGoal.setAttribute('src', './img/goal.png');
+
+
       function render() {
         for (let y = 0; y < map.length; y++) {
           for (let x = 0; x < map[y].length; x++) {
@@ -57,6 +66,24 @@
                 tilesize * x, tilesize * y,
                 tilesize, tilesize,
               );
+              if (y === start[0] && x === start[1]) {
+                ctx.drawImage(
+                  maptileStart,
+                  0, 0,
+                  maptileStart.naturalWidth, maptileStart.naturalHeight,
+                  tilesize * x, tilesize * y,
+                  tilesize, tilesize,
+                );
+              }
+              if (y === goal[0] && x === goal[1]) {
+                ctx.drawImage(
+                  maptileGoal,
+                  0, 0,
+                  maptileGoal.naturalWidth, maptileGoal.naturalHeight,
+                  tilesize * x, tilesize * y,
+                  tilesize, tilesize,
+                );
+              }
             }
           }
         }
