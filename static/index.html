@@ -30,6 +30,17 @@
       // コンテキスト取得
       const ctx = canvas.getContext('2d');
 
+      // 描画用関数の定義
+      const drawChip = (img, y, x) => {
+        ctx.drawImage(
+          img,
+          0, 0,
+          img.naturalWidth, img.naturalHeight,
+          tilesize * x, tilesize * y,
+          tilesize, tilesize,
+        );
+      }
+
       // マップタイル用Imageオブジェクトの生成
       const maptileWall = new Image();
       // maptile_wall.src = 'img/map01.png';
@@ -50,39 +61,15 @@
         for (let y = 0; y < map.length; y++) {
           for (let x = 0; x < map[y].length; x++) {
             if (map[y][x] === 0) {
-              ctx.drawImage(
-                maptileWall,
-                0, 0,
-                maptileWall.naturalWidth, maptileWall.naturalHeight,
-                tilesize * x, tilesize * y,
-                tilesize, tilesize,
-              );
+              drawChip(maptileWall, y, x);
             }
             if (map[y][x] === 1) {
-              ctx.drawImage(
-                maptileFloor,
-                0, 0,
-                maptileFloor.naturalWidth, maptileFloor.naturalHeight,
-                tilesize * x, tilesize * y,
-                tilesize, tilesize,
-              );
+              drawChip(maptileFloor, y, x);
               if (y === start[0] && x === start[1]) {
-                ctx.drawImage(
-                  maptileStart,
-                  0, 0,
-                  maptileStart.naturalWidth, maptileStart.naturalHeight,
-                  tilesize * x, tilesize * y,
-                  tilesize, tilesize,
-                );
+                drawChip(maptileStart, y, x)
               }
               if (y === goal[0] && x === goal[1]) {
-                ctx.drawImage(
-                  maptileGoal,
-                  0, 0,
-                  maptileGoal.naturalWidth, maptileGoal.naturalHeight,
-                  tilesize * x, tilesize * y,
-                  tilesize, tilesize,
-                );
+                drawChip(maptileGoal, y, x)
               }
             }
           }
