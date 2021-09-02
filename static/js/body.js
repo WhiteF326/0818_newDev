@@ -9,6 +9,13 @@ window.onload = async () => {
   const start = mapinfo['start'];
   const goal = mapinfo['goal'];
 
+  // キャラ情報の取得
+  const charaAuto = new CharaAuto();
+
+  // キャラ描画用のフレーム値
+  let frame = 0;
+  const endFrame = 3;
+
   // チップ情報の取得
   const chipData = JSON.parse(await fetchJSON('api/chip', {}));
   const chipList = new ChipList(chipData);
@@ -34,16 +41,29 @@ window.onload = async () => {
       tilesize, tilesize,
     );
   };
+  const drawChar = (y, x, toDraw = charaAuto, frame) => {
+    const drawAsset = toDraw.getAsset(frame, 'right');
+    const size = toDraw.sizeExchange(tilesize);
+    const offset = toDraw.getOffset(tilesize);
+    ctx.drawImage(
+      drawAsset['image'],
+      drawAsset['positionX'], drawAsset['positionY'],
+      toDraw.getcharaX(), toDraw.getcharaY(),
+      tilesize * x + offset, tilesize * y,
+      size['x'], size['y'],
+    );
+  };
 
-  const maptileStart = new Chip('./img/start.png');
   const maptileGoal = new Chip('./img/goal.png');
 
   function render() {
+    frame++;
+    if(frame == 4 << endFrame) frame = 0
     for (let y = 0; y < map.length; y++) {
       for (let x = 0; x < map[y].length; x++) {
         drawChip(chipList.getChip(map[y][x]), y, x);
         if (y === start[0] && x === start[1]) {
-          drawChip(maptileStart, y, x);
+          drawChar(y, x, charaAuto, frame >> endFrame);
         }
         if (y === goal[0] && x === goal[1]) {
           drawChip(maptileGoal, y, x);
