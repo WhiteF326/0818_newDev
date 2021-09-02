@@ -3,11 +3,15 @@ import { fetchJSON } from "https://js.sabae.cc/fetchJSON.js";
       // get map
       const stagename = 7;
 
-      // マップタイルの表示
-      const mapstr = await fetchJSON("api/stage", { "name": stagename });
-      const map = JSON.parse(mapstr)["stage"];
-      const start = JSON.parse(mapstr)["start"];
-      const goal = JSON.parse(mapstr)["goal"];
+      // マップ情報の取得
+      const mapinfo = JSON.parse(await fetchJSON("api/stage", { "name": stagename }));
+      const map = mapinfo["stage"];
+      const start = mapinfo["start"];
+      const goal = mapinfo["goal"];
+
+      // チップ情報の取得
+      const chipData = JSON.parse(await fetchJSON("api/chip", {}));
+      const chipList = new ChipList(chipData);
 
       // tile size
       const tilesize = 32;
@@ -31,40 +35,18 @@ import { fetchJSON } from "https://js.sabae.cc/fetchJSON.js";
         );
       }
 
-      // マップタイル用Imageオブジェクトの生成
-      const maptileWall = new Image();
-      maptileWall.setAttribute('src', './img/map01.png');
-      const maptileWall2 = new Image();
-      maptileWall2.setAttribute('src', './img/map03.png');
-
-      const maptileFloor = new Image();
-      maptileFloor.setAttribute('src', './img/map02.png');
-
-      const maptileStart = new Image();
-      maptileStart.setAttribute('src', './img/start.png');
-
-      const maptileGoal = new Image();
-      maptileGoal.setAttribute('src', './img/goal.png');
-
+      const maptileStart = new Chip('./img/start.png');
+      const maptileGoal = new Chip('./img/goal.png');
 
       function render() {
         for (let y = 0; y < map.length; y++) {
           for (let x = 0; x < map[y].length; x++) {
-            if (map[y][x] === 0) {
-              drawChip(maptileWall, y, x);
+            drawChip(chipList.getChip(map[y][x]), y, x);
+            if (y === start[0] && x === start[1]) {
+              drawChip(maptileStart, y, x)
             }
-            if (map[y][x] === 2) {
-              drawChip(maptileWall2, y, x);
-            }
-            
-            if (map[y][x] === 1) {
-              drawChip(maptileFloor, y, x);
-              if (y === start[0] && x === start[1]) {
-                drawChip(maptileStart, y, x)
-              }
-              if (y === goal[0] && x === goal[1]) {
-                drawChip(maptileGoal, y, x)
-              }
+            if (y === goal[0] && x === goal[1]) {
+              drawChip(maptileGoal, y, x)
             }
           }
         }
