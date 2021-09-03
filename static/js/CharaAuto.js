@@ -1,13 +1,15 @@
 class CharaAuto {
-  constructor() {
+  constructor(vector) {
     this.charaX = 32;
     this.charaY = 48;
 
     this.originalImg = new Image();
-    this.originalImg.setAttribute("src", "./img/charaAuto.png")
+    this.originalImg.setAttribute("src", "./img/charaAuto.png");
+
+    this.vector = vector;
   }
 
-  getAsset(frame, vector) {
+  getAsset(frame) {
     if (frame === 3) frame = 1;
     return {
       "image": this.originalImg,
@@ -16,9 +18,13 @@ class CharaAuto {
         "left": 1,
         "right": 2,
         "back": 3
-      }[vector] * this.charaY,
+      }[this.vector] * this.charaY,
       "positionX": this.charaX * frame
     };
+  }
+
+  setVector(vector){
+    this.vector = vector;
   }
 
   getcharaX = () => this.charaX;

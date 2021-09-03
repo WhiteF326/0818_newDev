@@ -10,7 +10,7 @@ window.onload = async () => {
   const goal = mapinfo['goal'];
 
   // キャラ情報の取得
-  const charaAuto = new CharaAuto();
+  const charaAuto = new CharaAuto(start[2]);
 
   // キャラ描画用のフレーム値
   let frame = 0;
@@ -42,7 +42,7 @@ window.onload = async () => {
     );
   };
   const drawChar = (y, x, toDraw = charaAuto, frame) => {
-    const drawAsset = toDraw.getAsset(frame, 'right');
+    const drawAsset = toDraw.getAsset(frame);
     const size = toDraw.sizeExchange(tilesize);
     const offset = toDraw.getOffset(tilesize);
     ctx.drawImage(
