@@ -1,4 +1,7 @@
 import {fetchJSON} from 'https://js.sabae.cc/fetchJSON.js';
+
+let moving = false;
+
 window.onload = async () => {
   // get map
   const stagename = 7;
@@ -76,3 +79,11 @@ window.onload = async () => {
 
   requestAnimationFrame(render);
 };
+
+document.getElementById("move").onclick = () => {
+  if(moving){
+    moving = false;
+  }else{
+    moving = true;
+  }
+}
