@@ -5,7 +5,7 @@ class ChipList {
   }
 
   // マップタイル取得
-  getChip(num = 0){
-    return new Chip("./img/" + this.chipData[num]);
+  getChip(num = 0) {
+    return new Chip('./img/' + this.chipData[num]);
   }
 }

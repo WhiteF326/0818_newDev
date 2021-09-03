@@ -1,6 +1,6 @@
-class Chip extends Image{
-  constructor(img){
+class Chip extends Image {
+  constructor(img) {
     super();
-    super.setAttribute("src", img);
+    super.setAttribute('src', img);
   }
 }
