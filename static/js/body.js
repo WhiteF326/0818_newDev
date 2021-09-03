@@ -3,18 +3,17 @@ import {fetchJSON} from 'https://js.sabae.cc/fetchJSON.js';
 let moving = false;
 
 window.onload = async () => {
-  // get map
-  const stagename = 7;
-
   // マップ情報の取得
   const mapinfo = JSON.parse(await fetchJSON('api/stage', {'name': stagename}));
   const map = mapinfo['stage'];
   const start = mapinfo['start'];
   const goal = mapinfo['goal'];
 
+  let mapcalc = JSON.parse(JSON.stringify(map));
+  mapcalc[start[0]][start[1]] = -1;
+
   // キャラ情報の取得
   const charaAuto = new CharaAuto(start[2]);
-
 
   // キャラ描画用のフレーム値
   let frame = 0;
@@ -59,6 +58,11 @@ window.onload = async () => {
       size['x'], size['y'],
     );
   };
+
+  // 移動
+  if(moving){
+    //
+  }
 
   const maptileGoal = new Chip('./img/goal.png');
 
