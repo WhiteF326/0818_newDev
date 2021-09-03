@@ -2,11 +2,19 @@ class CharaAuto {
   constructor(vector) {
     this.charaX = 32;
     this.charaY = 48;
+    this.posX = 0;
+    this.posY = 0;
+
+    this.pendingMove = [];
 
     this.originalImg = new Image();
     this.originalImg.setAttribute("src", "./img/charaAuto.png");
 
     this.vector = vector;
+
+    this.sign = (v) => {
+      return (v > 0) - (v < 0);
+    }
   }
 
   getAsset(frame) {
@@ -23,10 +31,38 @@ class CharaAuto {
     };
   }
 
-  setVector(vector){
+  setVector(vector) {
     this.vector = vector;
   }
 
+  setPos(y, x) {
+    this.posX = x;
+    this.posY = y;
+  }
+
+  addMove(y, x) {
+    this.pendingMove.push(y, x);
+  }
+  moveFrame(speed) {
+    if (this.pendingMove.length != 0) {
+      const xway = this.sign(this.pendingMove[0][1]);
+      const yway = this.sign(this.pendingMove[0][0]);
+      const xmove = Math.min(Math.abs(this.pendingMove[0][1]), speed) * xway;
+      const ymove = Math.min(Math.abs(this.pendingMove[0][0]), speed) * yway;
+
+      this.posX += xmove;
+      this.posY += ymove;
+
+      if (
+        Math.abs(this.pendingMove[0][1]) <= speed
+        && Math.abs(this.pendingMove[0][0] <= speed)) {
+        this.pendingMove.shift();
+      }
+    }
+  }
+
+  getposX = () => this.posX;
+  getposY = () => this.posY;
   getcharaX = () => this.charaX;
   getcharaY = () => this.charaY;
 

@@ -12,6 +12,7 @@ window.onload = async () => {
   // キャラ情報の取得
   const charaAuto = new CharaAuto(start[2]);
 
+
   // キャラ描画用のフレーム値
   let frame = 0;
   const endFrame = 3;
@@ -21,7 +22,10 @@ window.onload = async () => {
   const chipList = new ChipList(chipData);
 
   // tile size
-  const tilesize = 32;
+  const tilesize = 64;
+
+  charaAuto.setPos(
+    start[0] * tilesize, start[1] * tilesize + charaAuto.getOffset(tilesize));
 
   // canvas設定
   const canvas = document.getElementById('canvas');
@@ -41,15 +45,14 @@ window.onload = async () => {
       tilesize, tilesize,
     );
   };
-  const drawChar = (y, x, toDraw = charaAuto, frame) => {
+  const drawChar = (toDraw = charaAuto, frame) => {
     const drawAsset = toDraw.getAsset(frame);
     const size = toDraw.sizeExchange(tilesize);
-    const offset = toDraw.getOffset(tilesize);
     ctx.drawImage(
       drawAsset['image'],
       drawAsset['positionX'], drawAsset['positionY'],
       toDraw.getcharaX(), toDraw.getcharaY(),
-      tilesize * x + offset, tilesize * y,
+      toDraw.getposX(), toDraw.getposY(),
       size['x'], size['y'],
     );
   };
@@ -58,18 +61,16 @@ window.onload = async () => {
 
   function render() {
     frame++;
-    if(frame == 4 << endFrame) frame = 0
+    if (frame == 4 << endFrame) frame = 0;
     for (let y = 0; y < map.length; y++) {
       for (let x = 0; x < map[y].length; x++) {
         drawChip(chipList.getChip(map[y][x]), y, x);
-        if (y === start[0] && x === start[1]) {
-          drawChar(y, x, charaAuto, frame >> endFrame);
-        }
         if (y === goal[0] && x === goal[1]) {
           drawChip(maptileGoal, y, x);
         }
       }
     }
+    drawChar(charaAuto, frame >> endFrame);
     requestAnimationFrame(render);
   }
 
