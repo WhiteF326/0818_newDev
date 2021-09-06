@@ -41,7 +41,7 @@ class CharaAuto {
   }
 
   addMove(y, x) {
-    this.pendingMove.push(y, x);
+    this.pendingMove.push([y, x]);
   }
   moveFrame(speed) {
     if (this.pendingMove.length != 0) {
@@ -52,10 +52,12 @@ class CharaAuto {
 
       this.posX += xmove;
       this.posY += ymove;
+      this.pendingMove[0][1] -= xmove;
+      this.pendingMove[0][0] -= ymove;
 
       if (
-        Math.abs(this.pendingMove[0][1]) <= speed
-        && Math.abs(this.pendingMove[0][0] <= speed)) {
+        Math.abs(this.pendingMove[0][1]) == 0
+        && Math.abs(this.pendingMove[0][0] == 0)) {
         this.pendingMove.shift();
       }
     }
@@ -73,4 +75,6 @@ class CharaAuto {
     };
   }
   getOffset = (size) => Math.ceil(size / 8);
+
+  isWaitFor = () => !this.pendingMove.length;
 }

@@ -1,20 +1,18 @@
-import {fetchJSON} from 'https://js.sabae.cc/fetchJSON.js';
+import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
 
 let moving = false;
 
 window.onload = async () => {
-  // get map
-  const stagename = 7;
-
   // マップ情報の取得
-  const mapinfo = JSON.parse(await fetchJSON('api/stage', {'name': stagename}));
+  const mapinfo = JSON.parse(await fetchJSON('api/stage', { 'name': stagename }));
   const map = mapinfo['stage'];
   const start = mapinfo['start'];
   const goal = mapinfo['goal'];
 
+  let currentY = start[0], currentX = start[1], currentVector = start[2];
+
   // キャラ情報の取得
   const charaAuto = new CharaAuto(start[2]);
-
 
   // キャラ描画用のフレーム値
   let frame = 0;
@@ -51,6 +49,7 @@ window.onload = async () => {
   const drawChar = (toDraw = charaAuto, frame) => {
     const drawAsset = toDraw.getAsset(frame);
     const size = toDraw.sizeExchange(tilesize);
+    charaAuto.setVector(currentVector);
     ctx.drawImage(
       drawAsset['image'],
       drawAsset['positionX'], drawAsset['positionY'],
@@ -63,6 +62,52 @@ window.onload = async () => {
   const maptileGoal = new Chip('./img/goal.png');
 
   function render() {
+    // 移動
+    /**
+    可能な限り、今向いている方向に移動する
+    今向いている方向が壁ならば
+      逆戻りしか出来ないなら、180度旋回する
+      右または左の片方が壁でないなら、そちらに旋回する
+      右も左も壁でないなら、右側を優先する
+        左側優先との切り替えをする方法は協議中
+    */
+    if (moving) {
+      const power = moveWay[currentVector]["power"];
+      const nex = map[currentY + power[0]][currentX + power[1]];
+      if (nex == 1) {
+        if(charaAuto.isWaitFor()){
+          currentY += power[0];
+          currentX += power[1];
+          charaAuto.addMove(power[0] * tilesize, power[1] * tilesize);
+        }
+      } else {
+        const leftWay = moveWay[currentVector]["lt"];
+        const lst = moveWay[leftWay]["power"];
+        const lnex = map[currentY + lst[0]][currentX + lst[1]];
+        const rightWay = moveWay[currentVector]["rt"];
+        const rst = moveWay[rightWay]["power"];
+        const rnex = map[currentY + rst[0]][currentX + rst[1]];
+        // left and right?
+        if(lnex && rnex){
+          switch(routineAutoTwoWay){
+            case "right":
+              currentVector = rightWay;
+              break;
+            
+            case "left":
+              currentVector = leftWay;
+              break;
+          }
+        }else if(lnex){
+          currentVector = leftWay;
+        }else if(rnex){
+          currentVector = rightWay;
+        }else{
+          currentVector = moveWay[rightWay]["rt"];
+        }
+      }
+    }
+
     frame++;
     if (frame == 4 << endFrame) frame = 0;
     for (let y = 0; y < map.length; y++) {
@@ -74,6 +119,7 @@ window.onload = async () => {
       }
     }
     drawChar(charaAuto, frame >> endFrame);
+    charaAuto.moveFrame(CHARASPEED);
     requestAnimationFrame(render);
   }
 
@@ -81,9 +127,11 @@ window.onload = async () => {
 };
 
 document.getElementById("move").onclick = () => {
-  if(moving){
+  if (moving) {
     moving = false;
-  }else{
+    document.getElementById("mode").innerText = "停止中";
+  } else {
     moving = true;
+    document.getElementById("mode").innerText = "移動中";
   }
 }
