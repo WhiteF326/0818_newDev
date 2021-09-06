@@ -1,24 +1,27 @@
-const stagename = 7;
+const stagename = 1;
+const CHARASPEED = 4;
+
+const routineAutoTwoWay = "right";
 
 const moveWay = {
   "right": {
     "power": [0, 1],
     "lt": "back",
-    "right": "front"
+    "rt": "front"
   },
   "left": {
     "power": [0, -1],
     "lt": "front",
-    "right": "back"
+    "rt": "back"
   },
   "back": {
     "power": [-1, 0],
     "lt": "left",
-    "right": "right"
+    "rt": "right"
   },
   "front": {
     "power": [1, 0],
     "lt": "right",
-    "right": "left"
+    "rt": "left"
   }
 };
