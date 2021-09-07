@@ -8,7 +8,7 @@ class CharaHand {
     this.pendingMove = [];
 
     this.originalImg = new Image();
-    this.originalImg.setAttribute("src", "./img/charaAuto.png");
+    this.originalImg.setAttribute("src", "./img/charaHand.png");
 
     this.vector = vector;
 

@@ -1,18 +1,22 @@
-import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
+import {fetchJSON} from 'https://js.sabae.cc/fetchJSON.js';
 
 let moving = false;
 
 window.onload = async () => {
   // マップ情報の取得
-  const mapinfo = JSON.parse(await fetchJSON('api/stage', { 'name': stagename }));
+  const mapinfo = JSON.parse(await fetchJSON('api/stage', {'name': stagename}));
   const map = mapinfo['stage'];
   const start = mapinfo['start'];
+  const hstart = mapinfo['controll'];
   const goal = mapinfo['goal'];
 
-  let currentY = start[0], currentX = start[1], currentVector = start[2];
+  let currentY = start[0];
+  let currentX = start[1];
+  let currentVector = start[2];
 
   // キャラ情報の取得
   const charaAuto = new CharaAuto(start[2]);
+  const charaHand = new CharaHand('right');
 
   // キャラ描画用のフレーム値
   let frame = 0;
@@ -25,8 +29,15 @@ window.onload = async () => {
   // tile size
   const tilesize = 64;
 
+  // キャラ描画位置の調整
   charaAuto.setPos(
-    start[0] * tilesize, start[1] * tilesize + charaAuto.getOffset(tilesize));
+    start[0] * tilesize,
+    start[1] * tilesize + charaAuto.getOffset(tilesize),
+  );
+  charaHand.setPos(
+    hstart[0] * tilesize,
+    hstart[1] * tilesize + charaHand.getOffset(tilesize),
+  );
 
   // canvas設定
   const canvas = document.getElementById('canvas');
@@ -72,38 +83,38 @@ window.onload = async () => {
         左側優先との切り替えをする方法は協議中
     */
     if (moving) {
-      const power = moveWay[currentVector]["power"];
+      const power = moveWay[currentVector]['power'];
       const nex = map[currentY + power[0]][currentX + power[1]];
       if (nex == 1) {
-        if(charaAuto.isWaitFor()){
+        if (charaAuto.isWaitFor()) {
           currentY += power[0];
           currentX += power[1];
           charaAuto.addMove(power[0] * tilesize, power[1] * tilesize);
         }
       } else {
-        const leftWay = moveWay[currentVector]["lt"];
-        const lst = moveWay[leftWay]["power"];
+        const leftWay = moveWay[currentVector]['lt'];
+        const lst = moveWay[leftWay]['power'];
         const lnex = map[currentY + lst[0]][currentX + lst[1]];
-        const rightWay = moveWay[currentVector]["rt"];
-        const rst = moveWay[rightWay]["power"];
+        const rightWay = moveWay[currentVector]['rt'];
+        const rst = moveWay[rightWay]['power'];
         const rnex = map[currentY + rst[0]][currentX + rst[1]];
         // left and right?
-        if(lnex && rnex){
-          switch(routineAutoTwoWay){
-            case "right":
-              currentVector = rightWay;
-              break;
-            
-            case "left":
-              currentVector = leftWay;
-              break;
+        if (lnex && rnex) {
+          switch (routineAutoTwoWay) {
+          case 'right':
+            currentVector = rightWay;
+            break;
+
+          case 'left':
+            currentVector = leftWay;
+            break;
           }
-        }else if(lnex){
+        } else if (lnex) {
           currentVector = leftWay;
-        }else if(rnex){
+        } else if (rnex) {
           currentVector = rightWay;
-        }else{
-          currentVector = moveWay[rightWay]["rt"];
+        } else {
+          currentVector = moveWay[rightWay]['rt'];
         }
       }
     }
@@ -119,6 +130,7 @@ window.onload = async () => {
       }
     }
     drawChar(charaAuto, frame >> endFrame);
+    drawChar(charaHand, frame >> endFrame);
     charaAuto.moveFrame(CHARASPEED);
     requestAnimationFrame(render);
   }
@@ -126,12 +138,12 @@ window.onload = async () => {
   requestAnimationFrame(render);
 };
 
-document.getElementById("move").onclick = () => {
+document.getElementById('move').onclick = () => {
   if (moving) {
     moving = false;
-    document.getElementById("mode").innerText = "停止中";
+    document.getElementById('mode').innerText = '停止中';
   } else {
     moving = true;
-    document.getElementById("mode").innerText = "移動中";
+    document.getElementById('mode').innerText = '移動中';
   }
-}
+};
