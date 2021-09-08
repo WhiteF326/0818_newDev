@@ -96,6 +96,12 @@ window.onload = async () => {
     drawChar(charaHand, frame >> endFrame);
     charaAuto.moveFrame(CHARASPEED);
 
+    if (currentY === goal[0] && currentX === goal[1] &&
+      charaAuto.isWaitFor() && moving) {
+      console.log('goal');
+      moving = false;
+    }
+
     if (moving) {
       const power = moveWay[currentVector]['power'];
       const nex = map[currentY + power[0]][currentX + power[1]];
@@ -131,11 +137,6 @@ window.onload = async () => {
           currentVector = moveWay[rightWay]['rt'];
         }
       }
-    }
-    if (currentY === goal[0] && currentX === goal[1] &&
-      charaAuto.isWaitFor() && moving) {
-      console.log('goal');
-      moving = false;
     }
     requestAnimationFrame(render);
   }
