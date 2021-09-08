@@ -3,9 +3,6 @@ import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
 let moving = false;
 
 window.onload = async () => {
-  // プログラム板の初期化
-  const userProg = new UserProgBody();
-  userProg.pInit();
   // マップ情報の取得
   const mapinfo = JSON.parse(await fetchJSON('api/stage', { 'name': stagename }));
   const map = mapinfo['stage'];
@@ -13,9 +10,15 @@ window.onload = async () => {
   const hstart = mapinfo['controll'];
   const goal = mapinfo['goal'];
 
+  // 白キャラの初期位置と向きを設定
   let currentY = start[0];
   let currentX = start[1];
   let currentVector = start[2];
+
+  // プログラム板の初期化
+  const userProg = new UserProgBody();
+  const progSize = mapinfo['progSize'];
+  userProg.pInit(...progSize);
 
   // キャラ情報の取得
   const charaAuto = new CharaAuto(start[2]);
@@ -29,7 +32,7 @@ window.onload = async () => {
   const chipData = JSON.parse(await fetchJSON('api/chip', {}));
   const chipList = new ChipList(chipData);
 
-  //
+  // ウィンドウサイズを取得
   let sw = window.innerWidth;
 
   // tile size
@@ -79,15 +82,12 @@ window.onload = async () => {
   const maptileGoal = new Chip('./img/goal.png');
 
   function render() {
-    // 移動
-    /**
-    可能な限り、今向いている方向に移動する
-    今向いている方向が壁ならば
-      逆戻りしか出来ないなら、180度旋回する
-      右または左の片方が壁でないなら、そちらに旋回する
-      右も左も壁でないなら、右側を優先する
-        左側優先との切り替えをする方法は協議中
-    */
+    // プログラム板の描画
+    const currentCost = userProg.renderProgram();
+    document.getElementById("cost").innerText = 
+      "現在コスト：" + currentCost + "\n" + 
+      "上限コスト：" + mapinfo["maxCost"];
+    // キャラクターの移動
     frame++;
     if (frame === 4 << endFrame) frame = 0;
     for (let y = 0; y < map.length; y++) {
