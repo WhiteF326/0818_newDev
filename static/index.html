@@ -4,17 +4,30 @@
 <head>
   <meta charset="UTF-8">
   <title>プログラミングゲーム（仮）</title>
+
+  <link rel="stylesheet" href="css/userBoad.css">
+  
   <script src="js/Const.js"></script>
+  <script src="js/userProgBody.js"></script>
   <script src="js/chip.js"></script>
   <script src="js/ChipList.js"></script>
   <script src="js/CharaAuto.js"></script>
   <script src="js/CharaHand.js"></script>
-  
 </head>
+
+<style>
+  canvas{
+    display: inline-block;
+    vertical-align: top;
+  }
+</style>
 
 <body>
   <script type="module" src="js/body.js"></script> 
-  <canvas id="canvas"></canvas><br>
+  <div>
+    <canvas id="canvas"></canvas>
+    <canvas id="program" class="userBoad"></canvas>
+  </div>
   <button id="move">移動</button>
   <span id="mode"></span>
 </body>
