@@ -33,7 +33,7 @@ window.onload = async () => {
   let sw = window.innerWidth;
 
   // tile size
-  const tilesize = Math.min(64, Math.floor(sw / 2 / map[0].length) - 1);
+  const tilesize = Math.min(64, Math.floor(sw / 2 / map[0].length));
 
   // キャラ描画位置の調整
   charaAuto.setPos(
