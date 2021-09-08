@@ -3,6 +3,9 @@ import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
 let moving = false;
 
 window.onload = async () => {
+  // プログラム板の初期化
+  const userProg = new UserProgBody();
+  userProg.pInit();
   // マップ情報の取得
   const mapinfo = JSON.parse(await fetchJSON('api/stage', { 'name': stagename }));
   const map = mapinfo['stage'];
