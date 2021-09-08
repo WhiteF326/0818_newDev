@@ -125,7 +125,7 @@ window.onload = async () => {
         const rst = moveWay[rightWay]['power'];
         const rnex = map[currentY + rst[0]][currentX + rst[1]];
         // left and right?
-        if (lnex && rnex) {
+        if (lnex === 1 && rnex === 1) {
           switch (routineAutoTwoWay) {
             case 'right':
               currentVector = rightWay;
@@ -135,9 +135,9 @@ window.onload = async () => {
               currentVector = leftWay;
               break;
           }
-        } else if (lnex) {
+        } else if (lnex === 1) {
           currentVector = leftWay;
-        } else if (rnex) {
+        } else if (rnex === 1) {
           currentVector = rightWay;
         } else {
           currentVector = moveWay[rightWay]['rt'];
