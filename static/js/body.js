@@ -93,6 +93,7 @@ window.onload = async () => {
       }
     }
     drawChar(charaAuto, frame >> endFrame);
+    drawChar(charaHand, frame >> endFrame);
     charaAuto.moveFrame(CHARASPEED);
 
     if (moving) {
