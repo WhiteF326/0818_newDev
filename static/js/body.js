@@ -83,7 +83,7 @@ window.onload = async () => {
         左側優先との切り替えをする方法は協議中
     */
     frame++;
-    if (frame == 4 << endFrame) frame = 0;
+    if (frame === 4 << endFrame) frame = 0;
     for (let y = 0; y < map.length; y++) {
       for (let x = 0; x < map[y].length; x++) {
         drawChip(chipList.getChip(map[y][x]), y, x);
@@ -99,15 +99,15 @@ window.onload = async () => {
     if (moving) {
       const power = moveWay[currentVector]['power'];
       const nex = map[currentY + power[0]][currentX + power[1]];
-      if (nex == 1) {
+      if (nex === 1) {
         if (charaAuto.isWaitFor()) {
           currentY += power[0];
           currentX += power[1];
           charaAuto.addMove(power[0] * tilesize, power[1] * tilesize);
         }
       } else if (charaAuto.isWaitFor()) {
-        const leftWay = moveWay[currentVector]["lt"];
-        const lst = moveWay[leftWay]["power"];
+        const leftWay = moveWay[currentVector]['lt'];
+        const lst = moveWay[leftWay]['power'];
         const lnex = map[currentY + lst[0]][currentX + lst[1]];
         const rightWay = moveWay[currentVector]['rt'];
         const rst = moveWay[rightWay]['power'];
@@ -132,10 +132,13 @@ window.onload = async () => {
         }
       }
     }
-
+    if (currentY === goal[0] && currentX === goal[1] &&
+      charaAuto.isWaitFor() && moving) {
+      console.log('goal');
+      moving = false;
+    }
     requestAnimationFrame(render);
   }
-
   requestAnimationFrame(render);
 };
 
