@@ -1,10 +1,10 @@
-import {fetchJSON} from 'https://js.sabae.cc/fetchJSON.js';
+import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
 
 let moving = false;
 
 window.onload = async () => {
   // マップ情報の取得
-  const mapinfo = JSON.parse(await fetchJSON('api/stage', {'name': stagename}));
+  const mapinfo = JSON.parse(await fetchJSON('api/stage', { 'name': stagename }));
   const map = mapinfo['stage'];
   const start = mapinfo['start'];
   const hstart = mapinfo['controll'];
@@ -26,8 +26,11 @@ window.onload = async () => {
   const chipData = JSON.parse(await fetchJSON('api/chip', {}));
   const chipList = new ChipList(chipData);
 
+  //
+  let sw = window.innerWidth;
+
   // tile size
-  const tilesize = 64;
+  const tilesize = Math.min(64, Math.floor(sw / 2 / map[0].length));
 
   // キャラ描画位置の調整
   charaAuto.setPos(
@@ -121,13 +124,13 @@ window.onload = async () => {
         // left and right?
         if (lnex && rnex) {
           switch (routineAutoTwoWay) {
-          case 'right':
-            currentVector = rightWay;
-            break;
+            case 'right':
+              currentVector = rightWay;
+              break;
 
-          case 'left':
-            currentVector = leftWay;
-            break;
+            case 'left':
+              currentVector = leftWay;
+              break;
           }
         } else if (lnex) {
           currentVector = leftWay;
