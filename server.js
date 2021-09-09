@@ -10,9 +10,6 @@ class Body extends Server {
     case 'stage':
       ret = await Deno.readTextFile('./stage/' + prm.name + '.json');
       break;
-    
-    case 'chip':
-      ret = await Deno.readTextFile("./info/ChipList.json");
     }
     return ret;
   }
