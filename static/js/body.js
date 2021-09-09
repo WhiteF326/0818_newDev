@@ -29,7 +29,11 @@ window.onload = async () => {
   const endFrame = 3;
 
   // チップ情報の取得
-  const chipData = JSON.parse(await fetchJSON('api/chip', {}));
+  const chipData = [
+    "map01.png",
+    "map02.png",
+    "map03.png"
+  ];
   const chipList = new ChipList(chipData);
 
   // ウィンドウサイズを取得
