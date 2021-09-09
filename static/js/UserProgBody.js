@@ -6,33 +6,33 @@ class UserProgBody {
         cost: 0
       },
       1: {
-        name: "start",
-        cost: 0
-      },
-      2: {
         name: "move",
         cost: 1
       },
-      3: {
+      2: {
         name: "destroy",
         cost: 2
       },
-      4: {
+      3: {
         name: "create",
         cost: 2
       },
-      5: {
+      4: {
         name: "loop",
         cost: 1
       },
-      6: {
+      5: {
         name: "next",
         cost: 0
       },
-      7: {
+      6: {
         name: "if",
         cost: 2
-      }
+      },
+      7: {
+        name: "start",
+        cost: 0
+      },
     };
     this.params = {
       3: {
@@ -51,8 +51,11 @@ class UserProgBody {
       "front",
       "foot",
       "destroyable"
-    ]
+    ];
+    this.background = new Image();
+    this.background.setAttribute("src", "img/progBack.jpg");
   }
+  
   pInit = (y, x) => {
     this.y = y;
     this.x = x;
@@ -77,15 +80,49 @@ class UserProgBody {
     );
 
     this.ctx.beginPath();
-    this.ctx.font = "48px Arial";
+    this.ctx.font = "48px Times New Roman";
+    this.ctx.fillStyle = "white";
 
     this.stage = new Array(y);
     for (let i = 0; i < y; i++) {
       const col = new Array(x);
-      col.fill({type: 0, param: {}});
+      for(let j = 0; j < x; j++){
+        col[j] = {type: 0, param: {}}
+      }
       this.stage[i] = col;
     }
-    this.stage[0][0] = {type: 1, param: {}};
+    this.stage[0][0] = {type: 7, param: {}};
+
+    progBoad.addEventListener("click", e => {
+      e.preventDefault();
+      const rect = e.target.getBoundingClientRect();
+
+      const vx = e.clientX - rect.left;
+      const vy = e.clientY - rect.top;
+
+      const sx = progBoad.clientWidth / progBoad.width;
+      const sy = progBoad.clientHeight / progBoad.height;
+
+      const px = Math.floor(Math.floor(vx / sx) / this.tileSize);
+      const py = Math.floor(Math.floor(vy / sy) / this.tileSize);
+
+      if(px || py){
+        this.stage[py][px]["type"] += 1;
+        this.stage[py][px]["type"] %= 7;
+      }
+
+      console.log(this.stage.map(x => x.map(y => y["type"])));
+
+      // プログラム板の描画
+      const currentCost = this.renderProgram();
+      document.getElementById("cost").innerText = 
+        "現在コスト：" + currentCost + "\n";
+    });
+
+    // 最初の描画
+    const currentCost = this.renderProgram();
+    document.getElementById("cost").innerText = 
+      "現在コスト：" + currentCost + "\n";
   }
   
   getProgram = (y, x) => {
@@ -98,6 +135,15 @@ class UserProgBody {
   renderProgram = () => {
     // 初期化
     this.ctx.clearRect(0, 0, this.drawX, this.drawY);
+
+    // 背景の描画
+    this.ctx.drawImage(
+      this.background,
+      0, 0,
+      this.background.width, this.background.height,
+      0, 0,
+      this.drawX, this.drawY
+    );
 
     // 横線
     for (let i = 1; i <= this.y; i++) {
@@ -119,15 +165,16 @@ class UserProgBody {
     for(let h = 0; h < this.y; h++){
       for(let w = 0; w < this.x; w++){
         const prog = this.stage[h][w];
-        currentCost += this.blocks[prog["type"]]["cost"];
-        this.ctx.fillText(
-          this.blocks[prog["type"]]["name"].split("")[0],
-          w * this.tileSize, (h + 1) * this.tileSize,
-          this.tileSize
-        )
+        if(prog["type"]){
+          currentCost += this.blocks[prog["type"]]["cost"];
+          this.ctx.fillText(
+            this.blocks[prog["type"]]["name"].split("")[0],
+            (w + 0.25) * this.tileSize, (h + 0.75) * this.tileSize,
+            this.tileSize
+          );
+        }
       }
     }
-    this.ctx.stroke();
 
     return currentCost;
   }

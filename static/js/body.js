@@ -2,163 +2,161 @@ import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
 
 let moving = false;
 
-window.onload = async () => {
-  // マップ情報の取得
-  const mapinfo = JSON.parse(await fetchJSON('api/stage', { 'name': stagename }));
-  const map = mapinfo['stage'];
-  const start = mapinfo['start'];
-  const hstart = mapinfo['controll'];
-  const goal = mapinfo['goal'];
+class Body{
+  constructor(mapinfo){
+    // マップ情報の取得
+    this.mapinfo = mapinfo;
+    this.map = this.mapinfo['stage'];
+    this.start = this.mapinfo['start'];
+    this.hstart = this.mapinfo['controll'];
+    this.goal = this.mapinfo['goal'];
 
-  // 白キャラの初期位置と向きを設定
-  let currentY = start[0];
-  let currentX = start[1];
-  let currentVector = start[2];
+    // 白キャラの初期位置と向きを設定
+    this.currentY = this.start[0];
+    this.currentX = this.start[1];
+    this.currentVector = this.start[2];
 
-  // プログラム板の初期化
-  const userProg = new UserProgBody();
-  const progSize = mapinfo['progSize'];
-  userProg.pInit(...progSize);
+    // プログラム板の初期化
+    this.userProg = new UserProgBody();
+    this.progSize = this.mapinfo['progSize'];
+    this.userProg.pInit(...this.progSize);
 
-  // キャラ情報の取得
-  const charaAuto = new CharaAuto(start[2]);
-  const charaHand = new CharaHand('right');
+    // キャラ情報の取得
+    this.charaAuto = new CharaAuto(this.start[2]);
+    this.charaHand = new CharaHand('right');
 
-  // キャラ描画用のフレーム値
-  let frame = 0;
-  const endFrame = 3;
+    // キャラ描画用のフレーム値
+    this.frame = 0;
+    this.endFrame = 3;
 
-  // チップ情報の取得
-  const chipData = [
-    "map01.png",
-    "map02.png",
-    "map03.png"
-  ];
-  const chipList = new ChipList(chipData);
+    // チップ情報の取得
+    this.chipData = [
+      "map01.png",
+      "map02.png",
+      "map03.png"
+    ];
+    this.chipList = new ChipList(this.chipData);
 
-  // ウィンドウサイズを取得
-  let sw = window.innerWidth;
+    // ウィンドウサイズを取得
+    this.sw = window.innerWidth;
 
-  // tile size
-  const tilesize = Math.min(64, Math.floor(sw / 2 / map[0].length));
+    // tile size
+    this.tilesize = Math.min(
+      64, Math.floor(this.sw / 2 / this.map[0].length));
 
-  // キャラ描画位置の調整
-  charaAuto.setPos(
-    start[0] * tilesize,
-    start[1] * tilesize + charaAuto.getOffset(tilesize),
-  );
-  charaHand.setPos(
-    hstart[0] * tilesize,
-    hstart[1] * tilesize + charaHand.getOffset(tilesize),
-  );
-
-  // canvas設定
-  const canvas = document.getElementById('canvas');
-  canvas.width = tilesize * map[0].length; // canvasの横幅
-  canvas.height = tilesize * map.length; // canvasの縦幅
-
-  // コンテキスト取得
-  const ctx = canvas.getContext('2d');
-
-  // 描画用関数の定義
-  const drawChip = (img, y, x) => {
-    ctx.drawImage(
-      img,
-      0, 0,
-      img.naturalWidth, img.naturalHeight,
-      tilesize * x, tilesize * y,
-      tilesize, tilesize,
+    // キャラ描画位置の調整
+    this.charaAuto.setPos(
+      this.start[0] * this.tilesize,
+      this.start[1] * this.tilesize
+        + this.charaAuto.getOffset(this.tilesize),
     );
-  };
-  const drawChar = (toDraw = charaAuto, frame) => {
-    const drawAsset = toDraw.getAsset(frame);
-    const size = toDraw.sizeExchange(tilesize);
-    charaAuto.setVector(currentVector);
-    ctx.drawImage(
-      drawAsset['image'],
-      drawAsset['positionX'], drawAsset['positionY'],
-      toDraw.getcharaX(), toDraw.getcharaY(),
-      toDraw.getposX(), toDraw.getposY(),
-      size['x'], size['y'],
+    this.charaHand.setPos(
+      this.hstart[0] * this.tilesize,
+      this.hstart[1] * this.tilesize
+        + this.charaHand.getOffset(this.tilesize),
     );
-  };
 
-  const maptileGoal = new Chip('./img/goal.png');
+    // canvas設定
+    this.canvas = document.getElementById('canvas');
+    this.canvas.width = this.tilesize * this.map[0].length; // canvasの横幅
+    this.canvas.height = this.tilesize * this.map.length; // canvasの縦幅
 
-  function render() {
-    // プログラム板の描画
-    const currentCost = userProg.renderProgram();
-    document.getElementById("cost").innerText = 
-      "現在コスト：" + currentCost + "\n" + 
-      "上限コスト：" + mapinfo["maxCost"];
+    // コンテキスト取得
+    this.ctx = this.canvas.getContext('2d');
+
+    // 描画用関数の定義
+    this.drawChip = (img, y, x) => {
+      this.ctx.drawImage(
+        img,
+        0, 0,
+        img.naturalWidth, img.naturalHeight,
+        this.tilesize * x, this.tilesize * y,
+        this.tilesize, this.tilesize,
+      );
+    };
+    this.drawChar = (toDraw = this.charaAuto, frame) => {
+      const drawAsset = toDraw.getAsset(frame);
+      const size = toDraw.sizeExchange(this.tilesize);
+      this.charaAuto.setVector(this.currentVector);
+      this.ctx.drawImage(
+        drawAsset['image'],
+        drawAsset['positionX'], drawAsset['positionY'],
+        toDraw.getcharaX(), toDraw.getcharaY(),
+        toDraw.getposX(), toDraw.getposY(),
+        size['x'], size['y'],
+      );
+    };
+
+    this.maptileGoal = new Chip('./img/goal.png');
+
+    this.render();
+  }
+
+  render() {
     // キャラクターの移動
-    frame++;
-    if (frame === 4 << endFrame) frame = 0;
-    for (let y = 0; y < map.length; y++) {
-      for (let x = 0; x < map[y].length; x++) {
-        drawChip(chipList.getChip(map[y][x]), y, x);
-        if (y === goal[0] && x === goal[1]) {
-          drawChip(maptileGoal, y, x);
+    this.frame++;
+    if (this.frame === 4 << this.endFrame) this.frame = 0;
+    for (let y = 0; y < this.map.length; y++) {
+      for (let x = 0; x < this.map[y].length; x++) {
+        this.drawChip(this.chipList.getChip(this.map[y][x]), y, x);
+        if (y === this.goal[0] && x === this.goal[1]) {
+          this.drawChip(this.maptileGoal, y, x);
         }
       }
     }
-    drawChar(charaAuto, frame >> endFrame);
-    drawChar(charaHand, frame >> endFrame);
-    charaAuto.moveFrame(CHARASPEED);
+    this.drawChar(this.charaAuto, this.frame >> this.endFrame);
+    this.drawChar(this.charaHand, this.frame >> this.endFrame);
+    this.charaAuto.moveFrame(CHARASPEED);
 
-    if (currentY === goal[0] && currentX === goal[1] &&
-      charaAuto.isWaitFor() && moving) {
+    if (this.currentY === this.goal[0] && this.currentX === this.goal[1] &&
+      this.charaAuto.isWaitFor() && moving) {
       console.log('goal');
       moving = false;
     }
 
     if (moving) {
       const power = moveWay[currentVector]['power'];
-      const nex = map[currentY + power[0]][currentX + power[1]];
+      const nex = this.map[currentY + power[0]][currentX + power[1]];
       if (nex === 1) {
-        if (charaAuto.isWaitFor()) {
-          currentY += power[0];
-          currentX += power[1];
-          charaAuto.addMove(power[0] * tilesize, power[1] * tilesize);
+        if (this.charaAuto.isWaitFor()) {
+          this.currentY += power[0];
+          this.currentX += power[1];
+          this.charaAuto.addMove(
+            power[0] * this.tilesize, power[1] * this.tilesize
+          );
         }
-      } else if (charaAuto.isWaitFor()) {
+      } else if (this.charaAuto.isWaitFor()) {
         const leftWay = moveWay[currentVector]['lt'];
         const lst = moveWay[leftWay]['power'];
-        const lnex = map[currentY + lst[0]][currentX + lst[1]];
+        const lnex = map[currentY + lst[0]][this.currentX + lst[1]];
         const rightWay = moveWay[currentVector]['rt'];
         const rst = moveWay[rightWay]['power'];
-        const rnex = map[currentY + rst[0]][currentX + rst[1]];
+        const rnex = map[currentY + rst[0]][this.currentX + rst[1]];
         // left and right?
         if (lnex === 1 && rnex === 1) {
           switch (routineAutoTwoWay) {
             case 'right':
-              currentVector = rightWay;
+              this.currentVector = rightWay;
               break;
 
             case 'left':
-              currentVector = leftWay;
+              this.currentVector = leftWay;
               break;
           }
         } else if (lnex === 1) {
-          currentVector = leftWay;
+          this.currentVector = leftWay;
         } else if (rnex === 1) {
-          currentVector = rightWay;
+          this.currentVector = rightWay;
         } else {
-          currentVector = moveWay[rightWay]['rt'];
+          this.currentVector = moveWay[rightWay]['rt'];
         }
       }
     }
-    requestAnimationFrame(render);
+    requestAnimationFrame(this.render.bind(this));
   }
-  requestAnimationFrame(render);
-};
+}
 
-document.getElementById('move').onclick = () => {
-  if (moving) {
-    moving = false;
-    document.getElementById('mode').innerText = '停止中';
-  } else {
-    moving = true;
-    document.getElementById('mode').innerText = '移動中';
-  }
-};
+window.onload = async () => {
+  const mapinfo = JSON.parse(await fetchJSON('api/stage', { 'name': stagename }));
+  new Body(mapinfo);
+}
