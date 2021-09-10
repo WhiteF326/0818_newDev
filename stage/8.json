@@ -12,7 +12,6 @@
   ],
   "start": [1, 1, "right"],
   "goal": [6, 2],
-  "controll": [4, 0],
-  "progSize": [4, 8],
+  "controll": [3, 1],
   "maxCost": 6
 }

@@ -17,11 +17,11 @@ Blockly.defineBlocksWithJsonArray(
           ],
           [
             '上',
-            'UP',
+            'BACK',
           ],
           [
             '下',
-            'DOWN',
+            'FRONT',
           ],
         ],
       },
@@ -127,17 +127,17 @@ Blockly.defineBlocksWithJsonArray(
 Blockly.JavaScript['move'] = function(block) {
   const dropdown_vector = block.getFieldValue('vector');
   const value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
-  const code = 'console.log("' + dropdown_vector + '");\n';
+  const code = "move " + dropdown_vector.toLowerCase() + "\n";
   return code;
 };
 
 Blockly.JavaScript['destroy'] = function(block) {
-  const code = 'console.log("destroy");\n';
+  const code = 'destroy\n';
   return code;
 };
 
 Blockly.JavaScript['create'] = function(block) {
-  const code = 'console.log("create");\n';
+  const code = 'create\n';
   return code;
 };
 
@@ -145,7 +145,7 @@ Blockly.JavaScript['loop'] = function(block) {
   const number_repeatamount = block.getFieldValue('REPEATAMOUNT');
   const value_repeatamount = Blockly.JavaScript.valueToCode(block, 'REPEATAMOUNT', Blockly.JavaScript.ORDER_ATOMIC);
   const statements_repeatblock = Blockly.JavaScript.statementToCode(block, 'REPEATBLOCK');
-  const code = 'for(let i = 0; i < ' + number_repeatamount + '; i++){\n' + statements_repeatblock + '};\n';
+  const code = 'loop ' + number_repeatamount + '\n' + statements_repeatblock + 'next\n';
   return code;
 };
 
@@ -153,16 +153,12 @@ Blockly.JavaScript['if'] = function(block) {
   const statements_statement = Blockly.JavaScript.statementToCode(block, 'STATEMENT');
   const statements_true = Blockly.JavaScript.statementToCode(block, 'TRUE');
   const statements_false = Blockly.JavaScript.statementToCode(block, 'FALSE');
-  const code = 'if(' + statements_statement + '){\n' + statements_true + '}else{\n' + statements_false + '};\n';
+  const ifid = String(Math.random());
+  const code = 'if ' + statements_statement + ' ' + ifid + ' \n' + statements_true + 'else ' + ifid + '\n' + statements_false + 'endif ' + ifid + '\n';
   return code;
 };
 
-Blockly.JavaScript['sensor_front'] = function(block) {
-  const code = '...';
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
 Blockly.JavaScript['sensor_foot'] = function(block) {
-  const code= '...';
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  const code = 'sensor_foot';
+  return code;
 }

@@ -4,11 +4,11 @@ let moving = false;
 
 class Body{
   constructor(mapinfo){
-    // プログラム部の表示
-    new ProgBoad();
     // マップ情報の取得
     this.mapinfo = mapinfo;
     this.map = this.mapinfo['stage'];
+    this.mapY = this.map.length;
+    this.mapX = this.map[0].length;
     this.start = this.mapinfo['start'];
     this.cstart = this.mapinfo['controll'];
     this.goal = this.mapinfo['goal'];
@@ -97,6 +97,32 @@ class Body{
   }
 
   cmove = (y, x) => {
+    const dy = this.cursorY + y;
+    const dx = this.cursorX + x;
+
+    if(dy < 0 || dy >= this.mapY || dx < 0 || dx >= this.mapX){
+      return false;
+    }else{
+      this.cursorY += y;
+      this.cursorX += x;
+      this.charaHand.addMove(
+        y * this.tilesize, x * this.tilesize
+      );
+      return true;
+    }
+  }
+
+  sensor_foot = () => this.map[this.cursorY][this.cursorX] == 2;
+
+  destroyCursor = () => {
+    if(this.map[this.cursorY][this.cursorX] == 2){
+      this.map[this.cursorY][this.cursorX] = 1;
+    }
+  }
+  createCursor = () => {
+    if(this.map[this.cursorY][this.cursorX] == 1){
+      this.map[this.cursorY][this.cursorX] = 2;
+    }
   }
 
   render() {
@@ -114,6 +140,7 @@ class Body{
     this.drawChar(this.charaAuto, this.frame >> this.endFrame);
     this.drawChar(this.charaHand, this.frame >> this.endFrame);
     this.charaAuto.moveFrame(CHARASPEED);
+    this.charaHand.moveFrame(CHARASPEED);
 
     if (this.currentY === this.goal[0] && this.currentX === this.goal[1] &&
       this.charaAuto.isWaitFor() && moving) {
@@ -165,5 +192,7 @@ class Body{
 
 window.onload = async () => {
   const mapinfo = JSON.parse(await fetchJSON('api/stage', { 'name': stagename }));
-  new Body(mapinfo);
+  const gameBody = new Body(mapinfo);
+
+  new ProgBoad(gameBody);
 }
