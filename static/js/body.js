@@ -10,13 +10,17 @@ class Body{
     this.mapinfo = mapinfo;
     this.map = this.mapinfo['stage'];
     this.start = this.mapinfo['start'];
-    this.hstart = this.mapinfo['controll'];
+    this.cstart = this.mapinfo['controll'];
     this.goal = this.mapinfo['goal'];
 
     // 白キャラの初期位置と向きを設定
     this.currentY = this.start[0];
     this.currentX = this.start[1];
     this.currentVector = this.start[2];
+
+    // カーソルの初期位置を設定
+    this.cursorY = this.cstart[0];
+    this.cursorX = this.cstart[1];
 
     // プログラム板の初期化
     this.progSize = this.mapinfo['progSize'];
@@ -38,21 +42,21 @@ class Body{
     this.chipList = new ChipList(this.chipData);
 
     // ウィンドウサイズを取得
-    this.sw = window.innerWidth;
+    this.sh = window.innerHeight;
 
     // tile size
     this.tilesize = min(
-      64, floor(this.sw / 2.2 / this.map[0].length));
+      64, floor(this.sh / 2.2 / this.map.length));
 
     // キャラ描画位置の調整
     this.charaAuto.setPos(
-      this.start[0] * this.tilesize,
-      this.start[1] * this.tilesize
+      this.currentY * this.tilesize,
+      this.currentX * this.tilesize
         + this.charaAuto.getOffset(this.tilesize),
     );
     this.charaHand.setPos(
-      this.hstart[0] * this.tilesize,
-      this.hstart[1] * this.tilesize
+      this.cursorY * this.tilesize,
+      this.cursorX * this.tilesize
         + this.charaHand.getOffset(this.tilesize),
     );
 
@@ -90,6 +94,9 @@ class Body{
     this.maptileGoal = new Chip('./img/goal.png');
 
     this.render();
+  }
+
+  cmove = (y, x) => {
   }
 
   render() {
