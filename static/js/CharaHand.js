@@ -1,3 +1,5 @@
+// TODO キューに壁破壊、作成を突っ込む
+
 class CharaHand {
   constructor(vector) {
     this.charaX = 32;
