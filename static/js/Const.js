@@ -25,3 +25,7 @@ const moveWay = {
     "rt": "left"
   }
 };
+
+const floor = Math.floor
+const min = Math.min
+const max = Math.max

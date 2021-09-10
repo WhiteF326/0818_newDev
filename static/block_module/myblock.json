@@ -1,0 +1,114 @@
+[{
+  "type": "move",
+  "message0": "%1 に進む %2",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "vector",
+      "options": [
+        [
+          "左",
+          "LEFT"
+        ],
+        [
+          "右",
+          "RIGHT"
+        ],
+        [
+          "上",
+          "UP"
+        ],
+        [
+          "下",
+          "DOWN"
+        ]
+      ]
+    },
+    {
+      "type": "input_value",
+      "name": "NAME",
+      "check": "String"
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 0,
+  "tooltip": "指定した方向に1歩進みます。",
+  "helpUrl": ""
+},
+{
+  "type": "destroy",
+  "message0": "足元の壁を破壊する",
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 60,
+  "tooltip": "足元の壁を破壊します",
+  "helpUrl": ""
+},
+{
+  "type": "create",
+  "message0": "足元に壁を置く",
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 120,
+  "tooltip": "足元に壁を置きます。",
+  "helpUrl": ""
+},
+{
+  "type": "loop",
+  "message0": "%1 回繰り返し実行 %2 %3",
+  "args0": [
+    {
+      "type": "field_number",
+      "name": "REPEATAMOUNT",
+      "value": 0,
+      "min": 0,
+      "precision": 1
+    },
+    {
+      "type": "input_value",
+      "name": "REPEATAMOUNT",
+      "check": "Number"
+    },
+    {
+      "type": "input_statement",
+      "name": "REPEATBLOCK"
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 180,
+  "tooltip": "中に含まれるブロックを繰り返し実行します。",
+  "helpUrl": ""
+},
+{
+  "type": "if",
+  "message0": "判定する条件 %1 正しい時の処理 %2 正しくない時の処理 %3",
+  "args0": [
+    {
+      "type": "input_statement",
+      "name": "STATEMENT"
+    },
+    {
+      "type": "input_statement",
+      "name": "TRUE"
+    },
+    {
+      "type": "input_statement",
+      "name": "FALSE"
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 230,
+  "tooltip": "条件により分岐します。",
+  "helpUrl": ""
+},
+{
+  "type": "sensor_front",
+  "message0": "向いている方向に移動出来る",
+  "output": "Boolean",
+  "colour": 230,
+  "tooltip": "キャラクターが向いている方向に移動出来るならば真を返します。",
+  "helpUrl": ""
+}]

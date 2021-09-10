@@ -8,15 +8,23 @@
   <link rel="stylesheet" href="css/userBoad.css">
   
   <script src="js/Const.js"></script>
-  <script src="js/userProgBody.js"></script>
   <script src="js/chip.js"></script>
   <script src="js/ChipList.js"></script>
   <script src="js/CharaAuto.js"></script>
   <script src="js/CharaHand.js"></script>
+
+  <!-- blockly -->
+  <script src="block_module/blockly_compressed.js"></script>
+  <script src="block_module/blocks_compressed.js"></script>
+  <script src="block_module/javascript_compressed.js"></script>
+  <script src="block_module/msg/js/ja.js"></script>
+
+  <script src="block_module/myblock.js"></script>
+  <script src="js/ProgBoad.js"></script>
 </head>
 
 <style>
-  canvas{
+  .bmain{
     display: inline-block;
     vertical-align: top;
   }
@@ -25,8 +33,16 @@
 <body>
   <script type="module" src="js/Body.js"></script> 
   <div>
-    <canvas id="canvas" ></canvas>
-    <canvas id="program" class="userBoad"></canvas>
+    <canvas id="canvas" class="bmain"></canvas>
+    <div id="blocklyDiv" class="bmain"></div>
+    <xml id="toolbox">
+      <block type="move"></block>
+      <block type="destroy"></block>
+      <block type="create"></block>
+      <block type="loop"></block>
+      <block type="if"></block>
+      <block type="sensor_front"></block>
+    </xml>
   </div>
   <span id="cost"></span><br>
   <button id="move">移動</button>

@@ -4,6 +4,8 @@ let moving = false;
 
 class Body{
   constructor(mapinfo){
+    // プログラム部の表示
+    new ProgBoad();
     // マップ情報の取得
     this.mapinfo = mapinfo;
     this.map = this.mapinfo['stage'];
@@ -17,9 +19,7 @@ class Body{
     this.currentVector = this.start[2];
 
     // プログラム板の初期化
-    this.userProg = new UserProgBody();
     this.progSize = this.mapinfo['progSize'];
-    this.userProg.pInit(...this.progSize);
 
     // キャラ情報の取得
     this.charaAuto = new CharaAuto(this.start[2]);
@@ -41,8 +41,8 @@ class Body{
     this.sw = window.innerWidth;
 
     // tile size
-    this.tilesize = Math.min(
-      64, Math.floor(this.sw / 2 / this.map[0].length));
+    this.tilesize = min(
+      64, floor(this.sw / 2.2 / this.map[0].length));
 
     // キャラ描画位置の調整
     this.charaAuto.setPos(
