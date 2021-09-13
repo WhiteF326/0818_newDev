@@ -145,7 +145,8 @@ Blockly.JavaScript['loop'] = function(block) {
   const number_repeatamount = block.getFieldValue('REPEATAMOUNT');
   const value_repeatamount = Blockly.JavaScript.valueToCode(block, 'REPEATAMOUNT', Blockly.JavaScript.ORDER_ATOMIC);
   const statements_repeatblock = Blockly.JavaScript.statementToCode(block, 'REPEATBLOCK');
-  const code = 'loop ' + number_repeatamount + '\n' + statements_repeatblock + 'next\n';
+  const forid = String(Math.random());
+  const code = 'loop ' + number_repeatamount + ' ' + forid + '\n' + statements_repeatblock + 'next ' + forid + '\n';
   return code;
 };
 
@@ -154,7 +155,7 @@ Blockly.JavaScript['if'] = function(block) {
   const statements_true = Blockly.JavaScript.statementToCode(block, 'TRUE');
   const statements_false = Blockly.JavaScript.statementToCode(block, 'FALSE');
   const ifid = String(Math.random());
-  const code = 'if ' + statements_statement + ' ' + ifid + ' \n' + statements_true + 'else ' + ifid + '\n' + statements_false + 'endif ' + ifid + '\n';
+  const code = 'if ' + statements_statement + ' ' + ifid + '\n' + statements_true + 'else ' + ifid + '\n' + statements_false + 'endif ' + ifid + '\n';
   return code;
 };
 

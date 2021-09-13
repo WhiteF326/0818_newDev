@@ -20,6 +20,7 @@
   <script src="block_module/msg/js/ja.js"></script>
 
   <script src="block_module/myblock.js"></script>
+  <script src="js/CostCalculator.js"></script>
   <script src="js/ProgBoad.js"></script>
 </head>
 
@@ -27,6 +28,7 @@
   <script type="module" src="js/Body.js"></script> 
   <div>
     <canvas id="canvas"></canvas>
+    <span id="cost"></span><br>
     <div id="blocklyDiv"></div>
     <xml id="toolbox">
       <block type="move"></block>
@@ -37,9 +39,7 @@
       <block type="sensor_foot"></block>
     </xml>
   </div>
-  <span id="cost"></span><br>
   <button id="move">開始</button>
-  <span id="mode"></span>
 </body>
 
 </html>

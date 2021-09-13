@@ -30,6 +30,7 @@ class Body {
     // キャラ情報の取得
     this.charaAuto = new CharaAuto(this.start[2]);
     this.charaHand = new CharaHand('right');
+    this.endFlg = false;
 
     // キャラ描画用のフレーム値
     this.frame = 0;
@@ -67,6 +68,8 @@ class Body {
     this.canvas.width = this.tilesize * this.map[0].length; // canvasの横幅
     this.canvas.height = this.tilesize * this.map.length; // canvasの縦幅
 
+    this.canvas.oncontextmenu = () => {return false;}
+
     // コンテキスト取得
     this.ctx = this.canvas.getContext('2d');
 
@@ -99,8 +102,8 @@ class Body {
   }
 
   cMove = (y, x) => {
-    const dy = this.cursorY + y;
-    const dx = this.cursorX + x;
+    const dy = this.futureCursorY + y;
+    const dx = this.futureCursorX + x;
 
     if (dy < 0 || dy >= this.mapY || dx < 0 || dx >= this.mapX) {
       return false;
@@ -128,6 +131,10 @@ class Body {
     if (this.map[y][x] == 1) {
       this.map[y][x] = 2;
     }
+  }
+
+  turnMoving = () => {
+    moving = !moving;
   }
 
   render() {
@@ -159,6 +166,10 @@ class Body {
       this.cursorX += action[0];
     }
 
+    if(this.endFlg && this.charaHand.isWaitFor()){
+      moving = true;
+    }
+
     if (this.currentY === this.goal[0] && this.currentX === this.goal[1] &&
       this.charaAuto.isWaitFor() && moving) {
       console.log('goal');
@@ -166,8 +177,8 @@ class Body {
     }
 
     if (moving) {
-      const power = moveWay[currentVector]['power'];
-      const nex = this.map[currentY + power[0]][currentX + power[1]];
+      const power = moveWay[this.currentVector]['power'];
+      const nex = this.map[this.currentY + power[0]][this.currentX + power[1]];
       if (nex === 1) {
         if (this.charaAuto.isWaitFor()) {
           this.currentY += power[0];
@@ -177,12 +188,12 @@ class Body {
           );
         }
       } else if (this.charaAuto.isWaitFor()) {
-        const leftWay = moveWay[currentVector]['lt'];
+        const leftWay = moveWay[this.currentVector]['lt'];
         const lst = moveWay[leftWay]['power'];
-        const lnex = map[currentY + lst[0]][this.currentX + lst[1]];
-        const rightWay = moveWay[currentVector]['rt'];
+        const lnex = this.map[this.currentY + lst[0]][this.currentX + lst[1]];
+        const rightWay = moveWay[this.currentVector]['rt'];
         const rst = moveWay[rightWay]['power'];
-        const rnex = map[currentY + rst[0]][this.currentX + rst[1]];
+        const rnex = this.map[this.currentY + rst[0]][this.currentX + rst[1]];
         // left and right?
         if (lnex === 1 && rnex === 1) {
           switch (routineAutoTwoWay) {

@@ -1,6 +1,8 @@
 class ProgBoad {
   constructor(gameBody) {
     this.gameBody = gameBody;
+    this.costCalculator = new CostCalculator();
+    this.endFlg = false;
     const workdiv = document.getElementById("blocklyDiv");
     workdiv.setAttribute("style",
       "height: " + String(floor(window.innerHeight / 2.2)) + "px; " +
@@ -9,10 +11,42 @@ class ProgBoad {
     const workspace = Blockly.inject("blocklyDiv",
       { toolbox: document.getElementById("toolbox") });
 
+    document.body.childNodes.forEach(elm => {
+      elm.addEventListener("click", () => {
+        const cost = this.costCalculator.calc(
+          Blockly.JavaScript.workspaceToCode(workspace)
+        );
+        document.getElementById("cost").innerText = String(cost);
+      });
+    });
+    const cost = this.costCalculator.calc(
+      Blockly.JavaScript.workspaceToCode(workspace)
+    );
+    document.getElementById("cost").innerText = String(cost);
+
     document.getElementById("move").onclick = () => {
       const code = Blockly.JavaScript.workspaceToCode(workspace)
         .replaceAll("  ", "");
-      this.parse(code.split("\n"));
+      console.log(code);
+      // 静的解析
+      let runnable = true;
+      const loopNumbers = [...code.matchAll("loop [0-9]+")]
+        .map(a => [...a[0].matchAll("[0-9]+")][0])
+        .map(a => Number(a[0]));
+      if (loopNumbers.length) {
+        if (loopNumbers.reduce((p, c) => p + c) > 50) {
+          // エラーで止まる
+          runnable = false;
+          alert("ループ回数が多すぎます。");
+        }
+      }
+      const illegalIf = [...code.matchAll("if[0-1]")];
+      if (illegalIf.length) {
+        runnable = false;
+        alert("条件が指定されていないifがあります。");
+      }
+      if (runnable) this.parse(code.split("\n"));
+      this.gameBody.endFlg = true;
     }
   }
 
@@ -30,10 +64,11 @@ class ProgBoad {
         this.gameBody.cAction("create");
       } else if (line.startsWith("loop")) {
         const loopAmount = Number(line.split(" ")[1]);
+        const forid = line.split(" ")[2];
         for (let _ = 0; _ < loopAmount; _++) {
-          this.parse(codel.slice(i + 1, codel.lastIndexOf("next")));
+          this.parse(codel.slice(i + 1, codel.indexOf("next " + forid)));
         }
-        i = codel.lastIndexOf("next");
+        i = codel.lastIndexOf("next " + forid);
       } else if (line.startsWith("if")) {
         const ifid = line.split(" ")[2];
         let judge = false;

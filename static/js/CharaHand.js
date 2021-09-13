@@ -93,4 +93,8 @@ class CharaHand {
   getOffset = (size) => Math.ceil(size / 8);
 
   isWaitFor = () => !this.pendingMove.length;
+
+  allCancel = () => {
+    this.pendingMove = [];
+  }
 }
