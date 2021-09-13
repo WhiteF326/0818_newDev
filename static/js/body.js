@@ -2,8 +2,8 @@ import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
 
 let moving = false;
 
-class Body{
-  constructor(mapinfo){
+class Body {
+  constructor(mapinfo) {
     // マップ情報の取得
     this.mapinfo = mapinfo;
     this.map = this.mapinfo['stage'];
@@ -21,6 +21,8 @@ class Body{
     // カーソルの初期位置を設定
     this.cursorY = this.cstart[0];
     this.cursorX = this.cstart[1];
+    this.futureCursorY = this.cstart[0];
+    this.futureCursorX = this.cstart[1];
 
     // プログラム板の初期化
     this.progSize = this.mapinfo['progSize'];
@@ -52,12 +54,12 @@ class Body{
     this.charaAuto.setPos(
       this.currentY * this.tilesize,
       this.currentX * this.tilesize
-        + this.charaAuto.getOffset(this.tilesize),
+      + this.charaAuto.getOffset(this.tilesize),
     );
     this.charaHand.setPos(
       this.cursorY * this.tilesize,
       this.cursorX * this.tilesize
-        + this.charaHand.getOffset(this.tilesize),
+      + this.charaHand.getOffset(this.tilesize),
     );
 
     // canvas設定
@@ -96,32 +98,35 @@ class Body{
     this.render();
   }
 
-  cmove = (y, x) => {
+  cMove = (y, x) => {
     const dy = this.cursorY + y;
     const dx = this.cursorX + x;
 
-    if(dy < 0 || dy >= this.mapY || dx < 0 || dx >= this.mapX){
+    if (dy < 0 || dy >= this.mapY || dx < 0 || dx >= this.mapX) {
       return false;
-    }else{
-      this.cursorY += y;
-      this.cursorX += x;
+    } else {
+      this.futureCursorX += x;
+      this.futureCursorY += y;
       this.charaHand.addMove(
         y * this.tilesize, x * this.tilesize
       );
       return true;
     }
   }
+  cAction = (type) => {
+    this.charaHand.addCursorAction(type);
+  }
 
-  sensor_foot = () => this.map[this.cursorY][this.cursorX] == 2;
+  sensor_foot = () => this.map[this.futureCursorY][this.futureCursorX] == 2;
 
-  destroyCursor = () => {
-    if(this.map[this.cursorY][this.cursorX] == 2){
-      this.map[this.cursorY][this.cursorX] = 1;
+  destroyCursor = (y, x) => {
+    if (this.map[y][x] == 2) {
+      this.map[y][x] = 1;
     }
   }
-  createCursor = () => {
-    if(this.map[this.cursorY][this.cursorX] == 1){
-      this.map[this.cursorY][this.cursorX] = 2;
+  createCursor = (y, x) => {
+    if (this.map[y][x] == 1) {
+      this.map[y][x] = 2;
     }
   }
 
@@ -140,7 +145,19 @@ class Body{
     this.drawChar(this.charaAuto, this.frame >> this.endFrame);
     this.drawChar(this.charaHand, this.frame >> this.endFrame);
     this.charaAuto.moveFrame(CHARASPEED);
-    this.charaHand.moveFrame(CHARASPEED);
+    const action = this.charaHand.moveFrame(CHARASPEED);
+    if (typeof action == "string") {
+      const y = this.cursorY, x = this.cursorX;
+      if (action === "create") {
+        this.createCursor(y, x);
+      } else if (action === "destroy") {
+        this.destroyCursor(y, x);
+      }
+    } else if (action) {
+      console.log(this.cursorX, this.cursorY);
+      this.cursorY += action[1];
+      this.cursorX += action[0];
+    }
 
     if (this.currentY === this.goal[0] && this.currentX === this.goal[1] &&
       this.charaAuto.isWaitFor() && moving) {

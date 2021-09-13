@@ -1,5 +1,3 @@
-// TODO キューに壁破壊、作成を突っ込む
-
 class CharaHand {
   constructor(vector) {
     this.charaX = 32;
@@ -45,22 +43,38 @@ class CharaHand {
   addMove(y, x) {
     this.pendingMove.push([y, x]);
   }
+  addCursorAction(type){
+    this.pendingMove.push(type);
+  }
   moveFrame(speed) {
     if (this.pendingMove.length != 0) {
-      const xway = this.sign(this.pendingMove[0][1]);
-      const yway = this.sign(this.pendingMove[0][0]);
-      const xmove = Math.min(Math.abs(this.pendingMove[0][1]), speed) * xway;
-      const ymove = Math.min(Math.abs(this.pendingMove[0][0]), speed) * yway;
-
-      this.posX += xmove;
-      this.posY += ymove;
-      this.pendingMove[0][1] -= xmove;
-      this.pendingMove[0][0] -= ymove;
-
-      if (
-        Math.abs(this.pendingMove[0][1]) == 0
-        && Math.abs(this.pendingMove[0][0] == 0)) {
+      if(typeof this.pendingMove[0] === "string"){
+        const action = this.pendingMove[0];
         this.pendingMove.shift();
+        if(action === "destroy"){
+          return "destroy";
+        }else if(action === "create"){
+          return "create";
+        }
+      } else {
+        const xway = this.sign(this.pendingMove[0][1]);
+        const yway = this.sign(this.pendingMove[0][0]);
+        const xmove = Math.min(Math.abs(this.pendingMove[0][1]), speed) * xway;
+        const ymove = Math.min(Math.abs(this.pendingMove[0][0]), speed) * yway;
+
+        this.posX += xmove;
+        this.posY += ymove;
+        this.pendingMove[0][1] -= xmove;
+        this.pendingMove[0][0] -= ymove;
+
+        if (
+          Math.abs(this.pendingMove[0][1]) == 0
+          && Math.abs(this.pendingMove[0][0] == 0)) {
+          this.pendingMove.shift();
+          return [xway, yway];
+        }
+
+        return false;
       }
     }
   }
