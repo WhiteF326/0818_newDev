@@ -68,7 +68,7 @@ class Body {
     this.canvas.width = this.tilesize * this.map[0].length; // canvasの横幅
     this.canvas.height = this.tilesize * this.map.length; // canvasの縦幅
 
-    this.canvas.oncontextmenu = () => {return false;}
+    this.canvas.oncontextmenu = () => { return false; }
 
     // コンテキスト取得
     this.ctx = this.canvas.getContext('2d');
@@ -166,7 +166,7 @@ class Body {
       this.cursorX += action[0];
     }
 
-    if(this.endFlg && this.charaHand.isWaitFor()){
+    if (this.endFlg && this.charaHand.isWaitFor()) {
       moving = true;
     }
 
@@ -178,39 +178,47 @@ class Body {
 
     if (moving) {
       const power = moveWay[this.currentVector]['power'];
-      const nex = this.map[this.currentY + power[0]][this.currentX + power[1]];
-      if (nex === 1) {
-        if (this.charaAuto.isWaitFor()) {
-          this.currentY += power[0];
-          this.currentX += power[1];
-          this.charaAuto.addMove(
-            power[0] * this.tilesize, power[1] * this.tilesize
-          );
-        }
-      } else if (this.charaAuto.isWaitFor()) {
-        const leftWay = moveWay[this.currentVector]['lt'];
-        const lst = moveWay[leftWay]['power'];
-        const lnex = this.map[this.currentY + lst[0]][this.currentX + lst[1]];
-        const rightWay = moveWay[this.currentVector]['rt'];
-        const rst = moveWay[rightWay]['power'];
-        const rnex = this.map[this.currentY + rst[0]][this.currentX + rst[1]];
-        // left and right?
-        if (lnex === 1 && rnex === 1) {
-          switch (routineAutoTwoWay) {
-            case 'right':
-              this.currentVector = rightWay;
-              break;
-
-            case 'left':
-              this.currentVector = leftWay;
-              break;
+      const dy = this.currentY + power[0];
+      const dx = this.currentX + power[1];
+      if (dy < 0 || dy >= this.mapY || dx < 0 || dx >= this.mapX) {
+        this.currentVector = moveWay[
+          moveWay[this.currentVector]['rt']
+        ]['rt'];
+      } else {
+        const nex = this.map[this.currentY + power[0]][this.currentX + power[1]];
+        if (nex === 1) {
+          if (this.charaAuto.isWaitFor()) {
+            this.currentY += power[0];
+            this.currentX += power[1];
+            this.charaAuto.addMove(
+              power[0] * this.tilesize, power[1] * this.tilesize
+            );
           }
-        } else if (lnex === 1) {
-          this.currentVector = leftWay;
-        } else if (rnex === 1) {
-          this.currentVector = rightWay;
-        } else {
-          this.currentVector = moveWay[rightWay]['rt'];
+        } else if (this.charaAuto.isWaitFor()) {
+          const leftWay = moveWay[this.currentVector]['lt'];
+          const lst = moveWay[leftWay]['power'];
+          const lnex = this.map[this.currentY + lst[0]][this.currentX + lst[1]];
+          const rightWay = moveWay[this.currentVector]['rt'];
+          const rst = moveWay[rightWay]['power'];
+          const rnex = this.map[this.currentY + rst[0]][this.currentX + rst[1]];
+          // left and right?
+          if (lnex === 1 && rnex === 1) {
+            switch (routineAutoTwoWay) {
+              case 'right':
+                this.currentVector = rightWay;
+                break;
+
+              case 'left':
+                this.currentVector = leftWay;
+                break;
+            }
+          } else if (lnex === 1) {
+            this.currentVector = leftWay;
+          } else if (rnex === 1) {
+            this.currentVector = rightWay;
+          } else {
+            this.currentVector = moveWay[rightWay]['rt'];
+          }
         }
       }
     }
