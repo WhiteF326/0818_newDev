@@ -63,6 +63,8 @@ class ProgBoad {
       if (runnable) {
         this.parse(code.split("\n"));
         this.gameBody.endFlg = true;
+        document.getElementById("move").disabled = true;
+        document.getElementById("blocklyDiv").disabled = true;
       }
     }
   }
