@@ -6,7 +6,8 @@
   <title>プログラミングゲーム（仮）</title>
 
   <link rel="stylesheet" href="css/userBoad.css">
-  
+  <link href="https://fonts.googleapis.com/css?family=M+PLUS+1p" rel="stylesheet">
+
   <script src="js/Const.js"></script>
   <script src="js/chip.js"></script>
   <script src="js/ChipList.js"></script>
@@ -24,11 +25,20 @@
   <script src="js/ProgBoad.js"></script>
 </head>
 
+<style>
+  .cost {
+    font: 1.5em serif;
+    font-family: "M PLUS 1p";
+  }
+</style>
+
 <body>
-  <script type="module" src="js/Body.js"></script> 
+  <script type="module" src="js/Body.js"></script>
   <div>
     <canvas id="canvas"></canvas>
-    <span id="cost"></span><br>
+    <span id="cost" class="cost" style="display: inline-block;"></span>
+    <button id="move">開始</button>
+    <button id="retry">やり直し</button>
     <div id="blocklyDiv"></div>
     <xml id="toolbox">
       <block type="move"></block>
@@ -39,7 +49,6 @@
       <block type="sensor_foot"></block>
     </xml>
   </div>
-  <button id="move">開始</button>
 </body>
 
 </html>

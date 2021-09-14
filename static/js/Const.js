@@ -29,3 +29,7 @@ const moveWay = {
 const floor = Math.floor
 const min = Math.min
 const max = Math.max
+
+const makeCostText = (current, target) => {
+  return "現在コスト：" + current + "\n最大コスト：" + target;
+}

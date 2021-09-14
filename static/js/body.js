@@ -223,4 +223,8 @@ window.onload = async () => {
   const gameBody = new Body(mapinfo);
 
   new ProgBoad(gameBody);
+
+  document.getElementById("retry").addEventListener("click", () => {
+    location.reload();
+  });
 }

@@ -11,18 +11,23 @@ class ProgBoad {
     const workspace = Blockly.inject("blocklyDiv",
       { toolbox: document.getElementById("toolbox") });
 
+    const costPrint = () => {
+      const cost = this.costCalculator.calc(
+        Blockly.JavaScript.workspaceToCode(workspace)
+      );
+      document.getElementById("cost").innerText = makeCostText(
+        cost, gameBody.mapinfo["maxCost"]
+      );
+      if(cost > gameBody.mapinfo["maxCost"]){
+        document.getElementById("cost").style.color = "Red";
+      }
+    }
+
     document.body.childNodes.forEach(elm => {
-      elm.addEventListener("click", () => {
-        const cost = this.costCalculator.calc(
-          Blockly.JavaScript.workspaceToCode(workspace)
-        );
-        document.getElementById("cost").innerText = String(cost);
-      });
+      elm.addEventListener("click", () => { costPrint(); });
     });
-    const cost = this.costCalculator.calc(
-      Blockly.JavaScript.workspaceToCode(workspace)
-    );
-    document.getElementById("cost").innerText = String(cost);
+    document.onkeydown = () => { costPrint(); };
+    costPrint();
 
     document.getElementById("move").onclick = () => {
       const code = Blockly.JavaScript.workspaceToCode(workspace)
@@ -45,8 +50,17 @@ class ProgBoad {
         runnable = false;
         alert("条件が指定されていないifがあります。");
       }
-      if (runnable) this.parse(code.split("\n"));
-      this.gameBody.endFlg = true;
+      const cost = this.costCalculator.calc(
+        Blockly.JavaScript.workspaceToCode(workspace)
+      );
+      if(cost > this.gameBody.mapinfo["maxCost"]){
+        runnable = false;
+        alert("プログラムのコストが高すぎます。");
+      }
+      if (runnable){
+        this.parse(code.split("\n"));
+        this.gameBody.endFlg = true;
+      }
     }
   }
 
