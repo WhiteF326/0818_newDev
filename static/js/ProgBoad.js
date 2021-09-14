@@ -26,9 +26,10 @@ class ProgBoad {
     }
 
     document.body.childNodes.forEach(elm => {
-      elm.addEventListener("click", () => { costPrint(); });
+      elm.onclick = () => costPrint();
     });
-    document.onkeydown = () => { costPrint(); };
+    document.onkeydown = () => costPrint();
+    workspace.addChangeListener(() => costPrint());
     costPrint();
 
     document.getElementById("move").onclick = () => {
