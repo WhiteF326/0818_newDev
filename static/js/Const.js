@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 const stagename = 22;
-=======
-const stagename = 8;
->>>>>>> 2f595fc7b685690beb19373cdd821bb4b5067172
 const CHARASPEED = 4;
 
 const routineAutoTwoWay = "right";
