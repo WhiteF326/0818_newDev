@@ -2,159 +2,229 @@ import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
 
 let moving = false;
 
-window.onload = async () => {
-  // プログラム板の初期化
-  const userProg = new UserProgBody();
-  userProg.pInit();
-  // マップ情報の取得
-  const mapinfo = JSON.parse(await fetchJSON('api/stage', { 'name': stagename }));
-  const map = mapinfo['stage'];
-  const start = mapinfo['start'];
-  const hstart = mapinfo['controll'];
-  const goal = mapinfo['goal'];
+class Body {
+  constructor(mapinfo) {
+    // マップ情報の取得
+    this.mapinfo = mapinfo;
+    this.map = this.mapinfo['stage'];
+    this.mapY = this.map.length;
+    this.mapX = this.map[0].length;
+    this.start = this.mapinfo['start'];
+    this.cstart = this.mapinfo['controll'];
+    this.goal = this.mapinfo['goal'];
 
-  let currentY = start[0];
-  let currentX = start[1];
-  let currentVector = start[2];
+    // 白キャラの初期位置と向きを設定
+    this.currentY = this.start[0];
+    this.currentX = this.start[1];
+    this.currentVector = this.start[2];
 
-  // キャラ情報の取得
-  const charaAuto = new CharaAuto(start[2]);
-  const charaHand = new CharaHand('right');
+    // カーソルの初期位置を設定
+    this.cursorY = this.cstart[0];
+    this.cursorX = this.cstart[1];
+    this.futureCursorY = this.cstart[0];
+    this.futureCursorX = this.cstart[1];
 
-  // キャラ描画用のフレーム値
-  let frame = 0;
-  const endFrame = 3;
+    // プログラム板の初期化
+    this.progSize = this.mapinfo['progSize'];
 
-  // チップ情報の取得
-  const chipData = JSON.parse(await fetchJSON('api/chip', {}));
-  const chipList = new ChipList(chipData);
+    // キャラ情報の取得
+    this.charaAuto = new CharaAuto(this.start[2]);
+    this.charaHand = new CharaHand('right');
+    this.endFlg = false;
 
-  //
-  let sw = window.innerWidth;
+    // キャラ描画用のフレーム値
+    this.frame = 0;
+    this.endFrame = 3;
 
-  // tile size
-  const tilesize = Math.min(64, Math.floor(sw / 2 / map[0].length));
+    // チップ情報の取得
+    this.chipData = [
+      "map01.png",
+      "map02.png",
+      "map03.png"
+    ];
+    this.chipList = new ChipList(this.chipData);
 
-  // キャラ描画位置の調整
-  charaAuto.setPos(
-    start[0] * tilesize,
-    start[1] * tilesize + charaAuto.getOffset(tilesize),
-  );
-  charaHand.setPos(
-    hstart[0] * tilesize,
-    hstart[1] * tilesize + charaHand.getOffset(tilesize),
-  );
+    // ウィンドウサイズを取得
+    this.sh = window.innerHeight;
 
-  // canvas設定
-  const canvas = document.getElementById('canvas');
-  canvas.width = tilesize * map[0].length; // canvasの横幅
-  canvas.height = tilesize * map.length; // canvasの縦幅
+    // tile size
+    this.tilesize = min(
+      64, floor(this.sh / 2.2 / this.map.length));
 
-  // コンテキスト取得
-  const ctx = canvas.getContext('2d');
-
-  // 描画用関数の定義
-  const drawChip = (img, y, x) => {
-    ctx.drawImage(
-      img,
-      0, 0,
-      img.naturalWidth, img.naturalHeight,
-      tilesize * x, tilesize * y,
-      tilesize, tilesize,
+    // キャラ描画位置の調整
+    this.charaAuto.setPos(
+      this.currentY * this.tilesize,
+      this.currentX * this.tilesize
+      + this.charaAuto.getOffset(this.tilesize),
     );
-  };
-  const drawChar = (toDraw = charaAuto, frame) => {
-    const drawAsset = toDraw.getAsset(frame);
-    const size = toDraw.sizeExchange(tilesize);
-    charaAuto.setVector(currentVector);
-    ctx.drawImage(
-      drawAsset['image'],
-      drawAsset['positionX'], drawAsset['positionY'],
-      toDraw.getcharaX(), toDraw.getcharaY(),
-      toDraw.getposX(), toDraw.getposY(),
-      size['x'], size['y'],
+    this.charaHand.setPos(
+      this.cursorY * this.tilesize,
+      this.cursorX * this.tilesize
+      + this.charaHand.getOffset(this.tilesize),
     );
-  };
 
-  const maptileGoal = new Chip('./img/goal.png');
+    // canvas設定
+    this.canvas = document.getElementById('canvas');
+    this.canvas.width = this.tilesize * this.map[0].length; // canvasの横幅
+    this.canvas.height = this.tilesize * this.map.length; // canvasの縦幅
 
-  function render() {
-    // 移動
-    /**
-    可能な限り、今向いている方向に移動する
-    今向いている方向が壁ならば
-      逆戻りしか出来ないなら、180度旋回する
-      右または左の片方が壁でないなら、そちらに旋回する
-      右も左も壁でないなら、右側を優先する
-        左側優先との切り替えをする方法は協議中
-    */
-    frame++;
-    if (frame === 4 << endFrame) frame = 0;
-    for (let y = 0; y < map.length; y++) {
-      for (let x = 0; x < map[y].length; x++) {
-        drawChip(chipList.getChip(map[y][x]), y, x);
-        if (y === goal[0] && x === goal[1]) {
-          drawChip(maptileGoal, y, x);
+    this.canvas.oncontextmenu = () => {return false;}
+
+    // コンテキスト取得
+    this.ctx = this.canvas.getContext('2d');
+
+    // 描画用関数の定義
+    this.drawChip = (img, y, x) => {
+      this.ctx.drawImage(
+        img,
+        0, 0,
+        img.naturalWidth, img.naturalHeight,
+        this.tilesize * x, this.tilesize * y,
+        this.tilesize, this.tilesize,
+      );
+    };
+    this.drawChar = (toDraw = this.charaAuto, frame) => {
+      const drawAsset = toDraw.getAsset(frame);
+      const size = toDraw.sizeExchange(this.tilesize);
+      this.charaAuto.setVector(this.currentVector);
+      this.ctx.drawImage(
+        drawAsset['image'],
+        drawAsset['positionX'], drawAsset['positionY'],
+        toDraw.getcharaX(), toDraw.getcharaY(),
+        toDraw.getposX(), toDraw.getposY(),
+        size['x'], size['y'],
+      );
+    };
+
+    this.maptileGoal = new Chip('./img/goal.png');
+
+    this.render();
+  }
+
+  cMove = (y, x) => {
+    const dy = this.futureCursorY + y;
+    const dx = this.futureCursorX + x;
+
+    if (dy < 0 || dy >= this.mapY || dx < 0 || dx >= this.mapX) {
+      return false;
+    } else {
+      this.futureCursorX += x;
+      this.futureCursorY += y;
+      this.charaHand.addMove(
+        y * this.tilesize, x * this.tilesize
+      );
+      return true;
+    }
+  }
+  cAction = (type) => {
+    this.charaHand.addCursorAction(type);
+  }
+
+  sensor_foot = () => this.map[this.futureCursorY][this.futureCursorX] == 2;
+
+  destroyCursor = (y, x) => {
+    if (this.map[y][x] == 2) {
+      this.map[y][x] = 1;
+    }
+  }
+  createCursor = (y, x) => {
+    if (this.map[y][x] == 1) {
+      this.map[y][x] = 2;
+    }
+  }
+
+  turnMoving = () => {
+    moving = !moving;
+  }
+
+  render() {
+    // キャラクターの移動
+    this.frame++;
+    if (this.frame === 4 << this.endFrame) this.frame = 0;
+    for (let y = 0; y < this.map.length; y++) {
+      for (let x = 0; x < this.map[y].length; x++) {
+        this.drawChip(this.chipList.getChip(this.map[y][x]), y, x);
+        if (y === this.goal[0] && x === this.goal[1]) {
+          this.drawChip(this.maptileGoal, y, x);
         }
       }
     }
-    drawChar(charaAuto, frame >> endFrame);
-    drawChar(charaHand, frame >> endFrame);
-    charaAuto.moveFrame(CHARASPEED);
+    this.drawChar(this.charaAuto, this.frame >> this.endFrame);
+    this.drawChar(this.charaHand, this.frame >> this.endFrame);
+    this.charaAuto.moveFrame(CHARASPEED);
+    const action = this.charaHand.moveFrame(CHARASPEED);
+    if (typeof action == "string") {
+      const y = this.cursorY, x = this.cursorX;
+      if (action === "create") {
+        this.createCursor(y, x);
+      } else if (action === "destroy") {
+        this.destroyCursor(y, x);
+      }
+    } else if (action) {
+      console.log(this.cursorX, this.cursorY);
+      this.cursorY += action[1];
+      this.cursorX += action[0];
+    }
 
-    if (currentY === goal[0] && currentX === goal[1] &&
-      charaAuto.isWaitFor() && moving) {
+    if(this.endFlg && this.charaHand.isWaitFor()){
+      moving = true;
+    }
+
+    if (this.currentY === this.goal[0] && this.currentX === this.goal[1] &&
+      this.charaAuto.isWaitFor() && moving) {
       console.log('goal');
       moving = false;
     }
 
     if (moving) {
-      const power = moveWay[currentVector]['power'];
-      const nex = map[currentY + power[0]][currentX + power[1]];
+      const power = moveWay[this.currentVector]['power'];
+      const nex = this.map[this.currentY + power[0]][this.currentX + power[1]];
       if (nex === 1) {
-        if (charaAuto.isWaitFor()) {
-          currentY += power[0];
-          currentX += power[1];
-          charaAuto.addMove(power[0] * tilesize, power[1] * tilesize);
+        if (this.charaAuto.isWaitFor()) {
+          this.currentY += power[0];
+          this.currentX += power[1];
+          this.charaAuto.addMove(
+            power[0] * this.tilesize, power[1] * this.tilesize
+          );
         }
-      } else if (charaAuto.isWaitFor()) {
-        const leftWay = moveWay[currentVector]['lt'];
+      } else if (this.charaAuto.isWaitFor()) {
+        const leftWay = moveWay[this.currentVector]['lt'];
         const lst = moveWay[leftWay]['power'];
-        const lnex = map[currentY + lst[0]][currentX + lst[1]];
-        const rightWay = moveWay[currentVector]['rt'];
+        const lnex = this.map[this.currentY + lst[0]][this.currentX + lst[1]];
+        const rightWay = moveWay[this.currentVector]['rt'];
         const rst = moveWay[rightWay]['power'];
-        const rnex = map[currentY + rst[0]][currentX + rst[1]];
+        const rnex = this.map[this.currentY + rst[0]][this.currentX + rst[1]];
         // left and right?
         if (lnex === 1 && rnex === 1) {
           switch (routineAutoTwoWay) {
             case 'right':
-              currentVector = rightWay;
+              this.currentVector = rightWay;
               break;
 
             case 'left':
-              currentVector = leftWay;
+              this.currentVector = leftWay;
               break;
           }
         } else if (lnex === 1) {
-          currentVector = leftWay;
+          this.currentVector = leftWay;
         } else if (rnex === 1) {
-          currentVector = rightWay;
+          this.currentVector = rightWay;
         } else {
-          currentVector = moveWay[rightWay]['rt'];
+          this.currentVector = moveWay[rightWay]['rt'];
         }
       }
     }
-    requestAnimationFrame(render);
+    requestAnimationFrame(this.render.bind(this));
   }
-  requestAnimationFrame(render);
-};
+}
 
-document.getElementById('move').onclick = () => {
-  if (moving) {
-    moving = false;
-    document.getElementById('mode').innerText = '停止中';
-  } else {
-    moving = true;
-    document.getElementById('mode').innerText = '移動中';
-  }
-};
+window.onload = async () => {
+  const mapinfo = JSON.parse(await fetchJSON('api/stage', { 'name': stagename }));
+  const gameBody = new Body(mapinfo);
+
+  new ProgBoad(gameBody);
+
+  document.getElementById("retry").addEventListener("click", () => {
+    location.reload();
+  });
+}

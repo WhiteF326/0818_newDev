@@ -6,30 +6,49 @@
   <title>プログラミングゲーム（仮）</title>
 
   <link rel="stylesheet" href="css/userBoad.css">
-  
+  <link href="https://fonts.googleapis.com/css?family=M+PLUS+1p" rel="stylesheet">
+
   <script src="js/Const.js"></script>
-  <script src="js/userProgBody.js"></script>
   <script src="js/chip.js"></script>
   <script src="js/ChipList.js"></script>
   <script src="js/CharaAuto.js"></script>
   <script src="js/CharaHand.js"></script>
+
+  <!-- blockly -->
+  <script src="block_module/blockly_compressed.js"></script>
+  <script src="block_module/blocks_compressed.js"></script>
+  <script src="block_module/javascript_compressed.js"></script>
+  <script src="block_module/msg/js/ja.js"></script>
+
+  <script src="block_module/myblock.js"></script>
+  <script src="js/CostCalculator.js"></script>
+  <script src="js/ProgBoad.js"></script>
 </head>
 
 <style>
-  canvas{
-    display: inline-block;
-    vertical-align: top;
+  .cost {
+    font: 1.5em serif;
+    font-family: "M PLUS 1p";
   }
 </style>
 
 <body>
-  <script type="module" src="js/body.js"></script> 
+  <script type="module" src="js/Body.js"></script>
   <div>
     <canvas id="canvas"></canvas>
-    <canvas id="program" class="userBoad"></canvas>
+    <span id="cost" class="cost" style="display: inline-block;"></span>
+    <button id="move">開始</button>
+    <button id="retry">やり直し</button>
+    <div id="blocklyDiv"></div>
+    <xml id="toolbox">
+      <block type="move"></block>
+      <block type="destroy"></block>
+      <block type="create"></block>
+      <block type="loop"></block>
+      <block type="if"></block>
+      <block type="sensor_foot"></block>
+    </xml>
   </div>
-  <button id="move">移動</button>
-  <span id="mode"></span>
 </body>
 
 </html>

@@ -9,7 +9,7 @@
   "watcher": {
     "interval": 350,
     "exts": ["js", "jsx", "ts", "tsx"],
-    "match": ["**/*.*"],
+    "match": ["**/body.*"],
     "skip": ["*/.git/*"],
     "legacy": false
   }
