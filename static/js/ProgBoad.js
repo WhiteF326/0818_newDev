@@ -18,8 +18,10 @@ class ProgBoad {
       document.getElementById("cost").innerText = makeCostText(
         cost, gameBody.mapinfo["maxCost"]
       );
-      if(cost > gameBody.mapinfo["maxCost"]){
+      if (cost > gameBody.mapinfo["maxCost"]) {
         document.getElementById("cost").style.color = "Red";
+      } else {
+        document.getElementById("cost").style.color = "Black";
       }
     }
 
@@ -53,11 +55,11 @@ class ProgBoad {
       const cost = this.costCalculator.calc(
         Blockly.JavaScript.workspaceToCode(workspace)
       );
-      if(cost > this.gameBody.mapinfo["maxCost"]){
+      if (cost > this.gameBody.mapinfo["maxCost"]) {
         runnable = false;
         alert("プログラムのコストが高すぎます。");
       }
-      if (runnable){
+      if (runnable) {
         this.parse(code.split("\n"));
         this.gameBody.endFlg = true;
       }
