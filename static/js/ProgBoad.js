@@ -20,8 +20,6 @@ class ProgBoad {
       );
       if(cost > gameBody.mapinfo["maxCost"]){
         document.getElementById("cost").style.color = "Red";
-      }else{
-        document.getElementById("cost").style.color = "Black";
       }
     }
 
