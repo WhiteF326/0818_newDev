@@ -12,5 +12,6 @@
   ],
   "start": [1, 8, "left"],
   "goal": [6, 1],
-  "controll": [1, 0]
+  "controll": [1, 0],
+  "maxCost": 35
 }
