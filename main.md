@@ -93,8 +93,7 @@
 
 #### 画面仕様
 
-![初期状態](images/screenshot_1.png)
-
+![初期状態](https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/images/screenshot_1.png)
 ↑が盤面初期状態の画面。
 
 - 左上
@@ -108,17 +107,17 @@
 - 下
   - ユーザプログラムを記述する。
 
-![プログラミング中](images/screenshot_2.png)
+![プログラミング中](https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/images/screenshot_2.png)
 
 - 下部の blockly によって実装されたブロックプログラミング環境で、PC を動かすためのプログラムを実装する。
 
-![実行中](images/screenshot_3.png)
+![実行中](https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/images/screenshot_3.png)
 
 - 開始ボタンを押すとユーザプログラムが実行され、カーソルが移動したり石が配置、消去される。
 - その後、NPC が移動を開始する。
 
 <video controls>
-  <source src="images/playscene.mp4" type="video/mp4">
+  <source src="https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/images/playscene.mp4" type="video/mp4">
 </video>
 
 #### その他
