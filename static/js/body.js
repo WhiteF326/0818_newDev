@@ -244,4 +244,8 @@ window.onload = async () => {
     progBoad.save();
     location.reload();
   });
+
+  window.onbeforeunload = () => {
+    progBoad.save();
+  }
 }
