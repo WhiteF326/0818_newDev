@@ -232,9 +232,13 @@ window.onload = async () => {
   });
   const gameBody = new Body(mapinfo);
 
-  new ProgBoad(gameBody);
+  const progBoad = new ProgBoad(gameBody);
+  if(localStorage.getItem("savedProgram")){
+    progBoad.loadFromText(localStorage.getItem("savedProgram"));
+  }
 
   document.getElementById("retry").addEventListener("click", () => {
+    progBoad.save();
     location.reload();
   });
 }

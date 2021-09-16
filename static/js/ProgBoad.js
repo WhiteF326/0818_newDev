@@ -8,12 +8,12 @@ class ProgBoad {
       "height: " + String(floor(window.innerHeight / 2.2)) + "px; " +
       "width: " + String(floor(window.innerWidth / 1.2)) + "px;");
 
-    const workspace = Blockly.inject("blocklyDiv",
+    this.workspace = Blockly.inject("blocklyDiv",
       { toolbox: document.getElementById("toolbox") });
 
     const costPrint = () => {
       const cost = this.costCalculator.calc(
-        Blockly.JavaScript.workspaceToCode(workspace)
+        Blockly.JavaScript.workspaceToCode(this.workspace)
       );
       document.getElementById("cost").innerText = makeCostText(
         cost, gameBody.mapinfo["maxCost"]
@@ -29,11 +29,11 @@ class ProgBoad {
       elm.onclick = () => costPrint();
     });
     document.onkeydown = () => costPrint();
-    workspace.addChangeListener(() => costPrint());
+    this.workspace.addChangeListener(() => costPrint());
     costPrint();
 
     document.getElementById("move").onclick = () => {
-      const code = Blockly.JavaScript.workspaceToCode(workspace)
+      const code = Blockly.JavaScript.workspaceToCode(this.workspace)
         .replaceAll("  ", "");
       console.log(code);
       // 静的解析
@@ -54,7 +54,7 @@ class ProgBoad {
         alert("条件が指定されていないifがあります。");
       }
       const cost = this.costCalculator.calc(
-        Blockly.JavaScript.workspaceToCode(workspace)
+        Blockly.JavaScript.workspaceToCode(this.workspace)
       );
       if (cost > this.gameBody.mapinfo["maxCost"]) {
         runnable = false;
@@ -105,5 +105,21 @@ class ProgBoad {
         i = codel.indexOf("endif " + ifid);
       }
     }
+  }
+
+  loadFromText(text) {
+    this.workspace.clear();
+    Blockly.Xml.domToWorkspace(
+      Blockly.Xml.textToDom(text), this.workspace
+    );
+  }
+
+  save() {
+    localStorage.setItem(
+      "savedProgram",
+      Blockly.Xml.domToPrettyText(
+        Blockly.Xml.workspaceToDom(this.workspace)
+      )
+    );
   }
 }
