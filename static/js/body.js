@@ -227,7 +227,7 @@ class Body {
 }
 
 window.onload = async () => {
-  const mapinfo = JSON.parse(await fetchJSON('api/stage', { 'name': stagename }));
+  const mapinfo = JSON.parse(await fetchJSON('./api/stage.php', { 'name': stagename }));
   const gameBody = new Body(mapinfo);
 
   new ProgBoad(gameBody);
