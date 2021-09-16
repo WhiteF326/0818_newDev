@@ -126,7 +126,10 @@ class Body {
     }
   }
   createCursor = (y, x) => {
-    if (this.map[y][x] == 1) {
+    if (this.map[y][x] == 1
+      && !(this.currentY == y && this.currentX == x)) {
+      console.log(y, x);
+      console.log(this.currentY, this.currentX);
       this.map[y][x] = 2;
     }
   }
