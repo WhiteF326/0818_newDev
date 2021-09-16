@@ -1,5 +1,3 @@
-import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
-
 let moving = false;
 
 class Body {
@@ -227,7 +225,11 @@ class Body {
 }
 
 window.onload = async () => {
-  const mapinfo = JSON.parse(await fetchJSON('./api/stage.php', { 'name': stagename }));
+  const mapinfo = await fetch(
+    "./api/stage.php?name=" + stagename
+  ).then(res => res.text()).then(t => {
+    return JSON.parse(t);
+  });
   const gameBody = new Body(mapinfo);
 
   new ProgBoad(gameBody);
