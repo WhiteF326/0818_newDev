@@ -108,6 +108,9 @@ class CharaAuto {
   updateJunp = () => {
     if (this.isJunping) {
       this.jumpTime++;
+      if (this.jumpTime == 0) {
+        new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/jump.mp3").play();
+      }
       if (this.jumpTime >= 0) {
         this.difference = this.tileSize * Math.sin(
           this.#degToRad(this.jumpTime * 180 / (1.5 * this.tileSize / CHARASPEED))
