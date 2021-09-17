@@ -211,7 +211,7 @@ class Body {
             const rst = moveWay[rightWay]['power'];
             const rnex = this.map[this.currentY + rst[0]][this.currentX + rst[1]];
             // left and right?
-            if (lnex === 1 && rnex === 1) {
+            if (contains(floorList, lnex) && contains(floorList, rnex)) {
               switch (routineAutoTwoWay) {
                 case 'right':
                   this.currentVector = rightWay;
@@ -221,9 +221,9 @@ class Body {
                   this.currentVector = leftWay;
                   break;
               }
-            } else if (lnex === 1) {
+            } else if (contains(floorList, lnex)) {
               this.currentVector = leftWay;
-            } else if (rnex === 1) {
+            } else if (contains(floorList, rnex)) {
               this.currentVector = rightWay;
             } else {
               this.currentVector = moveWay[rightWay]['rt'];

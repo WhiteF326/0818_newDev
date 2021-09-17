@@ -109,7 +109,7 @@ class CharaAuto {
     if (this.isJunping) {
       this.jumpTime++;
       if (this.jumpTime == 0) {
-        new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/jump.mp3").play();
+        jumpSound.play();
       }
       if (this.jumpTime >= 0) {
         this.difference = this.tileSize * Math.sin(
