@@ -1,5 +1,7 @@
 let moving = false;
 
+import {fetchJSON} from 'https://js.sabae.cc/fetchJSON.js';
+
 class Body {
   constructor(mapinfo) {
     // マップ情報の取得
@@ -25,8 +27,15 @@ class Body {
     // プログラム板の初期化
     this.progSize = this.mapinfo['progSize'];
 
+    // ウィンドウサイズを取得
+    this.sh = window.innerHeight;
+
+    // tile size
+    this.tilesize = min(
+      64, floor(this.sh / 2.2 / this.map.length));
+
     // キャラ情報の取得
-    this.charaAuto = new CharaAuto(this.start[2]);
+    this.charaAuto = new CharaAuto(this.start[2], this.tilesize);
     this.charaHand = new CharaHand('right');
     this.endFlg = false;
 
@@ -38,16 +47,10 @@ class Body {
     this.chipData = [
       "map01.png",
       "map02.png",
-      "map03.png"
+      "map03.png",
+      "spring.png"
     ];
     this.chipList = new ChipList(this.chipData);
-
-    // ウィンドウサイズを取得
-    this.sh = window.innerHeight;
-
-    // tile size
-    this.tilesize = min(
-      64, floor(this.sh / 2.2 / this.map.length));
 
     // キャラ描画位置の調整
     this.charaAuto.setPos(
@@ -155,7 +158,7 @@ class Body {
     this.drawChar(this.charaHand, this.frame >> this.endFrame);
     this.charaAuto.moveFrame(CHARASPEED);
     const action = this.charaHand.moveFrame(CHARASPEED);
-    if (typeof action == "string") {
+    if (typeof action === "string") {
       const y = this.cursorY, x = this.cursorX;
       if (action === "create") {
         this.createCursor(y, x);
@@ -174,7 +177,6 @@ class Body {
 
     if (this.currentY === this.goal[0] && this.currentX === this.goal[1] &&
       this.charaAuto.isWaitFor() && moving) {
-      console.log('goal');
       moving = false;
     }
 
@@ -188,38 +190,44 @@ class Body {
         ]['rt'];
       } else {
         const nex = this.map[this.currentY + power[0]][this.currentX + power[1]];
-        if (nex === 1) {
-          if (this.charaAuto.isWaitFor()) {
+        if (this.charaAuto.isWaitFor()) {
+          if (nex === 1) {
             this.currentY += power[0];
             this.currentX += power[1];
             this.charaAuto.addMove(
-              power[0] * this.tilesize, power[1] * this.tilesize
+              power[0] * this.tilesize, power[1] * this.tilesize, false
             );
-          }
-        } else if (this.charaAuto.isWaitFor()) {
-          const leftWay = moveWay[this.currentVector]['lt'];
-          const lst = moveWay[leftWay]['power'];
-          const lnex = this.map[this.currentY + lst[0]][this.currentX + lst[1]];
-          const rightWay = moveWay[this.currentVector]['rt'];
-          const rst = moveWay[rightWay]['power'];
-          const rnex = this.map[this.currentY + rst[0]][this.currentX + rst[1]];
-          // left and right?
-          if (lnex === 1 && rnex === 1) {
-            switch (routineAutoTwoWay) {
-              case 'right':
-                this.currentVector = rightWay;
-                break;
-
-              case 'left':
-                this.currentVector = leftWay;
-                break;
-            }
-          } else if (lnex === 1) {
-            this.currentVector = leftWay;
-          } else if (rnex === 1) {
-            this.currentVector = rightWay;
+          } else if (nex === 3) {
+            this.currentY += power[0] * 2;
+            this.currentX += power[1] * 2;
+            this.charaAuto.addMove(
+              power[0] * this.tilesize * 2, power[1] * this.tilesize * 2, true
+            );
           } else {
-            this.currentVector = moveWay[rightWay]['rt'];
+            const leftWay = moveWay[this.currentVector]['lt'];
+            const lst = moveWay[leftWay]['power'];
+            const lnex = this.map[this.currentY + lst[0]][this.currentX + lst[1]];
+            const rightWay = moveWay[this.currentVector]['rt'];
+            const rst = moveWay[rightWay]['power'];
+            const rnex = this.map[this.currentY + rst[0]][this.currentX + rst[1]];
+            // left and right?
+            if (lnex === 1 && rnex === 1) {
+              switch (routineAutoTwoWay) {
+                case 'right':
+                  this.currentVector = rightWay;
+                  break;
+
+                case 'left':
+                  this.currentVector = leftWay;
+                  break;
+              }
+            } else if (lnex === 1) {
+              this.currentVector = leftWay;
+            } else if (rnex === 1) {
+              this.currentVector = rightWay;
+            } else {
+              this.currentVector = moveWay[rightWay]['rt'];
+            }
           }
         }
       }
@@ -229,15 +237,19 @@ class Body {
 }
 
 window.onload = async () => {
-  const mapinfo = await fetch(
-    "./api/stage.php?name=" + stagename
-  ).then(res => res.text()).then(t => {
-    return JSON.parse(t);
-  });
+  // php
+  // const mapinfo = await fetch(
+  //   "./api/stage.php?name=" + stagename
+  // ).then(res => res.text()).then(t => {
+  //   return JSON.parse(t);
+  // });
+
+  // deno
+  const mapinfo = JSON.parse(await fetchJSON('api/stage', {'name': stagename}));
   const gameBody = new Body(mapinfo);
 
   const progBoad = new ProgBoad(gameBody);
-  if(localStorage.getItem("savedProgram")){
+  if (localStorage.getItem("savedProgram")) {
     progBoad.loadFromText(localStorage.getItem("savedProgram"));
   }
 

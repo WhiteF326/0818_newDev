@@ -1,5 +1,5 @@
 class CharaAuto {
-  constructor(vector) {
+  constructor(vector, tileSize) {
     this.charaX = 32;
     this.charaY = 48;
     this.posX = 0;
@@ -15,6 +15,13 @@ class CharaAuto {
     this.sign = (v) => {
       return (v > 0) - (v < 0);
     }
+
+    this.velocity = 0;
+    this.isJunping = false;
+    this.difference = 0;
+    this.jumpTime = 0;
+
+    this.tileSize = tileSize;
   }
 
   getAsset(frame) {
@@ -27,7 +34,7 @@ class CharaAuto {
         "right": 2,
         "back": 3
       }[this.vector] * this.charaY,
-      "positionX": this.charaX * frame
+      "positionX": this.charaX * frame,
     };
   }
 
@@ -40,15 +47,25 @@ class CharaAuto {
     this.posY = y;
   }
 
-  addMove(y, x) {
-    this.pendingMove.push([y, x]);
+  addMove(y, x, isJunp) {
+    this.pendingMove.push([y, x, (isJunp ? 2 : 0)]);
   }
   moveFrame(speed) {
+    this.updateJunp();
     if (this.pendingMove.length != 0) {
       const xway = this.sign(this.pendingMove[0][1]);
       const yway = this.sign(this.pendingMove[0][0]);
-      const xmove = Math.min(Math.abs(this.pendingMove[0][1]), speed) * xway;
-      const ymove = Math.min(Math.abs(this.pendingMove[0][0]), speed) * yway;
+      const isJunp = this.pendingMove[0][2];
+      if (isJunp == 2) {
+        this.setJunp();
+        this.pendingMove[0][2] = 1;
+      }
+      const xmove = Math.min(
+        Math.abs(this.pendingMove[0][1]), speed * (isJunp ? 2 : 1)
+      ) * xway;
+      const ymove = Math.min(
+        Math.abs(this.pendingMove[0][0]), speed * (isJunp ? 2 : 1)
+      ) * yway;
 
       this.posX += xmove;
       this.posY += ymove;
@@ -64,7 +81,9 @@ class CharaAuto {
   }
 
   getposX = () => this.posX;
-  getposY = () => this.posY;
+  getposY = () => {
+    return this.posY - this.difference;
+  };
   getcharaX = () => this.charaX;
   getcharaY = () => this.charaY;
 
@@ -77,4 +96,27 @@ class CharaAuto {
   getOffset = (size) => Math.ceil(size / 8);
 
   isWaitFor = () => !this.pendingMove.length;
+
+  #degToRad = (deg) => deg * Math.PI / 180;
+
+  setJunp = () => {
+    this.velocity = -32;
+    this.isJunping = true;
+    this.difference = 0;
+    this.jumpTime = -(this.tileSize / CHARASPEED / 2);
+  }
+  updateJunp = () => {
+    if (this.isJunping) {
+      this.jumpTime++;
+      if (this.jumpTime >= 0) {
+        this.difference = this.tileSize * Math.sin(
+          this.#degToRad(this.jumpTime * 180 / (1.5 * this.tileSize / CHARASPEED))
+        );
+      }
+      if (this.jumpTime > (this.tileSize / CHARASPEED) * 1.5) {
+        this.difference = 0;
+        this.isJunping = false;
+      }
+    }
+  }
 }
