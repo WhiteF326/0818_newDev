@@ -20,6 +20,18 @@ class Body {
     this.cstart = this.mapinfo['controll'];
     this.goal = this.mapinfo['goal'];
 
+    // スイッチ情報の管理
+    this.doorPos = [[], [], [], [], []];
+    let firstSwitchs = [0, 0, 0, 0, 0];
+    for(let y = 0; y < this.mapY; y++){
+      for(let x = 0; x < this.mapX; x++){
+        if(this.map[y][x] === 5) firstSwitchs[this.param[y][x]]++;
+        if(this.map[y][x] === 6) this.doorPos[this.param[y][x]] = [y, x];
+      }
+    }
+    console.log(firstSwitchs);
+    this.doors = new Doors(firstSwitchs);
+
     // 白キャラの初期位置と向きを設定
     this.currentY = this.start[0];
     this.currentX = this.start[1];
@@ -200,6 +212,7 @@ class Body {
     }
 
     if (moving) {
+      console.log(this.doors.last);
       const power = moveWay[this.currentVector]['power'];
       const dy = this.currentY + power[0];
       const dx = this.currentX + power[1];
@@ -216,7 +229,16 @@ class Body {
           this.param[this.currentY][this.currentX]
             = this.chipList.stepFunc[this.map[this.currentY][this.currentX]]
               (this.param[this.currentY][this.currentX]);
-          if (nex === 1 || (nex === 4 && np >= 1)) {
+          if(this.map[this.currentY][this.currentX] === 5){
+            this.map[this.currentY][this.currentX] = 7;
+            if(this.doors.pushed(this.param[this.currentY][this.currentX])){
+              const doorNo = this.param[this.currentY][this.currentX];
+              if(this.doorPos[doorNo].length){
+                this.map[this.doorPos[doorNo][0]][this.doorPos[doorNo][1]] = 8;
+              }
+            }
+          }
+          if (nex === 1 || (nex === 4 && np >= 1) || contains([5, 7, 8], nex)) {
             this.currentY += power[0];
             this.currentX += power[1];
             this.charaAuto.addMove(
