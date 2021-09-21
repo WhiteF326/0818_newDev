@@ -1,6 +1,6 @@
 let moving = false;
 
-import {fetchJSON} from 'https://js.sabae.cc/fetchJSON.js';
+import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
 
 class Body {
   constructor(mapinfo) {
@@ -9,6 +9,13 @@ class Body {
     this.map = this.mapinfo['stage'];
     this.mapY = this.map.length;
     this.mapX = this.map[0].length;
+    this.param = this.mapinfo['param'];
+    if (!this.param) {
+      this.param = this.map;
+      this.param = this.param.map(
+        y => y.map(() => 0)
+      );
+    }
     this.start = this.mapinfo['start'];
     this.cstart = this.mapinfo['controll'];
     this.goal = this.mapinfo['goal'];
@@ -44,13 +51,7 @@ class Body {
     this.endFrame = 3;
 
     // チップ情報の取得
-    this.chipData = [
-      "map01.png",
-      "map02.png",
-      "map03.png",
-      "spring.png"
-    ];
-    this.chipList = new ChipList(this.chipData);
+    this.chipList = new ChipList();
 
     // キャラ描画位置の調整
     this.charaAuto.setPos(
@@ -73,6 +74,8 @@ class Body {
 
     // コンテキスト取得
     this.ctx = this.canvas.getContext('2d');
+    this.ctx.font = "24px serif";
+    this.ctx.fillStyle = "#FFD700";
 
     // 描画用関数の定義
     this.drawChip = (img, y, x) => {
@@ -82,6 +85,12 @@ class Body {
         img.naturalWidth, img.naturalHeight,
         this.tilesize * x, this.tilesize * y,
         this.tilesize, this.tilesize,
+      );
+    };
+    this.drawParam = (str, y, x) => {
+      this.ctx.fillText(
+        str,
+        this.tilesize * x, this.tilesize * y + 20
       );
     };
     this.drawChar = (toDraw = this.charaAuto, frame) => {
@@ -148,10 +157,20 @@ class Body {
     if (this.frame === 4 << this.endFrame) this.frame = 0;
     for (let y = 0; y < this.map.length; y++) {
       for (let x = 0; x < this.map[y].length; x++) {
-        this.drawChip(this.chipList.getChip(this.map[y][x]), y, x);
+        // render chip
+        this.drawChip(
+          this.chipList.getChip(this.map[y][x], this.param[y][x]),
+          y, x
+        );
         if (y === this.goal[0] && x === this.goal[1]) {
           this.drawChip(this.maptileGoal, y, x);
         }
+
+        // render param
+        this.drawParam(
+          this.chipList.printParam[this.map[y][x]](this.param[y][x]),
+          y, x
+        );
       }
     }
     this.drawChar(this.charaAuto, this.frame >> this.endFrame);
@@ -189,9 +208,15 @@ class Body {
           moveWay[this.currentVector]['rt']
         ]['rt'];
       } else {
-        const nex = this.map[this.currentY + power[0]][this.currentX + power[1]];
+        const nex =
+          this.map[this.currentY + power[0]][this.currentX + power[1]];
+        const np =
+          this.param[this.currentY + power[0]][this.currentX + power[1]];
         if (this.charaAuto.isWaitFor()) {
-          if (nex === 1) {
+          this.param[this.currentY][this.currentX]
+            = this.chipList.stepFunc[this.map[this.currentY][this.currentX]]
+              (this.param[this.currentY][this.currentX]);
+          if (nex === 1 || (nex === 4 && np >= 1)) {
             this.currentY += power[0];
             this.currentX += power[1];
             this.charaAuto.addMove(
@@ -206,10 +231,12 @@ class Body {
           } else {
             const leftWay = moveWay[this.currentVector]['lt'];
             const lst = moveWay[leftWay]['power'];
-            const lnex = this.map[this.currentY + lst[0]][this.currentX + lst[1]];
+            const lnex =
+              this.map[this.currentY + lst[0]][this.currentX + lst[1]];
             const rightWay = moveWay[this.currentVector]['rt'];
             const rst = moveWay[rightWay]['power'];
-            const rnex = this.map[this.currentY + rst[0]][this.currentX + rst[1]];
+            const rnex =
+              this.map[this.currentY + rst[0]][this.currentX + rst[1]];
             // left and right?
             if (contains(floorList, lnex) && contains(floorList, rnex)) {
               switch (routineAutoTwoWay) {
@@ -245,7 +272,9 @@ window.onload = async () => {
   // });
 
   // deno
-  const mapinfo = JSON.parse(await fetchJSON('api/stage', {'name': stagename}));
+  const mapinfo = JSON.parse(
+    await fetchJSON('api/stage', { 'name': stagename })
+  );
   const gameBody = new Body(mapinfo);
 
   const progBoad = new ProgBoad(gameBody);
