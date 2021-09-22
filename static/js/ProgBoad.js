@@ -67,6 +67,25 @@ class ProgBoad {
         document.getElementById("blocklyDiv").disabled = true;
       }
     }
+
+    // コスト表の作成
+    console.log(this.gameBody.costList);
+    Object.keys(progListText).forEach(eachType => {
+      const value = this.gameBody.costList[eachType];
+      
+      const tr = document.createElement("tr");
+      const typeD = document.createElement("td");
+      typeD.appendChild(document.createTextNode(progListText[eachType]));
+      tr.appendChild(typeD);
+      const valueD = document.createElement("td");
+      if(typeof value === 'undefined'){
+        valueD.appendChild(document.createTextNode(defaultCost[eachType]));
+      }else{
+        valueD.appendChild(document.createTextNode(value));
+      }
+      tr.appendChild(valueD);
+      document.getElementById("costList").appendChild(tr);
+    });
   }
 
   parse = (codel) => {
