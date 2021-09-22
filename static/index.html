@@ -40,9 +40,13 @@
   <script type="module" src="js/Body.js"></script>
   <div>
     <canvas id="canvas"></canvas>
-    <span id="cost" class="cost" style="display: inline-block;"></span>
-    <button id="move">開始</button>
-    <button id="retry">やり直し</button>
+    <div style="display: inline-block;">
+      <div style="display: flex;">
+        <span id="cost" class="cost" style="display: inline-block;"></span>
+      </div>
+      <button id="move">開始</button>
+      <button id="retry">やり直し</button>
+    </div>
     <div id="blocklyDiv"></div>
     <xml id="toolbox">
       <block type="move"></block>

@@ -23,10 +23,10 @@ class Body {
     // スイッチ情報の管理
     this.doorPos = [[], [], [], [], []];
     let firstSwitchs = [0, 0, 0, 0, 0];
-    for(let y = 0; y < this.mapY; y++){
-      for(let x = 0; x < this.mapX; x++){
-        if(this.map[y][x] === 5) firstSwitchs[this.param[y][x]]++;
-        if(this.map[y][x] === 6) this.doorPos[this.param[y][x]] = [y, x];
+    for (let y = 0; y < this.mapY; y++) {
+      for (let x = 0; x < this.mapX; x++) {
+        if (this.map[y][x] === 5) firstSwitchs[this.param[y][x]]++;
+        if (this.map[y][x] === 6) this.doorPos[this.param[y][x]] = [y, x];
       }
     }
     console.log(firstSwitchs);
@@ -212,7 +212,6 @@ class Body {
     }
 
     if (moving) {
-      console.log(this.doors.last);
       const power = moveWay[this.currentVector]['power'];
       const dy = this.currentY + power[0];
       const dx = this.currentX + power[1];
@@ -229,11 +228,11 @@ class Body {
           this.param[this.currentY][this.currentX]
             = this.chipList.stepFunc[this.map[this.currentY][this.currentX]]
               (this.param[this.currentY][this.currentX]);
-          if(this.map[this.currentY][this.currentX] === 5){
+          if (this.map[this.currentY][this.currentX] === 5) {
             this.map[this.currentY][this.currentX] = 7;
-            if(this.doors.pushed(this.param[this.currentY][this.currentX])){
+            if (this.doors.pushed(this.param[this.currentY][this.currentX])) {
               const doorNo = this.param[this.currentY][this.currentX];
-              if(this.doorPos[doorNo].length){
+              if (this.doorPos[doorNo].length) {
                 this.map[this.doorPos[doorNo][0]][this.doorPos[doorNo][1]] = 8;
               }
             }
@@ -252,13 +251,19 @@ class Body {
             );
           } else {
             const leftWay = moveWay[this.currentVector]['lt'];
-            const lst = moveWay[leftWay]['power'];
             const lnex =
-              this.map[this.currentY + lst[0]][this.currentX + lst[1]];
+              this.map
+              [this.currentY + moveWay[leftWay]['power'][0]]
+              [this.currentX + moveWay[leftWay]['power'][1]];
             const rightWay = moveWay[this.currentVector]['rt'];
-            const rst = moveWay[rightWay]['power'];
             const rnex =
-              this.map[this.currentY + rst[0]][this.currentX + rst[1]];
+              this.map
+              [this.currentY + moveWay[rightWay]['power'][0]]
+              [this.currentX + moveWay[rightWay]['power'][1]];
+            const bnex = 
+              this.map
+              [this.currentY + moveWay[moveWay[rightWay]['rt']]['power'][0]]
+              [this.currentX + moveWay[moveWay[rightWay]['rt']]['power'][1]];
             // left and right?
             if (contains(floorList, lnex) && contains(floorList, rnex)) {
               switch (routineAutoTwoWay) {
@@ -274,8 +279,10 @@ class Body {
               this.currentVector = leftWay;
             } else if (contains(floorList, rnex)) {
               this.currentVector = rightWay;
-            } else {
+            } else if (contains(floorList, bnex)) {
               this.currentVector = moveWay[rightWay]['rt'];
+            } else {
+              moving = false;
             }
           }
         }
