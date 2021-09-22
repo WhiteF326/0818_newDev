@@ -34,8 +34,13 @@ const makeCostText = (current, target) => {
   return "現在コスト：" + current + "\n最大コスト：" + target;
 }
 
+//ジャンプ音
 const jumpSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/jump.mp3");
 jumpSound.volume = 1;
+
+//スイッチ音
+const switchSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/switch.mp3");
+switchSound.volume = 1;
 
 const floorList = [1, 3, 4, 5, 7, 8];
 const contains = (ary, elm) => {
@@ -43,7 +48,7 @@ const contains = (ary, elm) => {
   let low = 0;
   let mid = 0;
 
-  while(low <= high){
+  while (low <= high) {
     mid = Math.floor((high + low) / 2);
     if (ary[mid] === elm) {
       return true;

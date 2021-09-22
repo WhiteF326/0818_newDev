@@ -10,5 +10,6 @@
   ],
   "start": [1, 4, "left"],
   "goal": [3, 3],
-  "controll": [0, 0]
+  "controll": [0, 1],
+  "maxCost": 16
 }
