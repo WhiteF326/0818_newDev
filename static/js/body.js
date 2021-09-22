@@ -19,6 +19,7 @@ class Body {
     this.start = this.mapinfo['start'];
     this.cstart = this.mapinfo['controll'];
     this.goal = this.mapinfo['goal'];
+    this.costList = this.mapinfo['costList'];
 
     // スイッチ情報の管理
     this.doorPos = [[], [], [], [], []];
@@ -29,7 +30,6 @@ class Body {
         if (this.map[y][x] === 6) this.doorPos[this.param[y][x]] = [y, x];
       }
     }
-    console.log(firstSwitchs);
     this.doors = new Doors(firstSwitchs);
 
     // 白キャラの初期位置と向きを設定

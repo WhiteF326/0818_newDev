@@ -56,3 +56,11 @@ const contains = (ary, elm) => {
 
   return false;
 }
+
+const defaultCost = {
+  "move": 3,
+  "destroy": 5,
+  "create": 5,
+  "loop": 1,
+  "if": 1
+}
