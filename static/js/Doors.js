@@ -4,6 +4,7 @@ class Doors{
   }
 
   pushed(ptr){
+    switchSound.play();
     this.last[ptr] = max(0, this.last[ptr] - 1);
     // console.log(this.last);
     if(!this.last[ptr]){
