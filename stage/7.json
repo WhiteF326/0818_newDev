@@ -25,11 +25,7 @@
   "goal": [5, 7],
   "controll": [3, 5],
   "costList": {
-    "move": 3,
-    "destroy": 5,
-    "create": 5,
-    "loop": 1,
-    "if": 1
+    "move": 2
   },
   "maxCost": 27
 }

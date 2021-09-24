@@ -1,7 +1,7 @@
 class ProgBoad {
   constructor(gameBody) {
     this.gameBody = gameBody;
-    this.costCalculator = new CostCalculator();
+    this.costCalculator = new CostCalculator(gameBody.costList);
     this.endFlg = false;
     const workdiv = document.getElementById("blocklyDiv");
     workdiv.setAttribute("style",
