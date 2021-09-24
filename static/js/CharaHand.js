@@ -52,8 +52,12 @@ class CharaHand {
         const action = this.pendingMove[0];
         this.pendingMove.shift();
         if (action === "destroy") {
+          destroySound.currentTime = 0;
+          destroySound.play();
           return "destroy";
         } else if (action === "create") {
+          putSound.currentTime = 0;
+          putSound.play();
           return "create";
         }
       } else {
