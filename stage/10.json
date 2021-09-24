@@ -25,5 +25,12 @@
   "start": [1, 5, "right"],
   "goal": [1, 1],
   "controll": [0, 0],
+  "costList": {
+    "move": 3,
+    "destroy": 5,
+    "create": 5,
+    "loop": 1,
+    "if": 1
+  },
   "maxCost": 20
 }
