@@ -48,6 +48,7 @@ class CharaAuto {
   }
 
   addMove(y, x, isJunp) {
+    footstepsSound.play();
     this.pendingMove.push([y, x, (isJunp ? 2 : 0)]);
   }
   moveFrame(speed) {

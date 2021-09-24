@@ -34,6 +34,10 @@ const makeCostText = (current, target) => {
   return "現在コスト：" + current + "\n最大コスト：" + target;
 }
 
+//足音
+const footstepsSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/footsteps.mp3");
+footstepsSound.volume = 1;
+
 //ジャンプ音
 const jumpSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/jump.mp3");
 jumpSound.volume = 1;
