@@ -336,8 +336,4 @@ window.onload = async () => {
   window.onbeforeunload = () => {
     progBoad.save();
   }
-
-  window.onclick = () => {
-    new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/audio.mp3").play();
-  }
 }
