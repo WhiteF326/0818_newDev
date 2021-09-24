@@ -43,17 +43,17 @@ class CharaHand {
   addMove(y, x) {
     this.pendingMove.push([y, x]);
   }
-  addCursorAction(type){
+  addCursorAction(type) {
     this.pendingMove.push(type);
   }
   moveFrame(speed) {
     if (this.pendingMove.length != 0) {
-      if(typeof this.pendingMove[0] === "string"){
+      if (typeof this.pendingMove[0] === "string") {
         const action = this.pendingMove[0];
         this.pendingMove.shift();
-        if(action === "destroy"){
+        if (action === "destroy") {
           return "destroy";
-        }else if(action === "create"){
+        } else if (action === "create") {
           return "create";
         }
       } else {
