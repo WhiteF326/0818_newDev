@@ -147,6 +147,7 @@ class Body {
   destroyCursor = (y, x) => {
     if (this.map[y][x] == 2) {
       this.map[y][x] = 1;
+      destroySound.currentTime = 0;
       destroySound.play();
     }
   }
@@ -156,6 +157,7 @@ class Body {
       && !(this.goal[0] == y && this.goal[1] == x)) {
       console.log(this.currentY, this.currentX);
       this.map[y][x] = 2;
+      putSound.currentTime = 0;
       putSound.play();
     }
   }
