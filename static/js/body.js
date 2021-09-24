@@ -147,15 +147,16 @@ class Body {
   destroyCursor = (y, x) => {
     if (this.map[y][x] == 2) {
       this.map[y][x] = 1;
+      destroySound.play();
     }
   }
   createCursor = (y, x) => {
     if (this.map[y][x] == 1
       && !(this.currentY == y && this.currentX == x)
       && !(this.goal[0] == y && this.goal[1] == x)) {
-      console.log(y, x);
       console.log(this.currentY, this.currentX);
       this.map[y][x] = 2;
+      putSound.play();
     }
   }
 
@@ -197,7 +198,6 @@ class Body {
         this.destroyCursor(y, x);
       }
     } else if (action) {
-      console.log(this.cursorX, this.cursorY);
       this.cursorY += action[1];
       this.cursorX += action[0];
     }
@@ -255,13 +255,25 @@ class Body {
               this.map
               [this.currentY + moveWay[leftWay]['power'][0]]
               [this.currentX + moveWay[leftWay]['power'][1]];
+            const lprm =
+              this.param
+              [this.currentY + moveWay[leftWay]['power'][0]]
+              [this.currentX + moveWay[leftWay]['power'][1]];
             const rightWay = moveWay[this.currentVector]['rt'];
             const rnex =
               this.map
               [this.currentY + moveWay[rightWay]['power'][0]]
               [this.currentX + moveWay[rightWay]['power'][1]];
-            const bnex = 
+            const rprm =
               this.map
+              [this.currentY + moveWay[rightWay]['power'][0]]
+              [this.currentX + moveWay[rightWay]['power'][1]];
+            const bnex =
+              this.map
+              [this.currentY + moveWay[moveWay[rightWay]['rt']]['power'][0]]
+              [this.currentX + moveWay[moveWay[rightWay]['rt']]['power'][1]];
+            const bprm =
+              this.param
               [this.currentY + moveWay[moveWay[rightWay]['rt']]['power'][0]]
               [this.currentX + moveWay[moveWay[rightWay]['rt']]['power'][1]];
             // left and right?
@@ -275,11 +287,14 @@ class Body {
                   this.currentVector = leftWay;
                   break;
               }
-            } else if (contains(floorList, lnex)) {
+            } else if (contains(floorList, lnex)
+              && (lnex !== 4 || lprm !== 0)) {
               this.currentVector = leftWay;
-            } else if (contains(floorList, rnex)) {
+            } else if (contains(floorList, rnex)
+              && (rnex !== 4 || rprm !== 0)) {
               this.currentVector = rightWay;
-            } else if (contains(floorList, bnex)) {
+            } else if (contains(floorList, bnex)
+              && (bnex !== 4 || bprm !== 0)) {
               this.currentVector = moveWay[rightWay]['rt'];
             } else {
               moving = false;
