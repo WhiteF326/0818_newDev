@@ -1,4 +1,4 @@
-const stagename = 10;
+const stagename = 7;
 const CHARASPEED = 4;
 
 const routineAutoTwoWay = "right";
@@ -34,27 +34,31 @@ const makeCostText = (current, target) => {
   return "現在コスト：" + current + "\n最大コスト：" + target;
 }
 
-//足音
+// 足音
 const footstepsSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/footsteps.mp3");
 footstepsSound.volume = 0.5;
 
-//ジャンプ音
+// ジャンプ音
 const jumpSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/jump.mp3");
 jumpSound.volume = 1;
 
-//スイッチ音
+// スイッチ音
 const switchSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/switch.mp3");
 switchSound.volume = 1;
 
-//破壊音
+// 破壊音
 const destroySound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/destroy.mp3");
 destroySound.volume = 0.5;
 
-//配置音
+// 配置音
 const putSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/put.mp3");
 putSound.volume = 1;
 
-const floorList = [1, 3, 4, 5, 7, 8];
+// 選択音
+const selectSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/select.mp3");
+selectSound.volume = 1;
+
+const floorList = [1, 3, 4, 5, 7, 8, 9];
 const contains = (ary, elm) => {
   let high = ary.length - 1;
   let low = 0;
@@ -80,4 +84,19 @@ const defaultCost = {
   "create": 5,
   "loop": 1,
   "if": 1
+}
+
+$(document).clickSpark({
+  particleImagePath: "img/particle.png",
+  particleCount: 10,
+  particleSpped: 1,
+  particleSize: 12,
+  particleRotationSpeed: 10,
+  particleDuration: 100,
+  animationType: "explosion",
+});
+
+document.onclick = () => {
+  selectSound.currentTime = 0;
+  selectSound.play();
 }

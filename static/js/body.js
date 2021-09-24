@@ -239,7 +239,7 @@ class Body {
               }
             }
           }
-          if (nex === 1 || (nex === 4 && np >= 1) || contains([5, 7, 8], nex)) {
+          if (nex === 1 || (nex === 4 && np >= 1) || contains([5, 7, 8, 9], nex)) {
             this.currentY += power[0];
             this.currentX += power[1];
             this.charaAuto.addMove(
