@@ -46,6 +46,10 @@ jumpSound.volume = 1;
 const switchSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/switch.mp3");
 switchSound.volume = 1;
 
+//置く音
+const putSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/put.mp3");
+putSound.volume = 1;
+
 const floorList = [1, 3, 4, 5, 7, 8];
 const contains = (ary, elm) => {
   let high = ary.length - 1;
