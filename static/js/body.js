@@ -247,9 +247,9 @@ class Body {
           const jy = this.currentY + power[0] * 3;
           const jx = this.currentX + power[1] * 3;
           let jnx = 0;
-          try{
+          try {
             jnx = contains(floorList, this.map[jy][jx]);
-          }catch(e){
+          } catch (e) {
             jnx = 0;
           }
           if ((nex === 4 && np >= 1) || contains([1, 5, 7, 8, 9], nex)) {
@@ -287,7 +287,7 @@ class Body {
               [this.currentY + moveWay[rightWay]['power'][0]]
               [this.currentX + moveWay[rightWay]['power'][1]];
             const rprm =
-              this.map
+              this.param
               [this.currentY + moveWay[rightWay]['power'][0]]
               [this.currentX + moveWay[rightWay]['power'][1]];
             const bnex =
@@ -299,7 +299,8 @@ class Body {
               [this.currentY + moveWay[moveWay[rightWay]['rt']]['power'][0]]
               [this.currentX + moveWay[moveWay[rightWay]['rt']]['power'][1]];
             // left and right?
-            if (contains(floorList, lnex) && contains(floorList, rnex)) {
+            if ((contains(floorList, lnex) || (lnex === 4 && lprm !== 0))
+              && (contains(floorList, rnex) || (rnex === 4 && rprm !== 0))) {
               switch (routineAutoTwoWay) {
                 case 'right':
                   this.currentVector = rightWay;
@@ -310,13 +311,13 @@ class Body {
                   break;
               }
             } else if (contains(floorList, lnex)
-              && (lnex !== 4 || lprm !== 0)) {
+              || (lnex === 4 && lprm !== 0)) {
               this.currentVector = leftWay;
             } else if (contains(floorList, rnex)
-              && (rnex !== 4 || rprm !== 0)) {
+              || (rnex === 4 && rprm !== 0)) {
               this.currentVector = rightWay;
             } else if (contains(floorList, bnex)
-              && (bnex !== 4 || bprm !== 0)) {
+              || (bnex === 4 && bprm !== 0)) {
               this.currentVector = moveWay[rightWay]['rt'];
             } else {
               moving = false;
