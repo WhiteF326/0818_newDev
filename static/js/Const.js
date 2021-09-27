@@ -1,5 +1,5 @@
-const stagename = 2;
-const CHARASPEED = 4;
+const stagename = 7;
+const CHARASPEED = 2;
 
 const routineAutoTwoWay = "right";
 

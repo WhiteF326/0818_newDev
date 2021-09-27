@@ -114,7 +114,9 @@ class CharaAuto {
       }
       if (this.jumpTime >= 0) {
         this.difference = this.tileSize * Math.sin(
-          this.#degToRad(this.jumpTime * 180 / (1.5 * this.tileSize / CHARASPEED))
+          this.#degToRad(
+            this.jumpTime * 180 / (1.5 * this.tileSize / CHARASPEED)
+          )
         );
       }
       if (this.jumpTime > (this.tileSize / CHARASPEED) * 1.5) {
