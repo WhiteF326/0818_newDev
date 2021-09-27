@@ -20,7 +20,7 @@ class Body {
     this.cstart = this.mapinfo['controll'];
     this.goal = this.mapinfo['goal'];
     this.costList = this.mapinfo['costList'];
-    if(!this.costList){
+    if (!this.costList) {
       this.costList = defaultCost;
     }
 
@@ -232,8 +232,8 @@ class Body {
         if (this.charaAuto.isWaitFor()) {
           if (!this.charaAuto.isJunping) {
             this.param[this.currentY][this.currentX]
-            = this.chipList.stepFunc[this.map[this.currentY][this.currentX]]
-              (this.param[this.currentY][this.currentX]);
+              = this.chipList.stepFunc[this.map[this.currentY][this.currentX]]
+                (this.param[this.currentY][this.currentX]);
           }
           if (this.map[this.currentY][this.currentX] === 5) {
             this.map[this.currentY][this.currentX] = 7;
@@ -244,6 +244,14 @@ class Body {
               }
             }
           }
+          const jy = this.currentY + power[0] * 3;
+          const jx = this.currentX + power[1] * 3;
+          let jnx = 0;
+          try{
+            jnx = contains(floorList, this.map[jy][jx]);
+          }catch(e){
+            jnx = 0;
+          }
           if ((nex === 4 && np >= 1) || contains([1, 5, 7, 8, 9], nex)) {
             this.currentY += power[0];
             this.currentX += power[1];
@@ -251,10 +259,17 @@ class Body {
               power[0] * this.tilesize, power[1] * this.tilesize, false
             );
           } else if (nex === 3) {
-            this.currentY += power[0] * 2;
-            this.currentX += power[1] * 2;
+            if (jnx) {
+              this.currentY += power[0] * 2;
+              this.currentX += power[1] * 2;
+              this.charaAuto.addMove(
+                power[0] * this.tilesize * 2, power[1] * this.tilesize * 2, true
+              );
+            }
+            this.currentY += power[0];
+            this.currentX += power[1];
             this.charaAuto.addMove(
-              power[0] * this.tilesize * 2, power[1] * this.tilesize * 2, true
+              power[0] * this.tilesize, power[1] * this.tilesize, false
             );
           } else {
             const leftWay = moveWay[this.currentVector]['lt'];
