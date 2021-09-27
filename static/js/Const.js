@@ -86,16 +86,6 @@ const defaultCost = {
   "if": 1
 }
 
-$(document).clickSpark({
-  particleImagePath: "img/particle.png",
-  particleCount: 10,
-  particleSpped: 1,
-  particleSize: 12,
-  particleRotationSpeed: 10,
-  particleDuration: 100,
-  animationType: "explosion",
-});
-
 document.onclick = () => {
   selectSound.currentTime = 0;
   selectSound.play();
