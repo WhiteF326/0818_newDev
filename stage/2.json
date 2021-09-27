@@ -19,5 +19,5 @@
     "loop": 1,
     "if": 1
   },
-  "maxCost": 10000
+  "maxCost": 9
 }
