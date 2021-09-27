@@ -20,6 +20,9 @@ class Body {
     this.cstart = this.mapinfo['controll'];
     this.goal = this.mapinfo['goal'];
     this.costList = this.mapinfo['costList'];
+    if(!this.costList){
+      this.costList = defaultCost;
+    }
 
     // スイッチ情報の管理
     this.doorPos = [[], [], [], [], []];
