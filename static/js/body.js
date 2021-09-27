@@ -230,9 +230,11 @@ class Body {
         const np =
           this.param[this.currentY + power[0]][this.currentX + power[1]];
         if (this.charaAuto.isWaitFor()) {
-          this.param[this.currentY][this.currentX]
+          if (!this.charaAuto.isJunping) {
+            this.param[this.currentY][this.currentX]
             = this.chipList.stepFunc[this.map[this.currentY][this.currentX]]
               (this.param[this.currentY][this.currentX]);
+          }
           if (this.map[this.currentY][this.currentX] === 5) {
             this.map[this.currentY][this.currentX] = 7;
             if (this.doors.pushed(this.param[this.currentY][this.currentX])) {
@@ -242,7 +244,7 @@ class Body {
               }
             }
           }
-          if (nex === 1 || (nex === 4 && np >= 1) || contains([5, 7, 8, 9], nex)) {
+          if ((nex === 4 && np >= 1) || contains([1, 5, 7, 8, 9], nex)) {
             this.currentY += power[0];
             this.currentX += power[1];
             this.charaAuto.addMove(
