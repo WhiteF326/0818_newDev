@@ -1,4 +1,4 @@
-const stagename = 7;
+const stagename = 12;
 const CHARASPEED = 4;
 
 const routineAutoTwoWay = "right";
@@ -46,7 +46,11 @@ jumpSound.volume = 1;
 const switchSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/switch.mp3");
 switchSound.volume = 1;
 
-// 破壊音
+//崖崩れ音
+const rubbleSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/rubble.mp3");
+rubbleSound.volume = 1;
+
+//破壊音
 const destroySound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/destroy.mp3");
 destroySound.volume = 0.5;
 
