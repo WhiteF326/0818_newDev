@@ -111,6 +111,7 @@ class CharaAuto {
     if (this.isJunping) {
       this.jumpTime++;
       if (this.jumpTime == 0) {
+        jumpSound.currentTime = 0;
         jumpSound.play();
       }
       if (this.jumpTime >= 0 || this.isChained) {
@@ -125,7 +126,7 @@ class CharaAuto {
         this.difference = 0;
         this.isJunping = false;
       }
-    } else if(!this.isJunping && this.isChained){
+    } else if (!this.isJunping && this.isChained) {
       this.isChained = false;
     }
   }
