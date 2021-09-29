@@ -1,80 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
-  <title>プログラミングゲーム（仮）</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>トップ画面</title>
 
   <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
-  <link rel="stylesheet" href="css/userBoad.css">
-  <link href="https://fonts.googleapis.com/css?family=M+PLUS+1p" rel="stylesheet">
-
-  <script src="js/Const.js"></script>
-  <script src="js/Chip.js"></script>
-  <script src="js/ChipList.js"></script>
-  <script src="js/CharaAuto.js"></script>
-  <script src="js/CharaHand.js"></script>
-  <script src="js/Doors.js"></script>
-  <script src="js/TextList.js"></script>
-
-  <!-- blockly -->
-  <script src="block_module/blockly_compressed.js"></script>
-  <script src="block_module/blocks_compressed.js"></script>
-  <script src="block_module/javascript_compressed.js"></script>
-  <script src="block_module/msg/js/ja.js"></script>
-
-  <script src="block_module/myblock.js"></script>
-  <script src="js/CostCalculator.js"></script>
-  <script src="js/ProgBoad.js"></script>
-
-  <!-- Audio -->
-  <!-- <audio src="https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/forest.mp3" loop id="forest"></audio> -->
 </head>
-
 <style>
-  .cost {
-    font: 1.5em serif;
-    font-family: "M PLUS 1p";
+  img{
+    height: 15%;
+    width: 15%;
   }
-  .costTable,
-  .costTable tr,
-  .costTable td {
-    border-collapse: collapse;
-    border: 1px black solid;
-  }
-  .costTable tr,
-  .costTable td {
-    padding: 10px;
-  }
-  
 </style>
+<script>
+  window.onload = function(){
+    const cursor = document.createElement("img");
+    cursor.setAttribute("src", "img/arrow.png");
+    cursor.style.margin = "0";
+    cursor.style.padding = "0";
+    let point = 0;
+    const endPoint = 4;
+    document.getElementById("sel" + point).appendChild(cursor);
+    window.onkeydown = (e) => {
+      document.getElementById("sel" + point).innerHTML = "";
+      switch(e.key){
+        case "ArrowUp":
+          point = (point + endPoint - 1) % endPoint;
+          break;
+        
+        case "ArrowDown":
+          point = (point + 1) % endPoint;
+          break;
+        
+        case "Enter":
+          window.location =
+            document.getElementById("ref" + point)
+              .childNodes[1].getAttribute("href");
+          break;
+      }
+      document.getElementById("sel" + point).appendChild(cursor);
+    }
+  }
+</script>
 
-<body id="body">
-  <script type="module" src="js/Body.js"></script>
-  <div id="stages">
-    <canvas id="canvas"></canvas>
-    <div style="display: inline-block;">
-      <table class="costTable">
-        <caption>コスト表</caption>
-        <tbody id="costList">
-        </tbody>
-      </table>
-      <span id="cost" class="cost" style="display: inline-block;"></span>
-      <div style="display: block">
-        <button id="move">開始</button>
-        <button id="retry">やり直し</button>
-      </div>
-    </div>
-    <div id="blocklyDiv"></div>
-    <xml id="toolbox">
-      <block type="move"></block>
-      <block type="destroy"></block>
-      <block type="create"></block>
-      <block type="loop"></block>
-      <block type="if"></block>
-      <block type="sensor_foot"></block>
-    </xml>
-  </div>
+<body>
+  <h1>ここにタイトルを挿入</h1>
+  <table>
+    <tbody>
+      <tr>
+        <td id="sel0"></td>
+        <td id="ref0">
+          <a href="login.html">ログイン</a>
+        </td>
+      </tr>
+      <tr>
+        <td id="sel1"></td>
+        <td id="ref1">
+          <a href="register.html">新規登録</a>
+        </td>
+      </tr>
+      <tr>
+        <td id="sel2"></td>
+        <td id="ref2">
+          <a href="freeStageSelect.html">フリーモード</a>
+        </td>
+      </tr>
+      <tr>
+        <td id="sel3"></td>
+        <td id="ref3">ストーリーモード</td>
+      </tr>
+      <tr>
+        <td id="sel4"></td>
+        <td id="ref4">Coming Soon…</td>
+      </tr>
+    </tbody>
+  </table>
 </body>
 
 </html>

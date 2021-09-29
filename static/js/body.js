@@ -341,7 +341,7 @@ window.onload = async () => {
 
   // deno
   const mapinfo = JSON.parse(
-    await fetchJSON('api/stage', { 'name': stagename })
+    await fetchJSON('api/stage/select', { 'name': stagename })
   );
   const gameBody = new Body(mapinfo);
 

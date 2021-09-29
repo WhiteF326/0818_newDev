@@ -1,26 +1,71 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ログイン</title>
+
   <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
 </head>
 <style>
-  form input{
+  form input {
     padding: 5px;
     margin: 5px 5px 5px 0;
   }
 </style>
+<script type="module">
+  import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
+  document.getElementById("usubmit").onclick = async () => {
+    const uid = document.getElementById("uid").value;
+    const upass = document.getElementById("upass").value;
+
+    let cont = true;
+    let errors = "";
+    if (!uid) {
+      errors += "ユーザーIDが空です。\n";
+      cont = false;
+    }
+    if (!upass) {
+      errors += "パスワードが空です。\n";
+      cont = false;
+    }
+    if (cont) {
+      const loginResult = await fetchJSON("api/login", {
+        "userid": uid,
+        "password": upass
+      });
+      if (loginResult) {
+        localStorage.setItem("userid", uid);
+        localStorage.setItem("pass", upass);
+        document.getElementById("succeed").style.display = "block";
+        document.getElementById("usubmit").disabled = true;
+      } else {
+        errors += "ユーザが見つかりませんでした。"
+      }
+    }
+    document.getElementById("errors").innerText = errors;
+  }
+</script>
+
 <body>
   <h1>
     ログイン画面
   </h1>
-  <form>
-    <input type="text" placeholder="ユーザーID"><br>
-    <input type="text" placeholder="パスワード"><br>
-    <input type="submit">
+  <form target="dummy">
+    <input type="text" placeholder="ユーザーID" id="uid"><br>
+    <input type="text" placeholder="パスワード" id="upass"><br>
+    <button id="usubmit">ログイン</button>
   </form>
+  <span id="succeed" style="display: none;">
+    ログインに成功しました。<br>
+    <form action="index.html">
+      <input type="submit" value="トップに戻る">
+    </form>
+  </span>
+  <span id="errors"></span>
+  <iframe name="dummy" style="display: none;"></iframe>
 </body>
+
 </html>
