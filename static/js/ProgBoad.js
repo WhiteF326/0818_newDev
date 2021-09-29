@@ -6,7 +6,7 @@ class ProgBoad {
     const workdiv = document.getElementById("blocklyDiv");
     workdiv.setAttribute("style",
       "height: " + String(floor(window.innerHeight / 2.2)) + "px; " +
-      "width: " + String(floor(window.innerWidth / 1.2)) + "px;");
+      "width: " + document.getElementById("stages").innerWidth + "px;");
 
     this.workspace = Blockly.inject("blocklyDiv",
       { toolbox: document.getElementById("toolbox") });

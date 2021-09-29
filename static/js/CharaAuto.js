@@ -20,6 +20,7 @@ class CharaAuto {
     this.isJunping = false;
     this.difference = 0;
     this.jumpTime = 0;
+    this.isChained = false;
 
     this.tileSize = tileSize;
   }
@@ -112,10 +113,11 @@ class CharaAuto {
       if (this.jumpTime == 0) {
         jumpSound.play();
       }
-      if (this.jumpTime >= 0) {
+      if (this.jumpTime >= 0 || this.isChained) {
+        this.isChained = true;
         this.difference = this.tileSize * Math.sin(
           this.#degToRad(
-            this.jumpTime * 180 / (1.5 * this.tileSize / CHARASPEED)
+            Math.abs(this.jumpTime) * 180 / (1.5 * this.tileSize / CHARASPEED)
           )
         );
       }
@@ -123,6 +125,8 @@ class CharaAuto {
         this.difference = 0;
         this.isJunping = false;
       }
+    } else if(!this.isJunping && this.isChained){
+      this.isChained = false;
     }
   }
 }

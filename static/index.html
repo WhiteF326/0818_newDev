@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <title>プログラミングゲーム（仮）</title>
 
+  <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
   <link rel="stylesheet" href="css/userBoad.css">
   <link href="https://fonts.googleapis.com/css?family=M+PLUS+1p" rel="stylesheet">
 
@@ -27,7 +28,7 @@
   <script src="js/ProgBoad.js"></script>
 
   <!-- Audio -->
-  <audio src="https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/forest.mp3" autoplay loop></audio>
+  <!-- <audio src="https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/forest.mp3" loop id="forest"></audio> -->
 </head>
 
 <style>
@@ -50,7 +51,7 @@
 
 <body id="body">
   <script type="module" src="js/Body.js"></script>
-  <div>
+  <div id="stages">
     <canvas id="canvas"></canvas>
     <div style="display: inline-block;">
       <table class="costTable">

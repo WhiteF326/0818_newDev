@@ -244,14 +244,6 @@ class Body {
               }
             }
           }
-          const jy = this.currentY + power[0] * 3;
-          const jx = this.currentX + power[1] * 3;
-          let jnx = 0;
-          try {
-            jnx = contains(floorList, this.map[jy][jx]);
-          } catch (e) {
-            jnx = 0;
-          }
           if ((nex === 4 && np >= 1) || contains([1, 5, 7, 8, 9], nex)) {
             this.currentY += power[0];
             this.currentX += power[1];
@@ -259,18 +251,27 @@ class Body {
               power[0] * this.tilesize, power[1] * this.tilesize, false
             );
           } else if (nex === 3) {
-            if (jnx) {
+            const jy = this.currentY + power[0] * 3;
+            const jx = this.currentX + power[1] * 3;
+            let jnex = 0;
+            try {
+              jnex = contains(floorList, this.map[jy][jx]);
+            } catch (e) {
+              jnex = 0;
+            }
+            if (jnex) {
               this.currentY += power[0] * 2;
               this.currentX += power[1] * 2;
               this.charaAuto.addMove(
                 power[0] * this.tilesize * 2, power[1] * this.tilesize * 2, true
               );
+            } else if (contains(floorList, nex)) {
+              this.currentY += power[0];
+              this.currentX += power[1];
+              this.charaAuto.addMove(
+                power[0] * this.tilesize, power[1] * this.tilesize, false
+              );
             }
-            this.currentY += power[0];
-            this.currentX += power[1];
-            this.charaAuto.addMove(
-              power[0] * this.tilesize, power[1] * this.tilesize, false
-            );
           } else {
             const leftWay = moveWay[this.currentVector]['lt'];
             const lnex =
