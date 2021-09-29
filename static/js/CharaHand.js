@@ -55,6 +55,8 @@ class CharaHand {
           return "destroy";
         } else if (action === "create") {
           return "create";
+        } else if (action === "repair") {
+          return "repair";
         }
       } else {
         const xway = this.sign(this.pendingMove[0][1]);

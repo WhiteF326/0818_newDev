@@ -145,23 +145,28 @@ class Body {
     this.charaHand.addCursorAction(type);
   }
 
-  sensor_foot = () => this.map[this.futureCursorY][this.futureCursorX] == 2;
+  sensor_foot = () => this.map[this.futureCursorY][this.futureCursorX] === 2;
 
   destroyCursor = (y, x) => {
-    if (this.map[y][x] == 2) {
+    if (this.map[y][x] === 2) {
       this.map[y][x] = 1;
       destroySound.currentTime = 0;
       destroySound.play();
     }
   }
   createCursor = (y, x) => {
-    if (this.map[y][x] == 1
-      && !(this.currentY == y && this.currentX == x)
-      && !(this.goal[0] == y && this.goal[1] == x)) {
+    if (this.map[y][x] === 1
+      && !(this.currentY === y && this.currentX === x)
+      && !(this.goal[0] === y && this.goal[1] === x)) {
       console.log(this.currentY, this.currentX);
       this.map[y][x] = 2;
       putSound.currentTime = 0;
       putSound.play();
+    }
+  }
+  repairCursor = (y, x) => {
+    if (this.map[y][x] === 4) {
+      this.param[y][x]++;
     }
   }
 
@@ -201,6 +206,8 @@ class Body {
         this.createCursor(y, x);
       } else if (action === "destroy") {
         this.destroyCursor(y, x);
+      } else if (action === "repair") {
+        this.repairCursor(y, x);
       }
     } else if (action) {
       this.cursorY += action[1];
