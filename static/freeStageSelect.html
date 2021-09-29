@@ -14,6 +14,7 @@
 <script type="module">
   import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
   window.onload = async () => {
+    localStorage.getItem("gameEnabled") === "false"
     const stages = JSON.parse(await fetchJSON("api/stage/all", {}));
 
     const tileWidth = 128;
@@ -56,7 +57,9 @@
         }
 
         tile.onclick = () => {
-          //
+          localStorage.setItem("selectedStage", tile.innerText);
+          localStorage.setItem("gameEnabled", "true");
+          window.location = "gameBody.html";
         }
 
         row.appendChild(tile);
