@@ -25,6 +25,8 @@ class ProgBoad {
       }
     }
 
+    this.loopCounters = [];
+
     document.body.childNodes.forEach(elm => {
       elm.onclick = () => costPrint();
     });
@@ -103,6 +105,7 @@ class ProgBoad {
         const loopAmount = Number(line.split(" ")[1]);
         const forid = line.split(" ")[2];
         for (let _ = 0; _ < loopAmount; _++) {
+          this.loopCounters.push();
           this.parse(codel.slice(i + 1, codel.indexOf("next " + forid)));
         }
         i = codel.lastIndexOf("next " + forid);
