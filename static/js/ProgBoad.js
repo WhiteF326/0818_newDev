@@ -82,6 +82,7 @@ class ProgBoad {
       } else {
         valueD.appendChild(document.createTextNode(value));
       }
+      valueD.setAttribute("align", "right");
       tr.appendChild(valueD);
       document.getElementById("costList").appendChild(tr);
     });
