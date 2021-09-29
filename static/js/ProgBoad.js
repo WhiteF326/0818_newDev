@@ -71,17 +71,18 @@ class ProgBoad {
     // コスト表の作成
     Object.keys(progListText).forEach(eachType => {
       const value = this.gameBody.costList[eachType];
-      
+
       const tr = document.createElement("tr");
       const typeD = document.createElement("td");
       typeD.appendChild(document.createTextNode(progListText[eachType]));
       tr.appendChild(typeD);
       const valueD = document.createElement("td");
-      if(typeof value === 'undefined'){
+      if (typeof value === 'undefined') {
         valueD.appendChild(document.createTextNode(defaultCost[eachType]));
-      }else{
+      } else {
         valueD.appendChild(document.createTextNode(value));
       }
+      valueD.setAttribute("align", "right");
       tr.appendChild(valueD);
       document.getElementById("costList").appendChild(tr);
     });
@@ -121,6 +122,8 @@ class ProgBoad {
           this.parse(codel.slice(codel.indexOf("else " + ifid), codel.indexOf("endif " + ifid)))
         }
         i = codel.indexOf("endif " + ifid);
+      } else if (line.startsWith("repair")) {
+        this.gameBody.cAction("repair");
       }
     }
   }
