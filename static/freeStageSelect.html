@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>フリー ステージセレクト</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+</head>
+
+<script src="js/Tools.js"></script>
+<script type="module">
+  import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
+  window.onload = async () => {
+    localStorage.getItem("gameEnabled") === "false"
+
+    let stgHeight = window.innerHeight - 64;
+    document.body.childNodes.forEach(r => {
+      if(r.nodeName !== "#text"
+      && r.getAttribute("id") !== "stages"){
+        stgHeight -= r.clientHeight;
+      }
+    });
+    document.getElementById("stages").setAttribute(
+      "style", "height: " + stgHeight + "px;"
+    );
+
+    const stages = JSON.parse(await fetchJSON("api/stage/all", {}));
+
+    const tileWidth = 128;
+    const marginWidth = 16;
+
+    const vertical = Math.floor(
+      (document.body.clientWidth - marginWidth) / tileWidth
+    ) - 1;
+
+    for (let i = 0; i < Math.ceil(stages.length / vertical); i++) {
+      const row = document.createElement("div");
+      row.classList.add("row");
+      row.style.display = "block"
+      for (let j = 0; j < vertical; j++) {
+        const ptr = i * vertical + j;
+
+        const tile = document.createElement("div");
+        tile.style.display = "inline-block"
+        tile.classList.add("tile");
+        tile.innerText = stages[ptr] || "Coming Soon";
+        tile.style.padding = "5px";
+        tile.style.color = retTextColor(ptr % 7);
+
+        const plist = retColor(ptr % 7);
+        let gradStr = "";
+        Object.keys(plist).forEach(p => {
+          gradStr += plist[p] + " " + String(p) + "%, "
+        });
+        gradStr = gradStr.slice(0, gradStr.length - 2);
+        tile.setAttribute("style",
+          tile.getAttribute("style")
+          + " background: linear-gradient(to bottom right, " + gradStr + ");")
+
+        tile.onmouseover = () => {
+          tile.style.borderStyle = "ridge";
+        }
+        tile.onmouseleave = () => {
+          tile.style.borderStyle = "groove";
+        }
+
+        tile.onclick = () => {
+          if(stages[ptr]){
+            localStorage.setItem("selectedStage", tile.innerText);
+            localStorage.setItem("gameEnabled", "true");
+            window.location = "gameBody.html";
+          }
+        }
+
+        row.appendChild(tile);
+      }
+      document.getElementById("stages").appendChild(row);
+    }
+  }
+</script>
+<script type="text/javascript" src="js/AccountStatus.js"></script>
+
+<style>
+  .tile {
+    width: 128px;
+    height: 128px;
+    border: 3px aliceblue;
+    border-style: groove;
+  }
+
+  .tile.tile {
+    margin-left: 16px;
+  }
+
+  .row.row {
+    margin-bottom: 16px;
+  }
+
+  body{
+    height: 100%;
+  }
+
+  .stages {
+    overflow-y: scroll;
+  }
+
+  .account-info {
+    position: absolute;
+    bottom: 0;
+    background-color: whitesmoke;
+    color: black;
+    display: block;
+    height: fit-content;
+  }
+
+  .left {
+    float: left;
+  }
+
+  .right {
+    float: right;
+  }
+</style>
+
+<body>
+  <form action="index.html">
+    <input type="submit" value="トップに戻る">
+  </form>
+  <h1>ステージセレクト</h1>
+  <div id="stages" class="stages"></div>
+  <div class="account-info" id="accountInfo"></div>
+</body>
+
+</html>

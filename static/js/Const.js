@@ -1,4 +1,3 @@
-const stagename = 7;
 const CHARASPEED = 4;
 
 const routineAutoTwoWay = "right";
@@ -39,14 +38,18 @@ const footstepsSound = new Audio("https://raw.githubusercontent.com/WhiteF326/08
 footstepsSound.volume = 0.5;
 
 // ジャンプ音
-const jumpSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/jump.mp3");
-jumpSound.volume = 1;
+const jumpSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/jump_ver2.mp3");
+jumpSound.volume = 0.5;
 
 // スイッチ音
 const switchSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/switch.mp3");
 switchSound.volume = 1;
 
-// 破壊音
+//崖崩れ音
+const rubbleSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/rubble.mp3");
+rubbleSound.volume = 1;
+
+//破壊音
 const destroySound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/destroy.mp3");
 destroySound.volume = 0.5;
 

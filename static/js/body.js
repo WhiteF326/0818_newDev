@@ -346,6 +346,10 @@ class Body {
 }
 
 window.onload = async () => {
+  if (localStorage.getItem("gameEnabled") === "false"
+    || !localStorage.getItem("gameEnabled")) {
+    history.back();
+  }
   // php
   // const mapinfo = await fetch(
   //   "./api/stage.php?name=" + stagename
@@ -355,7 +359,9 @@ window.onload = async () => {
 
   // deno
   const mapinfo = JSON.parse(
-    await fetchJSON('api/stage', { 'name': stagename })
+    await fetchJSON('api/stage/select', {
+      'name': localStorage.getItem("selectedStage")
+    })
   );
   const gameBody = new Body(mapinfo);
 
