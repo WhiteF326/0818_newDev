@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <title>プログラミングゲーム（仮）</title>
 
-  <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+  <link rel="stylesheet" href="css/sakura.css" type="text/css">
   <link rel="stylesheet" href="css/userBoad.css">
   <link href="https://fonts.googleapis.com/css?family=M+PLUS+1p" rel="stylesheet">
 
@@ -36,17 +36,18 @@
     font: 1.5em serif;
     font-family: "M PLUS 1p";
   }
+
   .costTable,
   .costTable tr,
   .costTable td {
     border-collapse: collapse;
     border: 1px black solid;
   }
+
   .costTable tr,
   .costTable td {
     padding: 5px;
   }
-  
 </style>
 
 <body id="body">
@@ -76,6 +77,8 @@
       <block type="sensor_loop"></block>
       <block type="sensor_foot_dest"></block>
       <block type="sensor_foot_stab"></block>
+      <block type="sensor_foot_floor"></block>
+      <block type="sensor_foot_colp"></block>
     </xml>
   </div>
 </body>

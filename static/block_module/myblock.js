@@ -150,32 +150,48 @@ Blockly.defineBlocksWithJsonArray(
     'tooltip': 'カーソルの真下が壊せない岩ならば真を返します。',
     'helpUrl': '',
   },
-],
+  {
+    'type': 'sensor_foot_floor',
+    'message0': '足元が床である',
+    'output': 'Boolean',
+    'colour': 300,
+    'tooltip': 'カーソルの真下が床ならば真を返します。',
+    'helpUrl': '',
+  },
+  {
+    'type': 'sensor_foot_colp',
+    'message0': '足元が耐久値付き床である',
+    'output': 'Boolean',
+    'colour': 300,
+    'tooltip': 'カーソルの真下が耐久値付き床ならば真を返します。',
+    'helpUrl': '',
+  },
+  ],
 );
 
-Blockly.JavaScript['move'] = function(block) {
+Blockly.JavaScript['move'] = function (block) {
   const dropdown_vector = block.getFieldValue('vector');
   const value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
   const code = "move " + dropdown_vector.toLowerCase() + "\n";
   return code;
 };
 
-Blockly.JavaScript['destroy'] = function(block) {
+Blockly.JavaScript['destroy'] = function (block) {
   const code = 'destroy\n';
   return code;
 };
 
-Blockly.JavaScript['create'] = function(block) {
+Blockly.JavaScript['create'] = function (block) {
   const code = 'create\n';
   return code;
 };
 
-Blockly.JavaScript['repair'] = function(block) {
+Blockly.JavaScript['repair'] = function (block) {
   const code = 'repair\n';
   return code;
 }
 
-Blockly.JavaScript['loop'] = function(block) {
+Blockly.JavaScript['loop'] = function (block) {
   const number_repeatamount = block.getFieldValue('REPEATAMOUNT');
   const value_repeatamount = Blockly.JavaScript.valueToCode(block, 'REPEATAMOUNT', Blockly.JavaScript.ORDER_ATOMIC);
   const statements_repeatblock = Blockly.JavaScript.statementToCode(block, 'REPEATBLOCK');
@@ -184,7 +200,7 @@ Blockly.JavaScript['loop'] = function(block) {
   return code;
 };
 
-Blockly.JavaScript['if'] = function(block) {
+Blockly.JavaScript['if'] = function (block) {
   const statements_statement = Blockly.JavaScript.statementToCode(block, 'STATEMENT');
   const statements_true = Blockly.JavaScript.statementToCode(block, 'TRUE');
   const statements_false = Blockly.JavaScript.statementToCode(block, 'FALSE');
@@ -193,16 +209,25 @@ Blockly.JavaScript['if'] = function(block) {
   return code;
 };
 
-Blockly.JavaScript['sensor_foot_dest'] = function(block) {
+Blockly.JavaScript['sensor_foot_dest'] = function (block) {
   const code = 'sensor_foot_dest';
   return code;
 }
-Blockly.JavaScript['sensor_foot_stab'] = function(block) {
+Blockly.JavaScript['sensor_foot_stab'] = function (block) {
   const code = 'sensor_foot_stab';
   return code;
 }
+Blockly.JavaScript['sensor_foot_floor'] = function (block) {
+  const code = 'sensor_foot_floor';
+  return code;
+}
+Blockly.JavaScript['sensor_foot_colp'] = function (block) {
+  const code = 'sensor_foot_colp';
+  return code;
+}
 
-Blockly.JavaScript['sensor_loop'] = function(block) {
+
+Blockly.JavaScript['sensor_loop'] = function (block) {
   const number_name = block.getFieldValue('COUNTER');
   const code = 'sensor_loop ' + number_name;
   return code;
