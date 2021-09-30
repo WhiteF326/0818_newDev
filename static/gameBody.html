@@ -27,6 +27,9 @@
   <script src="js/CostCalculator.js"></script>
   <script src="js/ProgBoad.js"></script>
 
+  <!-- account -->
+  <script type="text/javascript" src="js/AccountStatus.js"></script>
+
   <!-- Audio -->
   <!-- <audio src="https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/forest.mp3" loop id="forest"></audio> -->
 </head>
@@ -36,19 +39,41 @@
     font: 1.5em serif;
     font-family: "M PLUS 1p";
   }
+
   .costTable,
   .costTable tr,
   .costTable td {
     border-collapse: collapse;
     border: 1px black solid;
   }
+
   .costTable tr,
   .costTable td {
     padding: 10px;
   }
+
+  .account-info {
+    position: absolute;
+    bottom: 0;
+    background-color: whitesmoke;
+    color: black;
+    display: block;
+    height: fit-content;
+  }
+
+  .left {
+    float: left;
+  }
+
+  .right {
+    float: right;
+  }
 </style>
 
 <body id="body">
+  <form action="index.html">
+    <input type="submit" value="トップに戻る">
+  </form>
   <script type="module" src="js/Body.js"></script>
   <div id="stages">
     <canvas id="canvas"></canvas>
@@ -74,6 +99,7 @@
       <block type="sensor_foot"></block>
     </xml>
   </div>
+  <div class="account-info" id="accountInfo"></div>
 </body>
 
 </html>

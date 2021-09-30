@@ -10,13 +10,31 @@
   <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
 </head>
 <style>
-  img{
+  img {
     height: 15%;
     width: 15%;
   }
+
+  .account-info {
+    position: absolute;
+    bottom: 0;
+    background-color: whitesmoke;
+    color: black;
+    display: block;
+    height: fit-content;
+  }
+
+  .left {
+    float: left;
+  }
+
+  .right {
+    float: right;
+  }
 </style>
 <script>
-  window.onload = function(){
+  window.onload =  () => {
+    localStorage.setItem("gameEnabled", "false");
     const cursor = document.createElement("img");
     cursor.setAttribute("src", "img/arrow.png");
     cursor.style.margin = "0";
@@ -26,15 +44,15 @@
     document.getElementById("sel" + point).appendChild(cursor);
     window.onkeydown = (e) => {
       document.getElementById("sel" + point).innerHTML = "";
-      switch(e.key){
+      switch (e.key) {
         case "ArrowUp":
           point = (point + endPoint - 1) % endPoint;
           break;
-        
+
         case "ArrowDown":
           point = (point + 1) % endPoint;
           break;
-        
+
         case "Enter":
           window.location =
             document.getElementById("ref" + point)
@@ -45,6 +63,7 @@
     }
   }
 </script>
+<script type="text/javascript" src="js/AccountStatus.js"></script>
 
 <body>
   <h1>ここにタイトルを挿入</h1>
@@ -78,6 +97,7 @@
       </tr>
     </tbody>
   </table>
+  <div class="account-info" id="accountInfo"></div>
 </body>
 
 </html>

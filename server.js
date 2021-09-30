@@ -23,14 +23,14 @@ class Body extends Server {
         break;
 
       case 'stage':
-        switch (path.split('/')[3]){
+        switch (path.split('/')[3]) {
           case 'select':
             ret = await Deno.readTextFile('./stage/' + prm.name + '.json');
             break;
 
           case 'all':
             let retAry = [];
-            for await(const dirEntry of Deno.readDir('./stage')){
+            for await (const dirEntry of Deno.readDir('./stage')) {
               retAry.push(dirEntry.name.split('.')[0]);
             }
             retAry.sort((a, b) => {
@@ -39,22 +39,57 @@ class Body extends Server {
             ret = JSON.stringify(retAry);
             break;
         }
-        
         break;
-      
-      case 'login':
-        const uid = prm.userid;
-        let upass = encodeURI(prm.password);
-        for(let i = 0; i < 100; i++){
-          upass = sha512(upass, "utf8", "hex");
+
+      case 'user':
+        switch (path.split('/')[3]) {
+          case 'login': {
+            const uid = prm.userid;
+            let upass = encodeURI(prm.password);
+            for (let i = 0; i < 100; i++) {
+              upass = sha512(upass, "utf8", "hex");
+            }
+            const query = await this.client.query(
+              "select * from users where id = \"" + uid +
+              "\" and pass = \"" + upass + "\"",
+            );
+            if (query.length) ret = true;
+            else ret = false;
+            break;
+          }
+
+          case 'search': {
+            const uid = prm.userid;
+            const query = await this.client.query(
+              "select * from users where id = \"" + uid + "\""
+            );
+            if (query.length) ret = true;
+            else ret = false;
+            break;
+          }
+
+          case 'register': {
+            const uid = prm.userid;
+            const uname = prm.username;
+            let upass = encodeURI(prm.password);
+            for (let i = 0; i < 100; i++) {
+              upass = sha512(upass, "utf8", "hex");
+            }
+
+            const inserts = [
+              uid, uname, upass, 0, "0", void 0
+            ].map(v => {
+              if(typeof v === "string") return '"' + v + '"';
+              else if(typeof v === "undefined") return "current_timestamp()"
+              else return v
+            }).join(",");
+            console.log(inserts);
+            const result = await this.client.execute(
+              "insert into users values(" + inserts + ")"
+            );
+            return result;
+          }
         }
-        const query = await this.client.query(
-          "select * from users where id = \"" + uid +
-          "\" and pass = \"" + upass + "\"",
-        );
-        console.log(upass)
-        if(query.length) ret = true;
-        else ret = false;
         break;
     }
     return ret;

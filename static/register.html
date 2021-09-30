@@ -1,27 +1,186 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ログイン</title>
+  <title>新規登録</title>
   <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
 </head>
+
+<script type="text/javascript" src="js/zxcvbn.js"></script>
+<script type="module">
+  import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
+  const elm = (id) => document.getElementById(id);
+  const colors = [
+    "#AB0C0D",
+    "#ff3538",
+    "#e9bc01",
+    "#69cc00",
+    "#0188FE"
+  ];
+  const strengthString = [
+    "危険",
+    "脆弱",
+    "弱",
+    "中",
+    "強",
+  ]
+
+  elm("rsubmit").onclick = async () => {
+    const uid = elm("uid").value;
+    const uname = elm("uname").value;
+    const upass = elm("upass").value;
+    let errors = "";
+    const inRegex = /[\w]+/;
+
+    if (!uid) {
+      errors += "ユーザーIDが空です。入力してください。\n";
+    } else {
+      const uidCheck = uid.match(inRegex);
+      console.log(uidCheck);
+      if (!uidCheck || uidCheck[0] !== uid) {
+        errors += "ユーザー ID に半角英数字、アンダースコア以外の文字列が含まれています。再入力してください。\n";
+      }
+      if (uid.length < 4) {
+        errors += "ユーザー ID は 4 文字以上で入力してください。\n";
+      }
+    }
+    if (!uname) {
+      errors += "ユーザーネームが空です。入力してください。\n";
+    }
+    if (!upass) {
+      errors += "パスワードが空です。入力してください。\n";
+    } else {
+      const upassCheck = upass.match(inRegex);
+      if (!upassCheck || upassCheck[0] !== upass) {
+        errors += "パスワードに半角英数字、アンダースコア以外の文字列が含まれています。再入力してください。\n";
+      }
+      if (upass.length < 6) {
+        errors += "パスワードは 6 文字以上で入力してください。\n"
+      }
+      if (upass !== elm("repass").value) {
+        errors += "パスワードが一致していません。入力し直してください。\n";
+      }
+    }
+    if (!errors) {
+      // ユーザー ID が重複していないか問い合わせる
+      const queryExisting = await fetchJSON("api/user/search", {
+        "userid": uid
+      });
+      if (queryExisting) {
+        errors += "そのユーザー ID は既に使用されています。お手数ですが他の文字列をお試しください。\n";
+      }
+    }
+    if (!errors) {
+      // register
+      const registerTry = await fetchJSON("api/user/register", {
+        "userid": uid,
+        "username": uname,
+        "password": upass
+      });
+      if (registerTry.affectedRows === 1) {
+        elm("succeed").style.display = "block";
+        elm("rsubmit").disabled = true;
+      } else {
+        errors += "何らかのエラーで登録に失敗しました。お手数ですがもう一度お試しください\n。";
+      }
+    }
+    elm("errors").innerText = errors;
+  }
+
+  const evaluatePassword = () => {
+    const passResult = zxcvbn(elm("upass").value);
+    elm("strengthBar").style.color = colors[passResult.score];
+    elm("strengthBar").value = passResult.score;
+    elm("strength").style.color = colors[passResult.score];
+    elm("strength").innerText = strengthString[passResult.score];
+  }
+  const comparePassword = () => {
+    if (elm("upass").value !== elm("repass").value) {
+      elm("isSame").innerText = "同じパスワードが入力されていません。";
+    } else {
+      elm("isSame").innerText = "同じパスワードが入力されています。";
+    }
+  }
+
+  window.onload = () => {
+    evaluatePassword();
+  }
+  elm("upass").oninput = () => {
+    evaluatePassword();
+    comparePassword();
+  };
+  elm("repass").oninput = () => {
+    comparePassword();
+  }
+  elm("upass").onpaste = e => {
+    e.preventDefault();
+    elm("disPaste").classList.toggle("display");
+    setTimeout(() => {
+      elm("disPaste").classList.toggle("display");
+    }, 2000);
+  }
+  elm("repass").onpaste = e => {
+    e.preventDefault();
+    elm("disPasteRe").classList.toggle("display");
+    setTimeout(() => {
+      elm("disPasteRe").classList.toggle("display");
+    }, 2000);
+  }
+</script>
 <style>
-  form input{
+  form input {
     padding: 5px;
     margin: 5px 5px 5px 0;
   }
+
+  progress {
+    width: 100px;
+  }
+
+  #errors{
+    color: #B00001;
+  }
 </style>
+
 <body>
-  <h1>
-    ログイン画面
-  </h1>
-  <form>
-    <input type="text" placeholder="ユーザーID"><br>
-    <input type="text" placeholder="ユーザーネーム"><br>
-    <input type="text" placeholder="パスワード"><br>
-    <input type="submit">
+  <form action="index.html">
+    <input type="submit" value="トップに戻る">
   </form>
+  <h1>
+    新規登録
+  </h1>
+  <form target="dummy">
+    <input type="text" placeholder="ユーザーID" id="uid"><br>
+    <input type="text" placeholder="ユーザーネーム" id="uname"><br>
+    <input type="password" placeholder="パスワード" id="upass">
+    <span>
+      パスワードの強度：
+      <progress id="strengthBar" value="0" max="4"></progress>
+      <span id="strength"></span>
+    </span>
+    <br>
+    <input type="password" placeholder="パスワード(再)" id="repass">
+    <span>
+      <span id="isSame">同じパスワードが入力されています。</span>
+    </span><br>
+    <button id="rsubmit">登録</button>
+  </form><br>
+  <div style="font-size: medium;">
+    ユーザー ID は半角英数字およびアンダースコアのみを用いて 4 文字以上で入力してください。<br>
+    パスワードは半角英数字およびアンダースコアのみを用いて 6 文字以上で入力してください。<br>
+    ※パスワード欄ではペーストが禁止されています。<br>
+  </div><br>
+  <span id="succeed" style="display: none;">
+    登録に成功しました。<br>
+    <form action="index.html">
+      <input type="submit" value="トップに戻る">
+    </form>
+  </span>
+  <span id="errors"></span>
+  <iframe name="dummy" style="display: none;"></iframe>
 </body>
+
 </html>
