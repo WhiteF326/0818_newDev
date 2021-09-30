@@ -56,6 +56,15 @@ Blockly.defineBlocksWithJsonArray(
     'helpUrl': '',
   },
   {
+    'type': 'repair',
+    'message0': '壊れる床の耐久値 + 1',
+    'previousStatement': null,
+    'nextStatement': null,
+    'colour': 150,
+    'tooltip': '足元の壊れる床の耐久値を1増やします',
+    'helpUrl': '',
+  },
+  {
     'type': 'loop',
     'message0': '%1 回繰り返し実行 %2 %3',
     'args0': [
@@ -106,42 +115,83 @@ Blockly.defineBlocksWithJsonArray(
     'helpUrl': '',
   },
   {
-    'type': 'sensor_front',
-    'message0': '向いている方向に移動出来る',
-    'output': 'Boolean',
-    'colour': 300,
-    'tooltip': 'キャラクターが向いている方向に移動出来るならば真を返します。',
-    'helpUrl': '',
+    "type": "sensor_loop",
+    "message0": "ループ %1 回目かそれより後である %2",
+    "args0": [
+      {
+        "type": "field_number",
+        "name": "COUNTER",
+        "value": 0,
+        "min": 0
+      },
+      {
+        "type": "input_value",
+        "name": "LOOP_COUNT"
+      }
+    ],
+    "output": "Boolean",
+    "colour": 300,
+    "tooltip": "今回っているループが指定回数目かそれ以降ならば真を返します。",
+    "helpUrl": ""
   },
   {
-    'type': 'sensor_foot',
+    'type': 'sensor_foot_dest',
     'message0': '足元が壊せる岩である',
     'output': 'Boolean',
     'colour': 300,
-    'tooltip': 'キャラクターの足元が壊せる岩ならば真を返します。',
+    'tooltip': 'カーソルの真下が壊せる岩ならば真を返します。',
     'helpUrl': '',
   },
-],
+  {
+    'type': 'sensor_foot_stab',
+    'message0': '足元が壊せない岩である',
+    'output': 'Boolean',
+    'colour': 300,
+    'tooltip': 'カーソルの真下が壊せない岩ならば真を返します。',
+    'helpUrl': '',
+  },
+  {
+    'type': 'sensor_foot_floor',
+    'message0': '足元が床である',
+    'output': 'Boolean',
+    'colour': 300,
+    'tooltip': 'カーソルの真下が床ならば真を返します。',
+    'helpUrl': '',
+  },
+  {
+    'type': 'sensor_foot_colp',
+    'message0': '足元が耐久値付き床である',
+    'output': 'Boolean',
+    'colour': 300,
+    'tooltip': 'カーソルの真下が耐久値付き床ならば真を返します。',
+    'helpUrl': '',
+  },
+  ],
 );
 
-Blockly.JavaScript['move'] = function(block) {
+Blockly.JavaScript['move'] = function (block) {
   const dropdown_vector = block.getFieldValue('vector');
   const value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
   const code = "move " + dropdown_vector.toLowerCase() + "\n";
   return code;
 };
 
-Blockly.JavaScript['destroy'] = function(block) {
+Blockly.JavaScript['destroy'] = function (block) {
   const code = 'destroy\n';
   return code;
 };
 
-Blockly.JavaScript['create'] = function(block) {
+Blockly.JavaScript['create'] = function (block) {
   const code = 'create\n';
   return code;
 };
 
-Blockly.JavaScript['loop'] = function(block) {
+Blockly.JavaScript['repair'] = function (block) {
+  const code = 'repair\n';
+  return code;
+}
+
+Blockly.JavaScript['loop'] = function (block) {
   const number_repeatamount = block.getFieldValue('REPEATAMOUNT');
   const value_repeatamount = Blockly.JavaScript.valueToCode(block, 'REPEATAMOUNT', Blockly.JavaScript.ORDER_ATOMIC);
   const statements_repeatblock = Blockly.JavaScript.statementToCode(block, 'REPEATBLOCK');
@@ -150,7 +200,7 @@ Blockly.JavaScript['loop'] = function(block) {
   return code;
 };
 
-Blockly.JavaScript['if'] = function(block) {
+Blockly.JavaScript['if'] = function (block) {
   const statements_statement = Blockly.JavaScript.statementToCode(block, 'STATEMENT');
   const statements_true = Blockly.JavaScript.statementToCode(block, 'TRUE');
   const statements_false = Blockly.JavaScript.statementToCode(block, 'FALSE');
@@ -159,7 +209,26 @@ Blockly.JavaScript['if'] = function(block) {
   return code;
 };
 
-Blockly.JavaScript['sensor_foot'] = function(block) {
-  const code = 'sensor_foot';
+Blockly.JavaScript['sensor_foot_dest'] = function (block) {
+  const code = 'sensor_foot_dest';
+  return code;
+}
+Blockly.JavaScript['sensor_foot_stab'] = function (block) {
+  const code = 'sensor_foot_stab';
+  return code;
+}
+Blockly.JavaScript['sensor_foot_floor'] = function (block) {
+  const code = 'sensor_foot_floor';
+  return code;
+}
+Blockly.JavaScript['sensor_foot_colp'] = function (block) {
+  const code = 'sensor_foot_colp';
+  return code;
+}
+
+
+Blockly.JavaScript['sensor_loop'] = function (block) {
+  const number_name = block.getFieldValue('COUNTER');
+  const code = 'sensor_loop ' + number_name;
   return code;
 }

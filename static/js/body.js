@@ -143,25 +143,37 @@ class Body {
   }
   cAction = (type) => {
     this.charaHand.addCursorAction(type);
+    if(type === "create"
+    && this.map[this.futureCursorY][this.futureCursorX] === 1){
+      this.map[this.futureCursorY][this.futureCursorX] = 10;
+    }
   }
 
-  sensor_foot = () => this.map[this.futureCursorY][this.futureCursorX] == 2;
+  sensor_foot = (targ) =>{
+    console.log(this.map[this.futureCursorY][this.futureCursorX]);
+    return contains(targ, this.map[this.futureCursorY][this.futureCursorX]);
+  }
 
   destroyCursor = (y, x) => {
-    if (this.map[y][x] == 2) {
+    if (this.map[y][x] === 2) {
       this.map[y][x] = 1;
       destroySound.currentTime = 0;
       destroySound.play();
     }
   }
   createCursor = (y, x) => {
-    if (this.map[y][x] == 1
-      && !(this.currentY == y && this.currentX == x)
-      && !(this.goal[0] == y && this.goal[1] == x)) {
-      console.log(this.currentY, this.currentX);
+    if ((this.map[y][x] === 1 || this.map[y][x] === 10)
+      && !(this.currentY === y && this.currentX === x)
+      && !(this.goal[0] === y && this.goal[1] === x)) {
+      console.log(y, x);
       this.map[y][x] = 2;
       putSound.currentTime = 0;
       putSound.play();
+    }
+  }
+  repairCursor = (y, x) => {
+    if (this.map[y][x] === 4) {
+      this.param[y][x]++;
     }
   }
 
@@ -201,6 +213,8 @@ class Body {
         this.createCursor(y, x);
       } else if (action === "destroy") {
         this.destroyCursor(y, x);
+      } else if (action === "repair") {
+        this.repairCursor(y, x);
       }
     } else if (action) {
       this.cursorY += action[1];

@@ -11,7 +11,8 @@ class ChipList {
       ["door_off1.png", "door_off2.png", "door_off3.png", "door_off4.png", "door_off5.png"],
       ["pushed1.png", "pushed2.png", "pushed3.png", "pushed4.png", "pushed5.png"],
       ["door_on1.png", "door_on2.png", "door_on3.png", "door_on4.png", "door_on5.png"],
-      ["avoidCreate.png"]
+      ["avoidCreate.png"],
+      ["map02.png"]
     ];
     this.paramFunc = [
       (p) => 0,
@@ -23,6 +24,7 @@ class ChipList {
       (p) => p,
       (p) => p,
       (p) => p,
+      (p) => 0,
       (p) => 0,
     ];
     this.stepFunc = [
@@ -36,6 +38,7 @@ class ChipList {
       (p) => p,
       (p) => p,
       (p) => p,
+      (p) => 0,
     ];
     this.printParam = [
       (p) => "",
@@ -43,6 +46,7 @@ class ChipList {
       (p) => "",
       (p) => "",
       (p) => String(p),
+      (p) => "",
       (p) => "",
       (p) => "",
       (p) => "",

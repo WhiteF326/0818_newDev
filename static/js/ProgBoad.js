@@ -25,6 +25,8 @@ class ProgBoad {
       }
     }
 
+    this.loopCounters = [];
+
     document.body.childNodes.forEach(elm => {
       elm.onclick = () => costPrint();
     });
@@ -71,17 +73,18 @@ class ProgBoad {
     // コスト表の作成
     Object.keys(progListText).forEach(eachType => {
       const value = this.gameBody.costList[eachType];
-      
+
       const tr = document.createElement("tr");
       const typeD = document.createElement("td");
       typeD.appendChild(document.createTextNode(progListText[eachType]));
       tr.appendChild(typeD);
       const valueD = document.createElement("td");
-      if(typeof value === 'undefined'){
+      if (typeof value === 'undefined') {
         valueD.appendChild(document.createTextNode(defaultCost[eachType]));
-      }else{
+      } else {
         valueD.appendChild(document.createTextNode(value));
       }
+      valueD.setAttribute("align", "right");
       tr.appendChild(valueD);
       document.getElementById("costList").appendChild(tr);
     });
@@ -91,7 +94,6 @@ class ProgBoad {
     for (let i = 0; i < codel.length; i++) {
       const line = codel[i];
       if (!line) continue;
-
       if (line.startsWith("move")) {
         const way = line.split(" ")[1];
         this.gameBody.cMove(...moveWay[way]["power"]);
@@ -102,25 +104,47 @@ class ProgBoad {
       } else if (line.startsWith("loop")) {
         const loopAmount = Number(line.split(" ")[1]);
         const forid = line.split(" ")[2];
-        for (let _ = 0; _ < loopAmount; _++) {
+        for (let j = 0; j < loopAmount; j++) {
+          this.loopCounters.push(j);
           this.parse(codel.slice(i + 1, codel.indexOf("next " + forid)));
+          this.loopCounters.pop();
         }
         i = codel.lastIndexOf("next " + forid);
       } else if (line.startsWith("if")) {
-        const ifid = line.split(" ")[2];
+        const ifid = line.split(" ").slice(-1)[0];
         let judge = false;
         switch (line.split(" ")[1]) {
-          case "sensor_foot":
-            judge = this.gameBody.sensor_foot();
-            console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
+          case "sensor_foot_dest":
+            judge = this.gameBody.sensor_foot([2, 10]);
+            // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
+            break;
+          case "sensor_foot_stab":
+            judge = this.gameBody.sensor_foot([0]);
+            // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
+            break;
+          case "sensor_foot_floor":
+            judge = this.gameBody.sensor_foot([1]);
+            // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
+            break;
+          case "sensor_foot_colp":
+            judge = this.gameBody.sensor_foot([4]);
+            // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
+            break;
+          case "sensor_loop":
+            const comp = Number(line.split(" ")[2]);
+            judge = comp - 1 <= this.loopCounters.slice(-1)[0];
             break;
         }
         if (judge) {
           this.parse(codel.slice(i + 1, codel.indexOf("else " + ifid)));
         } else {
-          this.parse(codel.slice(codel.indexOf("else " + ifid), codel.indexOf("endif " + ifid)))
+          this.parse(codel.slice(
+            codel.indexOf("else " + ifid), codel.indexOf("endif " + ifid)
+          ));
         }
         i = codel.indexOf("endif " + ifid);
+      } else if (line.startsWith("repair")) {
+        this.gameBody.cAction("repair");
       }
     }
   }
