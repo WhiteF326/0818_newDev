@@ -25,6 +25,8 @@ class ProgBoad {
       }
     }
 
+    this.loopCounters = [];
+
     document.body.childNodes.forEach(elm => {
       elm.onclick = () => costPrint();
     });
@@ -92,7 +94,6 @@ class ProgBoad {
     for (let i = 0; i < codel.length; i++) {
       const line = codel[i];
       if (!line) continue;
-
       if (line.startsWith("move")) {
         const way = line.split(" ")[1];
         this.gameBody.cMove(...moveWay[way]["power"]);
@@ -103,23 +104,32 @@ class ProgBoad {
       } else if (line.startsWith("loop")) {
         const loopAmount = Number(line.split(" ")[1]);
         const forid = line.split(" ")[2];
-        for (let _ = 0; _ < loopAmount; _++) {
+        for (let j = 0; j < loopAmount; j++) {
+          this.loopCounters.push(j);
           this.parse(codel.slice(i + 1, codel.indexOf("next " + forid)));
+          this.loopCounters.pop();
         }
         i = codel.lastIndexOf("next " + forid);
       } else if (line.startsWith("if")) {
-        const ifid = line.split(" ")[2];
+        const ifid = line.split(" ").slice(-1)[0];
         let judge = false;
         switch (line.split(" ")[1]) {
           case "sensor_foot":
             judge = this.gameBody.sensor_foot();
-            console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
+            // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
+            break;
+
+          case "sensor_loop":
+            const comp = Number(line.split(" ")[2]);
+            judge = comp - 1 <= this.loopCounters.slice(-1)[0];
             break;
         }
         if (judge) {
           this.parse(codel.slice(i + 1, codel.indexOf("else " + ifid)));
         } else {
-          this.parse(codel.slice(codel.indexOf("else " + ifid), codel.indexOf("endif " + ifid)))
+          this.parse(codel.slice(
+            codel.indexOf("else " + ifid), codel.indexOf("endif " + ifid)
+          ));
         }
         i = codel.indexOf("endif " + ifid);
       } else if (line.startsWith("repair")) {
