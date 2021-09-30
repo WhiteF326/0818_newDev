@@ -46,7 +46,7 @@
         const tile = document.createElement("div");
         tile.style.display = "inline-block"
         tile.classList.add("tile");
-        tile.innerText = stages[ptr];
+        tile.innerText = stages[ptr] || "Coming Soon";
         tile.style.padding = "5px";
         tile.style.color = retTextColor(ptr % 7);
 
@@ -68,9 +68,11 @@
         }
 
         tile.onclick = () => {
-          localStorage.setItem("selectedStage", tile.innerText);
-          localStorage.setItem("gameEnabled", "true");
-          window.location = "gameBody.html";
+          if(stages[ptr]){
+            localStorage.setItem("selectedStage", tile.innerText);
+            localStorage.setItem("gameEnabled", "true");
+            window.location = "gameBody.html";
+          }
         }
 
         row.appendChild(tile);
