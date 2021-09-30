@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <title>プログラミングゲーム（仮）</title>
 
-  <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+  <link rel="stylesheet" href="css/sakura.css" type="text/css">
   <link rel="stylesheet" href="css/userBoad.css">
   <link href="https://fonts.googleapis.com/css?family=M+PLUS+1p" rel="stylesheet">
 
@@ -59,6 +59,7 @@
     color: black;
     display: block;
     height: fit-content;
+    z-index: 10000;
   }
 
   .left {
@@ -68,8 +69,16 @@
   .right {
     float: right;
   }
+
+  #blocklyComputeCanvas{
+    position: relative;
+    z-index: 1;
+  }
 </style>
 <body id="body">
+  <form action="index.html">
+    <input type="submit" value="トップに戻る">
+  </form>
   <script type="module" src="js/Body.js"></script>
   <div id="stages">
     <canvas id="canvas"></canvas>

@@ -54,7 +54,7 @@ class Body {
 
     // tile size
     this.tilesize = min(
-      64, floor(this.sh / 2.2 / this.map.length));
+      64, floor(this.sh / 2 / Math.max(this.map.length, this.map[0].length)));
 
     // キャラ情報の取得
     this.charaAuto = new CharaAuto(this.start[2], this.tilesize);
