@@ -14,6 +14,10 @@
     padding: 5px;
     margin: 5px 5px 5px 0;
   }
+
+  #errors {
+    color: #B00001;
+  }
 </style>
 <script type="module">
   import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
@@ -39,7 +43,7 @@
         document.getElementById("succeed").style.display = "block";
         document.getElementById("usubmit").disabled = true;
       } else {
-        errors += "ユーザが見つかりませんでした。"
+        errors += "ユーザ ID または パスワードが間違っています。"
       }
     }
     document.getElementById("errors").innerText = errors;
