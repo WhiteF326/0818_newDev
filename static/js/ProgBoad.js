@@ -114,10 +114,15 @@ class ProgBoad {
         const ifid = line.split(" ").slice(-1)[0];
         let judge = false;
         switch (line.split(" ")[1]) {
-          case "sensor_foot":
-            judge = this.gameBody.sensor_foot();
+          case "sensor_foot_dest":
+            judge = this.gameBody.sensor_foot([2, 10]);
             // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
             break;
+          case "sensor_foot_stab":
+            judge = this.gameBody.sensor_foot([0]);
+            // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
+            break;
+          
 
           case "sensor_loop":
             const comp = Number(line.split(" ")[2]);

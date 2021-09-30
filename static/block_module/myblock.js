@@ -135,11 +135,19 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   },
   {
-    'type': 'sensor_foot',
+    'type': 'sensor_foot_dest',
     'message0': '足元が壊せる岩である',
     'output': 'Boolean',
     'colour': 300,
-    'tooltip': 'キャラクターの足元が壊せる岩ならば真を返します。',
+    'tooltip': 'カーソルの真下が壊せる岩ならば真を返します。',
+    'helpUrl': '',
+  },
+  {
+    'type': 'sensor_foot_stab',
+    'message0': '足元が壊せない岩である',
+    'output': 'Boolean',
+    'colour': 300,
+    'tooltip': 'カーソルの真下が壊せない岩ならば真を返します。',
     'helpUrl': '',
   },
 ],
@@ -185,8 +193,12 @@ Blockly.JavaScript['if'] = function(block) {
   return code;
 };
 
-Blockly.JavaScript['sensor_foot'] = function(block) {
-  const code = 'sensor_foot';
+Blockly.JavaScript['sensor_foot_dest'] = function(block) {
+  const code = 'sensor_foot_dest';
+  return code;
+}
+Blockly.JavaScript['sensor_foot_stab'] = function(block) {
+  const code = 'sensor_foot_stab';
   return code;
 }
 
