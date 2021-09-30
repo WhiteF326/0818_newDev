@@ -106,12 +106,24 @@ Blockly.defineBlocksWithJsonArray(
     'helpUrl': '',
   },
   {
-    'type': 'sensor_front',
-    'message0': '向いている方向に移動出来る',
-    'output': 'Boolean',
-    'colour': 300,
-    'tooltip': 'キャラクターが向いている方向に移動出来るならば真を返します。',
-    'helpUrl': '',
+    "type": "sensor_loop",
+    "message0": "ループ %1 回目かそれより後である %2",
+    "args0": [
+      {
+        "type": "field_number",
+        "name": "COUNTER",
+        "value": 0,
+        "min": 0
+      },
+      {
+        "type": "input_value",
+        "name": "LOOP_COUNT"
+      }
+    ],
+    "output": "Boolean",
+    "colour": 300,
+    "tooltip": "今回っているループが指定回数目かそれ以降ならば真を返します。",
+    "helpUrl": ""
   },
   {
     'type': 'sensor_foot',
@@ -161,5 +173,11 @@ Blockly.JavaScript['if'] = function(block) {
 
 Blockly.JavaScript['sensor_foot'] = function(block) {
   const code = 'sensor_foot';
+  return code;
+}
+
+Blockly.JavaScript['sensor_loop'] = function(block) {
+  const number_name = block.getFieldValue('COUNTER');
+  const code = 'sensor_loop ' + number_name;
   return code;
 }
