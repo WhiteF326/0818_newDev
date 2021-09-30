@@ -162,7 +162,6 @@ class Body {
     }
   }
   createCursor = (y, x) => {
-
     if ((this.map[y][x] === 1 || this.map[y][x] === 10)
       && !(this.currentY === y && this.currentX === x)
       && !(this.goal[0] === y && this.goal[1] === x)) {
