@@ -30,7 +30,3 @@ window.addEventListener("load", () => {
   inf.appendChild(def);
   inf.appendChild(inout);
 });
-
-window.addEventListener("scroll", () => {
-  
-});
