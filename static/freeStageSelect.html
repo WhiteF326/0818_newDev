@@ -18,8 +18,8 @@
 
     let stgHeight = window.innerHeight - 64;
     document.body.childNodes.forEach(r => {
-      if(r.nodeName !== "#text"
-      && r.getAttribute("id") !== "stages"){
+      if (r.nodeName !== "#text"
+        && r.getAttribute("id") !== "stages") {
         stgHeight -= r.clientHeight;
       }
     });
@@ -28,6 +28,16 @@
     );
 
     const stages = JSON.parse(await fetchJSON("api/stage/all", {}));
+
+    let cleared = new Array(stages.length).fill("0").join("");
+
+    if (localStorage.getItem("userid")) {
+      cleared = (await fetchJSON(
+        "api/user/free", { "userid": localStorage.getItem("userid") }
+      ))["free_progress"] + cleared;
+      cleared = cleared.slice(0, stages.length);
+    }
+    console.log(cleared);
 
     const tileWidth = 128;
     const marginWidth = 16;
@@ -46,7 +56,17 @@
         const tile = document.createElement("div");
         tile.style.display = "inline-block"
         tile.classList.add("tile");
-        tile.innerText = stages[ptr] || "Coming Soon";
+        const numText = document.createElement("span");
+        numText.appendChild(
+          document.createTextNode(stages[ptr] || "Coming Soon")
+        );
+        tile.appendChild(numText);
+        const clearedText = document.createElement("span");
+        clearedText.appendChild(
+          document.createTextNode(cleared.charAt(ptr) === '0' ? "" : "cleared")
+        );
+        clearedText.setAttribute("style", "float: right;");
+        tile.appendChild(clearedText);
         tile.style.padding = "5px";
         tile.style.color = retTextColor(ptr % 7);
 
@@ -68,7 +88,7 @@
         }
 
         tile.onclick = () => {
-          if(stages[ptr]){
+          if (stages[ptr]) {
             localStorage.setItem("selectedStage", tile.innerText);
             localStorage.setItem("gameEnabled", "true");
             window.location = "gameBody.html";
@@ -99,7 +119,7 @@
     margin-bottom: 16px;
   }
 
-  body{
+  body {
     height: 100%;
   }
 
