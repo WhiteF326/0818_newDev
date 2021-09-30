@@ -1,4 +1,3 @@
-const stagename = 12;
 const CHARASPEED = 4;
 
 const routineAutoTwoWay = "right";
