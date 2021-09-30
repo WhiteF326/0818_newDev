@@ -162,6 +162,7 @@ class Body {
     }
   }
   createCursor = (y, x) => {
+
     if ((this.map[y][x] === 1 || this.map[y][x] === 10)
       && !(this.currentY === y && this.currentX === x)
       && !(this.goal[0] === y && this.goal[1] === x)) {
@@ -169,6 +170,11 @@ class Body {
       this.map[y][x] = 2;
       putSound.currentTime = 0;
       putSound.play();
+    }
+  }
+  repairCursor = (y, x) => {
+    if (this.map[y][x] === 4) {
+      this.param[y][x]++;
     }
   }
 
@@ -208,6 +214,8 @@ class Body {
         this.createCursor(y, x);
       } else if (action === "destroy") {
         this.destroyCursor(y, x);
+      } else if (action === "repair") {
+        this.repairCursor(y, x);
       }
     } else if (action) {
       this.cursorY += action[1];

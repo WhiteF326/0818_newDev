@@ -56,6 +56,15 @@ Blockly.defineBlocksWithJsonArray(
     'helpUrl': '',
   },
   {
+    'type': 'repair',
+    'message0': '壊れる床の耐久値 + 1',
+    'previousStatement': null,
+    'nextStatement': null,
+    'colour': 150,
+    'tooltip': '足元の壊れる床の耐久値を1増やします',
+    'helpUrl': '',
+  },
+  {
     'type': 'loop',
     'message0': '%1 回繰り返し実行 %2 %3',
     'args0': [
@@ -152,6 +161,11 @@ Blockly.JavaScript['create'] = function(block) {
   const code = 'create\n';
   return code;
 };
+
+Blockly.JavaScript['repair'] = function(block) {
+  const code = 'repair\n';
+  return code;
+}
 
 Blockly.JavaScript['loop'] = function(block) {
   const number_repeatamount = block.getFieldValue('REPEATAMOUNT');
