@@ -23,7 +23,7 @@
   ],
   "start": [1, 1, "right"],
   "goal": [1, 6],
-  "controll": [1, 3],
+  "controll": [0, 8],
   "costList": {
     "move": 2
   },

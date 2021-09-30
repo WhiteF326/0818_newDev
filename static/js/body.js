@@ -149,9 +149,9 @@ class Body {
     }
   }
 
-  sensor_foot = () =>{
+  sensor_foot = (targ) =>{
     console.log(this.map[this.futureCursorY][this.futureCursorX]);
-    return contains([2, 10], this.map[this.futureCursorY][this.futureCursorX]);
+    return contains(targ, this.map[this.futureCursorY][this.futureCursorX]);
   }
 
   destroyCursor = (y, x) => {
