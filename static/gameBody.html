@@ -49,7 +49,7 @@
 
   .costTable tr,
   .costTable td {
-    padding: 10px;
+    padding: 5px;
   }
 
   .account-info {
@@ -69,11 +69,7 @@
     float: right;
   }
 </style>
-
 <body id="body">
-  <form action="index.html">
-    <input type="submit" value="トップに戻る">
-  </form>
   <script type="module" src="js/Body.js"></script>
   <div id="stages">
     <canvas id="canvas"></canvas>
@@ -94,9 +90,14 @@
       <block type="move"></block>
       <block type="destroy"></block>
       <block type="create"></block>
+      <block type="repair"></block>
       <block type="loop"></block>
       <block type="if"></block>
-      <block type="sensor_foot"></block>
+      <block type="sensor_loop"></block>
+      <block type="sensor_foot_dest"></block>
+      <block type="sensor_foot_stab"></block>
+      <block type="sensor_foot_floor"></block>
+      <block type="sensor_foot_colp"></block>
     </xml>
   </div>
   <div class="account-info" id="accountInfo"></div>
