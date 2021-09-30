@@ -39,8 +39,8 @@ const footstepsSound = new Audio("https://raw.githubusercontent.com/WhiteF326/08
 footstepsSound.volume = 0.5;
 
 // ジャンプ音
-const jumpSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/jump.mp3");
-jumpSound.volume = 1;
+const jumpSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/jump_ver2.mp3");
+jumpSound.volume = 0.5;
 
 // スイッチ音
 const switchSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/switch.mp3");
