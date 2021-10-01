@@ -18,8 +18,8 @@
 
     let stgHeight = window.innerHeight - 64;
     document.body.childNodes.forEach(r => {
-      if(r.nodeName !== "#text"
-      && r.getAttribute("id") !== "stages"){
+      if (r.nodeName !== "#text"
+        && r.getAttribute("id") !== "stages") {
         stgHeight -= r.clientHeight;
       }
     });
@@ -28,6 +28,15 @@
     );
 
     const stages = JSON.parse(await fetchJSON("api/stage/all", {}));
+
+    let cleared = [];
+
+    if (localStorage.getItem("userid")) {
+      cleared = (await fetchJSON(
+        "api/user/free", { "userid": localStorage.getItem("userid") }
+      ));
+    }
+    console.log(cleared);
 
     const tileWidth = 128;
     const marginWidth = 16;
@@ -40,15 +49,44 @@
       const row = document.createElement("div");
       row.classList.add("row");
       row.style.display = "block"
+      
       for (let j = 0; j < vertical; j++) {
         const ptr = i * vertical + j;
 
         const tile = document.createElement("div");
         tile.style.display = "inline-block"
         tile.classList.add("tile");
-        tile.innerText = stages[ptr] || "Coming Soon";
+        const numText = document.createElement("span");
+        numText.appendChild(
+          document.createTextNode(stages[ptr] || "Coming Soon")
+        );
+        numText.style.color = retTextColor(ptr % 7);
+        tile.appendChild(numText);
+        const clearedText = document.createElement("span");
+        if (cleared.find(elm => elm.stagename === Number(stages[ptr]))) {
+          clearedText.appendChild(document.createTextNode("cleared"));
+          clearedText.appendChild(document.createElement("br"));
+          clearedText.appendChild(document.createTextNode(
+            "BestScore : " + Math.max(
+              ...cleared.filter(elm => elm.stagename == Number(stages[ptr]))
+              .map(elm => elm.score)
+            )
+          ));
+          clearedText.appendChild(document.createElement("br"));
+          clearedText.appendChild(document.createTextNode(
+            "BestCost : " + Math.min(
+              ...cleared.filter(elm => elm.stagename == Number(stages[ptr]))
+              .map(elm => elm.cost)
+            )
+          ));
+        }
+        clearedText.setAttribute(
+          "style", "transform: translateY(60px); float: right; "
+                  + "text-align: right; font-size: 0.8em;"
+        );
+        clearedText.style.color = "white";
+        tile.appendChild(clearedText);
         tile.style.padding = "5px";
-        tile.style.color = retTextColor(ptr % 7);
 
         const plist = retColor(ptr % 7);
         let gradStr = "";
@@ -68,8 +106,8 @@
         }
 
         tile.onclick = () => {
-          if(stages[ptr]){
-            localStorage.setItem("selectedStage", tile.innerText);
+          if (stages[ptr]) {
+            localStorage.setItem("selectedStage", String(ptr));
             localStorage.setItem("gameEnabled", "true");
             window.location = "gameBody.html";
           }
@@ -99,7 +137,7 @@
     margin-bottom: 16px;
   }
 
-  body{
+  body {
     height: 100%;
   }
 
