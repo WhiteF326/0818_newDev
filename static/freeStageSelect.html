@@ -29,13 +29,12 @@
 
     const stages = JSON.parse(await fetchJSON("api/stage/all", {}));
 
-    let cleared = new Array(stages.length).fill("0").join("");
+    let cleared = [];
 
     if (localStorage.getItem("userid")) {
       cleared = (await fetchJSON(
         "api/user/free", { "userid": localStorage.getItem("userid") }
-      ))["free_progress"] + cleared;
-      cleared = cleared.slice(0, stages.length);
+      ));
     }
     console.log(cleared);
 
@@ -50,6 +49,7 @@
       const row = document.createElement("div");
       row.classList.add("row");
       row.style.display = "block"
+      
       for (let j = 0; j < vertical; j++) {
         const ptr = i * vertical + j;
 
@@ -60,15 +60,33 @@
         numText.appendChild(
           document.createTextNode(stages[ptr] || "Coming Soon")
         );
+        numText.style.color = retTextColor(ptr % 7);
         tile.appendChild(numText);
         const clearedText = document.createElement("span");
-        clearedText.appendChild(
-          document.createTextNode(cleared.charAt(ptr) === '0' ? "" : "cleared")
+        if (cleared.find(elm => elm.stagename === Number(stages[ptr]))) {
+          clearedText.appendChild(document.createTextNode("cleared"));
+          clearedText.appendChild(document.createElement("br"));
+          clearedText.appendChild(document.createTextNode(
+            "BestScore : " + Math.max(
+              ...cleared.filter(elm => elm.stagename == Number(stages[ptr]))
+              .map(elm => elm.score)
+            )
+          ));
+          clearedText.appendChild(document.createElement("br"));
+          clearedText.appendChild(document.createTextNode(
+            "BestCost : " + Math.min(
+              ...cleared.filter(elm => elm.stagename == Number(stages[ptr]))
+              .map(elm => elm.cost)
+            )
+          ));
+        }
+        clearedText.setAttribute(
+          "style", "transform: translateY(60px); float: right; "
+                  + "text-align: right; font-size: 0.8em;"
         );
-        clearedText.setAttribute("style", "float: right;");
+        clearedText.style.color = "white";
         tile.appendChild(clearedText);
         tile.style.padding = "5px";
-        tile.style.color = retTextColor(ptr % 7);
 
         const plist = retColor(ptr % 7);
         let gradStr = "";
@@ -89,7 +107,7 @@
 
         tile.onclick = () => {
           if (stages[ptr]) {
-            localStorage.setItem("selectedStage", tile.innerText);
+            localStorage.setItem("selectedStage", String(ptr));
             localStorage.setItem("gameEnabled", "true");
             window.location = "gameBody.html";
           }

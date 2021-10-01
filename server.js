@@ -93,10 +93,9 @@ class Body extends Server {
 
           case 'free': {
             const uid = prm.userid;
-            const result = await this.client.query(
-              "select free_progress from users where id = \"" + uid + "\""
+            ret = await this.client.query(
+              "select * from freemode_results where userid = \"" + uid + "\""
             );
-            ret = result[0];
             break;
           }
         }
