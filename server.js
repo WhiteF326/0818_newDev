@@ -38,6 +38,23 @@ class Body extends Server {
             })
             ret = JSON.stringify(retAry);
             break;
+
+          case 'clear':
+            console.log(prm);
+            const uid = prm.userid;
+            const stagename = prm.stagename;
+            const cost = prm.cost;
+            const prms = "null, " + [
+              uid, stagename, 0, cost, void 0
+            ].map(v => {
+              if (typeof v === "string") return '"' + v + '"';
+              else if (typeof v === "undefined") return "current_timestamp()"
+              else return v
+            }).join(",");
+            await this.client.execute(
+              "insert into freemode_results values(" + prms + ")"
+            );
+            break;
         }
         break;
 
@@ -94,9 +111,28 @@ class Body extends Server {
           case 'free': {
             const uid = prm.userid;
             ret = await this.client.query(
-              "select * from freemode_results where userid = \"" + uid + "\""
+              "select * from freemode_results "
+              + "where userid = \"" + uid + "\" and deleted = 0"
             );
             break;
+          }
+
+          case 'reset': {
+            const uid = prm.userid;
+            switch (path.split('/')[4]) {
+              case 'free':
+                await this.client.execute(
+                  "update freemode_result set deleted = 0 " +
+                  "where userid = \"" + uid + "\""
+                );
+                break;
+              
+              case 'story':
+                await this.client.execute(
+                  "update users set story = 0 where userid = \"" + uid + "\""
+                );
+                break;
+            }
           }
         }
         break;

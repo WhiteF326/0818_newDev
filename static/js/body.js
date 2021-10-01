@@ -386,9 +386,13 @@ window.onload = async () => {
   }
 
   const modal = document.getElementsByClassName("modalback")[0];
-  console.log(modal);
-  modal.addEventListener("click", () => {
+  modal.addEventListener("click", async () => {
     modal.setAttribute("style", "width: 0%");
+    await fetchJSON("api/stage/clear", {
+      "userid": localStorage.getItem("userid"),
+      "stagename": localStorage.getItem("selectedStage"),
+      "cost": progBoad.costCalculate()
+    });
     setInterval(() => {
       window.location = "freeStageSelect.html";
     }, 1000);
