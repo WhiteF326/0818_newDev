@@ -79,15 +79,24 @@ class Body extends Server {
             const inserts = [
               uid, uname, upass, 0, "0", void 0
             ].map(v => {
-              if(typeof v === "string") return '"' + v + '"';
-              else if(typeof v === "undefined") return "current_timestamp()"
+              if (typeof v === "string") return '"' + v + '"';
+              else if (typeof v === "undefined") return "current_timestamp()"
               else return v
             }).join(",");
             console.log(inserts);
             const result = await this.client.execute(
               "insert into users values(" + inserts + ")"
             );
-            return result;
+            ret = result;
+            break;
+          }
+
+          case 'free': {
+            const uid = prm.userid;
+            ret = await this.client.query(
+              "select * from freemode_results where userid = \"" + uid + "\""
+            );
+            break;
           }
         }
         break;
