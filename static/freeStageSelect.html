@@ -64,7 +64,12 @@
         tile.appendChild(numText);
         const clearedText = document.createElement("span");
         if (cleared.find(elm => elm.stagename === Number(stages[ptr]))) {
-          clearedText.appendChild(document.createTextNode("cleared"));
+          const clearedImage = document.createElement("img");
+          clearedImage.setAttribute("src", "img/stageclear.png");
+          clearedImage.style.height = "48px";
+          clearedImage.style.width = "72px";
+          clearedImage.style.margin = "0";
+          clearedText.appendChild(clearedImage);
           clearedText.appendChild(document.createElement("br"));
           clearedText.appendChild(document.createTextNode(
             "BestScore : " + Math.max(
@@ -81,7 +86,7 @@
           ));
         }
         clearedText.setAttribute(
-          "style", "transform: translateY(60px); float: right; "
+          "style", "transform: translateY(35px); float: right; "
                   + "text-align: right; font-size: 0.8em;"
         );
         clearedText.style.color = "white";
