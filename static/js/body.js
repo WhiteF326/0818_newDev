@@ -23,6 +23,7 @@ class Body {
     if (!this.costList) {
       this.costList = defaultCost;
     }
+    this.goaled = false;
 
     // スイッチ情報の管理
     this.doorPos = [[], [], [], [], []];
@@ -143,13 +144,13 @@ class Body {
   }
   cAction = (type) => {
     this.charaHand.addCursorAction(type);
-    if(type === "create"
-    && this.map[this.futureCursorY][this.futureCursorX] === 1){
+    if (type === "create"
+      && this.map[this.futureCursorY][this.futureCursorX] === 1) {
       this.map[this.futureCursorY][this.futureCursorX] = 10;
     }
   }
 
-  sensor_foot = (targ) =>{
+  sensor_foot = (targ) => {
     console.log(this.map[this.futureCursorY][this.futureCursorX]);
     return contains(targ, this.map[this.futureCursorY][this.futureCursorX]);
   }
@@ -221,13 +222,17 @@ class Body {
       this.cursorX += action[0];
     }
 
-    if (this.endFlg && this.charaHand.isWaitFor()) {
+    if (this.endFlg && this.charaHand.isWaitFor() && !this.goaled) {
       moving = true;
     }
 
     if (this.currentY === this.goal[0] && this.currentX === this.goal[1] &&
       this.charaAuto.isWaitFor() && moving) {
       moving = false;
+      this.goaled = true;
+      const modal = document.getElementsByClassName("modalback")[0];
+      modal.style.transition = "1s";
+      modal.style.width = "85%";
     }
 
     if (moving) {
@@ -379,4 +384,13 @@ window.onload = async () => {
   window.onbeforeunload = () => {
     progBoad.save();
   }
+
+  const modal = document.getElementsByClassName("modalback")[0];
+  console.log(modal);
+  modal.addEventListener("click", () => {
+    modal.setAttribute("style", "width: 0%");
+    setInterval(() => {
+      window.location = "freeStageSelect.html";
+    }, 1000);
+  });
 }

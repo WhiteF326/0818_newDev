@@ -74,6 +74,29 @@
     position: relative;
     z-index: 1;
   }
+
+  .modalback {
+    transition: 0.5s;
+    position: absolute;
+    bottom: 0%;
+    display: block;
+    z-index: 9998;
+    background-color: rgba(234, 254, 234, 0.64);
+    height: 100%;
+    width: 0%;
+    margin: 0 auto;
+  }
+
+  .modal {
+    position: relative;
+    display: flexbox;
+    z-index: 9999;
+    width: fit-content;
+    height: fit-content;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 </style>
 <body id="body">
   <form action="index.html">
@@ -110,6 +133,11 @@
     </xml>
   </div>
   <div class="account-info" id="accountInfo"></div>
+  <div class="modalback">
+    <div class="modal">
+      <img src="img/stageclear_take.png">
+    </div>
+  </div>
 </body>
 
 </html>
