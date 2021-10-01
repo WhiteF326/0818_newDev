@@ -77,7 +77,7 @@ class Body extends Server {
             }
 
             const inserts = [
-              uid, uname, upass, 0, "0", void 0
+              uid, uname, upass, 0, void 0
             ].map(v => {
               if (typeof v === "string") return '"' + v + '"';
               else if (typeof v === "undefined") return "current_timestamp()"
