@@ -39,6 +39,7 @@
       });
       if (loginResult) {
         localStorage.setItem("userid", uid);
+        localStorage.setItem("username", loginResult);
         localStorage.setItem("pass", upass);
         document.getElementById("succeed").style.display = "block";
         document.getElementById("usubmit").disabled = true;

@@ -53,7 +53,7 @@ class Body extends Server {
               "select * from users where id = \"" + uid +
               "\" and pass = \"" + upass + "\"",
             );
-            if (query.length) ret = true;
+            if (query.length) ret = query[0]["name"];
             else ret = false;
             break;
           }

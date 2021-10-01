@@ -81,6 +81,9 @@
         "password": upass
       });
       if (registerTry.affectedRows === 1) {
+        localStorage.setItem("userid", uid);
+        localStorage.setItem("username", uname);
+        localStorage.setItem("pass", upass);
         elm("succeed").style.display = "block";
         elm("rsubmit").disabled = true;
       } else {
