@@ -40,9 +40,11 @@ class ProgBoad {
       console.log(code);
       // 静的解析
       let runnable = true;
-      const loopNumbers = [...code.matchAll("loop [0-9]+")]
+      const loopNumbers = [...code.matchAll("_*loop [0-9]+")]
+        .map(a => a[0].indexOf("_") === -1 ? a : ["loop 0"])
         .map(a => [...a[0].matchAll("[0-9]+")][0])
         .map(a => Number(a[0]));
+      console.log(loopNumbers)
       if (loopNumbers.length) {
         if (loopNumbers.reduce((p, c) => p + c) > 50) {
           // エラーで止まる
