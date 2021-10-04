@@ -34,17 +34,22 @@ CREATE TABLE `freemode_results` (
   `stagename` int(10) NOT NULL,
   `score` int(10) NOT NULL,
   `cost` int(10) NOT NULL,
-  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- テーブルのデータのダンプ `freemode_results`
 --
 
-INSERT INTO `freemode_results` (`id`, `userid`, `stagename`, `score`, `cost`, `date`) VALUES
-(1, 'test', 2, 810, 8, '2021-10-01 09:48:39'),
-(2, 'test', 5, 810, 16, '2021-10-01 09:49:42'),
-(3, 'test', 5, 810, 15, '2021-10-01 09:49:42');
+INSERT INTO `freemode_results` (`id`, `userid`, `stagename`, `score`, `cost`, `date`, `deleted`) VALUES
+(1, 'test', 2, 810, 8, '2021-10-01 09:48:39', 1),
+(2, 'test', 5, 810, 16, '2021-10-01 09:49:42', 1),
+(3, 'test', 5, 810, 15, '2021-10-01 09:49:42', 1),
+(4, 'test', 1, 0, 8, '2021-10-01 16:24:57', 1),
+(5, 'test', 7, 0, 15, '2021-10-01 16:25:28', 1),
+(6, 'test', 2, 0, 9, '2021-10-04 10:36:22', 0),
+(7, 'test', 2, 0, 9, '2021-10-04 10:50:23', 0);
 
 -- --------------------------------------------------------
 
@@ -93,7 +98,7 @@ ALTER TABLE `users`
 -- テーブルのAUTO_INCREMENT `freemode_results`
 --
 ALTER TABLE `freemode_results`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- ダンプしたテーブルの制約
