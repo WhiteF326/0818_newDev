@@ -20,5 +20,6 @@
     "loop": 1,
     "if": 1
   },
-  "maxCost": 8
+  "maxCost": 8,
+  "maxStep": 10
 }

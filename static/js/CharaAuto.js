@@ -78,6 +78,9 @@ class CharaAuto {
         Math.abs(this.pendingMove[0][1]) == 0
         && Math.abs(this.pendingMove[0][0] == 0)) {
         this.pendingMove.shift();
+        return 1;
+      }else{
+        return 0;
       }
     }
   }

@@ -94,3 +94,5 @@ document.onclick = () => {
   selectSound.currentTime = 0;
   selectSound.play();
 }
+
+const defaultStep = 100;

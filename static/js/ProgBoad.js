@@ -90,6 +90,12 @@ class ProgBoad {
     });
   }
 
+  costCalculate = () => {
+    return this.costCalculator.calc(
+      Blockly.JavaScript.workspaceToCode(this.workspace)
+    );
+  }
+
   parse = (codel) => {
     for (let i = 0; i < codel.length; i++) {
       const line = codel[i];

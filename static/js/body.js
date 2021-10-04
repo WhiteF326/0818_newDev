@@ -23,6 +23,11 @@ class Body {
     if (!this.costList) {
       this.costList = defaultCost;
     }
+    this.goaled = false;
+    this.lastStep = this.mapinfo['maxStep'];
+    if (!this.lastStep) this.lastStep = defaultStep;
+    document.getElementById("step").innerText =
+      "残り歩数 : " + (this.lastStep - 1);
 
     // スイッチ情報の管理
     this.doorPos = [[], [], [], [], []];
@@ -143,13 +148,13 @@ class Body {
   }
   cAction = (type) => {
     this.charaHand.addCursorAction(type);
-    if(type === "create"
-    && this.map[this.futureCursorY][this.futureCursorX] === 1){
+    if (type === "create"
+      && this.map[this.futureCursorY][this.futureCursorX] === 1) {
       this.map[this.futureCursorY][this.futureCursorX] = 10;
     }
   }
 
-  sensor_foot = (targ) =>{
+  sensor_foot = (targ) => {
     console.log(this.map[this.futureCursorY][this.futureCursorX]);
     return contains(targ, this.map[this.futureCursorY][this.futureCursorX]);
   }
@@ -205,7 +210,16 @@ class Body {
     }
     this.drawChar(this.charaAuto, this.frame >> this.endFrame);
     this.drawChar(this.charaHand, this.frame >> this.endFrame);
-    this.charaAuto.moveFrame(CHARASPEED);
+    const stepSpend = this.charaAuto.moveFrame(CHARASPEED);
+    if (stepSpend) {
+      this.lastStep--;
+      if (!this.lastStep) {
+        const modal = document.getElementsByClassName("fmodalback")[0];
+        modal.style.transition = "1s";
+        modal.style.width = "85%";
+        moving = false;
+      }
+    }
     const action = this.charaHand.moveFrame(CHARASPEED);
     if (typeof action === "string") {
       const y = this.cursorY, x = this.cursorX;
@@ -221,16 +235,24 @@ class Body {
       this.cursorX += action[0];
     }
 
-    if (this.endFlg && this.charaHand.isWaitFor()) {
+    if (this.endFlg
+      && this.charaHand.isWaitFor()
+      && !this.goaled && this.lastStep) {
       moving = true;
     }
 
     if (this.currentY === this.goal[0] && this.currentX === this.goal[1] &&
       this.charaAuto.isWaitFor() && moving) {
       moving = false;
+      this.goaled = true;
+      const modal = document.getElementsByClassName("modalback")[0];
+      modal.style.transition = "1s";
+      modal.style.width = "85%";
     }
 
     if (moving) {
+      document.getElementById("step").innerText =
+        "残り歩数 : " + (this.lastStep - 1);
       const power = moveWay[this.currentVector]['power'];
       const dy = this.currentY + power[0];
       const dx = this.currentX + power[1];
@@ -336,6 +358,11 @@ class Body {
               this.currentVector = moveWay[rightWay]['rt'];
             } else {
               moving = false;
+              setInterval(() => {
+                const modal = document.getElementsByClassName("fmodalback")[0];
+                modal.style.transition = "1s";
+                modal.style.width = "85%";
+              }, 1000)
             }
           }
         }
@@ -379,4 +406,25 @@ window.onload = async () => {
   window.onbeforeunload = () => {
     progBoad.save();
   }
+
+  const modal = document.getElementsByClassName("modalback")[0];
+  modal.addEventListener("click", async () => {
+    modal.setAttribute("style", "width: 0%");
+    await fetchJSON("api/stage/clear", {
+      "userid": localStorage.getItem("userid"),
+      "stagename": localStorage.getItem("selectedStage"),
+      "cost": progBoad.costCalculate()
+    });
+    setInterval(() => {
+      window.location = "freeStageSelect.html";
+    }, 1000);
+  });
+
+  const fmodal = document.getElementsByClassName("fmodalback")[0];
+  fmodal.addEventListener("click", async () => {
+    fmodal.setAttribute("style", "width: 0%");
+    setInterval(() => {
+      window.location = "freeStageSelect.html";
+    }, 1000);
+  });
 }
