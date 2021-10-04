@@ -7,5 +7,6 @@
   "start": [1, 5, "left"],
   "goal": [1, 1],
   "controll": [0, 3],
-  "maxCost": 8
+  "maxCost": 8,
+  "maxStep": 10
 }

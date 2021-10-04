@@ -97,6 +97,29 @@
     top: 50%;
     transform: translateY(-50%);
   }
+
+  .fmodalback {
+    transition: 0.5s;
+    position: absolute;
+    bottom: 0%;
+    display: block;
+    z-index: 9998;
+    background-color: rgba(254, 234, 234, 0.64);
+    height: 100%;
+    width: 0%;
+    margin: 0 auto;
+  }
+
+  .fmodal {
+    position: relative;
+    display: flexbox;
+    z-index: 9999;
+    width: fit-content;
+    height: fit-content;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 </style>
 <body id="body">
   <form action="index.html">
@@ -111,7 +134,8 @@
         <tbody id="costList">
         </tbody>
       </table>
-      <span id="cost" class="cost" style="display: inline-block;"></span>
+      <span id="cost" class="cost" style="display: inline-block;"></span><br>
+      <span id="step" class="cost" style="display: inline-block;"></span>
       <div style="display: block">
         <button id="move">開始</button>
         <button id="retry">やり直し</button>
@@ -138,6 +162,12 @@
       <img src="img/stageclear_take.png">
     </div>
   </div>
+  <div class="fmodalback">
+    <div class="fmodal">
+      <img src="img/stagefailed_take.png">
+    </div>
+  </div>
+  
 </body>
 
 </html>

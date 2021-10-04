@@ -24,6 +24,10 @@ class Body {
       this.costList = defaultCost;
     }
     this.goaled = false;
+    this.lastStep = this.mapinfo['maxStep'];
+    if (!this.lastStep) this.lastStep = defaultStep;
+    document.getElementById("step").innerText =
+      "残り歩数 : " + (this.lastStep - 1);
 
     // スイッチ情報の管理
     this.doorPos = [[], [], [], [], []];
@@ -206,7 +210,16 @@ class Body {
     }
     this.drawChar(this.charaAuto, this.frame >> this.endFrame);
     this.drawChar(this.charaHand, this.frame >> this.endFrame);
-    this.charaAuto.moveFrame(CHARASPEED);
+    const stepSpend = this.charaAuto.moveFrame(CHARASPEED);
+    if (stepSpend) {
+      this.lastStep--;
+      if (!this.lastStep) {
+        const modal = document.getElementsByClassName("fmodalback")[0];
+        modal.style.transition = "1s";
+        modal.style.width = "85%";
+        moving = false;
+      }
+    }
     const action = this.charaHand.moveFrame(CHARASPEED);
     if (typeof action === "string") {
       const y = this.cursorY, x = this.cursorX;
@@ -222,7 +235,9 @@ class Body {
       this.cursorX += action[0];
     }
 
-    if (this.endFlg && this.charaHand.isWaitFor() && !this.goaled) {
+    if (this.endFlg
+      && this.charaHand.isWaitFor()
+      && !this.goaled && this.lastStep) {
       moving = true;
     }
 
@@ -236,6 +251,8 @@ class Body {
     }
 
     if (moving) {
+      document.getElementById("step").innerText =
+        "残り歩数 : " + (this.lastStep - 1);
       const power = moveWay[this.currentVector]['power'];
       const dy = this.currentY + power[0];
       const dx = this.currentX + power[1];
@@ -341,6 +358,11 @@ class Body {
               this.currentVector = moveWay[rightWay]['rt'];
             } else {
               moving = false;
+              setInterval(() => {
+                const modal = document.getElementsByClassName("fmodalback")[0];
+                modal.style.transition = "1s";
+                modal.style.width = "85%";
+              }, 1000)
             }
           }
         }
@@ -393,6 +415,14 @@ window.onload = async () => {
       "stagename": localStorage.getItem("selectedStage"),
       "cost": progBoad.costCalculate()
     });
+    setInterval(() => {
+      window.location = "freeStageSelect.html";
+    }, 1000);
+  });
+
+  const fmodal = document.getElementsByClassName("fmodalback")[0];
+  fmodal.addEventListener("click", async () => {
+    fmodal.setAttribute("style", "width: 0%");
     setInterval(() => {
       window.location = "freeStageSelect.html";
     }, 1000);

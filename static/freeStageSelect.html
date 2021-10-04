@@ -119,18 +119,52 @@
         }
 
         row.appendChild(tile);
+
+
       }
       document.getElementById("stages").appendChild(row);
+      if (i % 2) {
+        document.getElementById("stages").appendChild(
+          document.createElement("hr")
+        );
+      }
     }
+
+    const silen = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/silen.mp3");
+    silen.volume = 1;
+    silen.loop = true;
 
     document.getElementById("reset").addEventListener("click", () => {
       const modal = document.getElementsByClassName("modalback")[0];
       modal.style.transition = "1s";
       modal.style.transform = "translateY(0)";
       modal.style.height = "100%";
-      const silen = new Audio("audio/silen.mp3");
-      silen.loop = true;
+
       silen.play();
+    });
+
+    document.getElementById("delete_yes").addEventListener(
+      "click", async () => {
+        const modal = document.getElementsByClassName("modalback")[0];
+        modal.style.transform = "translateY(-500px)";
+        modal.style.height = "0%";
+
+        silen.pause();
+        silen.currentTime = 0;
+
+        await fetchJSON("api/user/reset/free", {
+          "userid": localStorage.getItem("userid")
+        });
+
+        window.location.reload();
+      });
+    document.getElementById("delete_no").addEventListener("click", () => {
+      const modal = document.getElementsByClassName("modalback")[0];
+      modal.style.transform = "translateY(-500px)";
+      modal.style.height = "0%";
+
+      silen.pause();
+      silen.currentTime = 0;
     });
   }
 </script>

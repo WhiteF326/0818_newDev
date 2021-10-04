@@ -45,12 +45,13 @@ class Body extends Server {
             const stagename = prm.stagename;
             const cost = prm.cost;
             const prms = "null, " + [
-              uid, stagename, 0, cost, void 0
+              uid, stagename, 0, cost, void 0, 0
             ].map(v => {
               if (typeof v === "string") return '"' + v + '"';
               else if (typeof v === "undefined") return "current_timestamp()"
               else return v
             }).join(",");
+            console.log(prms);
             await this.client.execute(
               "insert into freemode_results values(" + prms + ")"
             );
@@ -122,7 +123,7 @@ class Body extends Server {
             switch (path.split('/')[4]) {
               case 'free':
                 await this.client.execute(
-                  "update freemode_result set deleted = 0 " +
+                  "update freemode_results set deleted = 1 " +
                   "where userid = \"" + uid + "\""
                 );
                 break;
