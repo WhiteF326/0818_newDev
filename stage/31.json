@@ -1,0 +1,1 @@
+{"stage":[[0,0,0],[0,1,0],[0,0,0]],"param":[[0,0,0],[0,0,0],[0,0,0]],"start":[1,1,"right"],"goal":[1,1],"controll":[0,0],"costList":{"move":3,"destroy":5,"create":5,"repair":10,"loop":1,"if":1},"maxCost":10,"maxStep":10,"unlocked":["move","destroy","create","repair","loop","if","sensor_loop","sensor_foot_dest","sensor_foot_stab","sensor_foot_floor","sensor_foot_colp"]}

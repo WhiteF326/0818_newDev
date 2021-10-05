@@ -90,7 +90,7 @@ class Body {
     this.canvas.width = this.tilesize * this.map[0].length; // canvasの横幅
     this.canvas.height = this.tilesize * this.map.length; // canvasの縦幅
 
-    this.canvas.oncontextmenu = () => { return false; }
+    this.canvas.oncontextmenu = () => false;
 
     // コンテキスト取得
     this.ctx = this.canvas.getContext('2d');
