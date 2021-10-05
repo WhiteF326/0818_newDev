@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>エディタ</title>
+
+  <link rel="stylesheet" href="css/sakura.css" type="text/css">
+
+  <script type="text/javascript" src="js/Const.js"></script>
+  <script type="text/javascript" src="js/TextList.js"></script>
+
+  <script type="text/javascript" src="js/CharaAuto.js"></script>
+  <script type="text/javascript" src="js/CharaHand.js"></script>
+  <script type="text/javascript" src="js/Chip.js"></script>
+  <script type="text/javascript" src="js/ChipList.js"></script>
+  <script type="text/javascript" src="js/EditorBody.js"></script>
+</head>
+<script type="module">
+  import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
+
+  window.onload = async () => {
+    const stageName =
+      new URL(window.location.href).searchParams.get("stagename");
+    if (!stageName) {
+      document.body.appendChild(
+        document.createTextNode("GET パラメータに問題番号を追加してください。")
+      );
+      return;
+    }
+
+    const problem = JSON.parse(
+      await fetchJSON("api/stage/select", { "name": String(stageName) })
+    );
+
+    document.getElementsByTagName("h2")[0].innerText += stageName;
+
+    const editorBody = new EditorBody(problem);
+
+    document.getElementById("save").onclick = async () => {
+      const problem = editorBody.exportProblem();
+      await fetchJSON("api/stage/save", {
+        "name": stageName,
+        "problem": problem
+      });
+    }
+
+  }
+</script>
+<style>
+  #previewStage {
+    display: block;
+  }
+
+  .t {
+    width: 100%;
+    vertical-align: top;
+    font-size: 14px;
+  }
+
+  .t.t {
+    margin-left: 10px;
+  }
+
+  canvas {
+    vertical-align: top;
+  }
+
+  .head {
+    display: inline-block;
+  }
+
+  .box {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .blockList {
+    transform: translateY(-55%);
+  }
+</style>
+
+<body>
+  <h2 class="head">問題番号：</h2>
+  <button class="head" id="save">保存</button>
+  <div class="box">
+    <canvas id="previewStage"></canvas>
+  </div>
+  <div id="selected"></div>
+  <!-- <div id="actions"></div> -->
+  <div id="info" class="box">
+    <table class="t">
+      <caption>コスト一覧</caption>
+      <tbody id="costList"></tbody>
+    </table>
+    <div class="blockList t">
+      <table>
+        <caption>ブロック一覧</caption>
+        <tbody id="blockList"></tbody>
+      </table>
+      <br>
+      <table>
+        <caption>操作</caption>
+        <tbody>
+          <th>
+          <td>キー</td>
+          <td>動作</td>
+          </th>
+          <tr>
+            <td>Shift + W</td>
+            <td>マップの下一行を削除</td>
+          </tr>
+          <tr>
+            <td>Shift + A</td>
+            <td>マップの右一列を削除</td>
+          </tr>
+          <tr>
+            <td>Shift + S</td>
+            <td>マップの下に一行追加</td>
+          </tr>
+          <tr>
+            <td>Shift + D</td>
+            <td>マップの右に一列追加</td>
+          </tr>
+          <tr>
+            <td>g</td>
+            <td>選択されているマスにゴールを移動</td>
+          </tr>
+          <tr>
+            <td>c</td>
+            <td>選択されているマスにカーソルを移動</td>
+          </tr>
+          <tr>
+            <td>p</td>
+            <td>選択されているマスにキャラを移動</td>
+          </tr>
+          <tr>
+            <td>t</td>
+            <td>キャラの向きを反時計回りに 90° 変更</td>
+          </tr>
+          <tr>
+            <td>0~9</td>
+            <td>選択されているマスの種類を変更</td>
+          </tr>
+          <tr>
+            <td>+, -</td>
+            <td>選択されているマスのパラメータを変更</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+
+</html>

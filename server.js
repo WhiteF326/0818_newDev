@@ -24,9 +24,55 @@ class Body extends Server {
 
       case 'stage':
         switch (path.split('/')[3]) {
-          case 'select':
-            ret = await Deno.readTextFile('./stage/' + prm.name + '.json');
+          case 'select': {
+            const stagename = prm.name;
+            try {
+              ret = await Deno.readTextFile('./stage/' + stagename + '.json');
+            } catch {
+              const first = {
+                "stage": [
+                  [0, 0, 0],
+                  [0, 1, 0],
+                  [0, 0, 0]
+                ],
+                "param": [
+                  [0, 0, 0],
+                  [0, 0, 0],
+                  [0, 0, 0]
+                ],
+                "start": [1, 1, "right"],
+                "goal": [1, 1],
+                "controll": [0, 0],
+                "costList": {
+                  "move": 3,
+                  "destroy": 5,
+                  "create": 5,
+                  "repair": 10,
+                  "loop": 1,
+                  "if": 1
+                },
+                "maxCost": 10,
+                "maxStep": 10,
+                "unlocked": [
+                  "move",
+                  "destroy",
+                  "create",
+                  "repair",
+                  "loop",
+                  "if",
+                  "sensor_loop",
+                  "sensor_foot_dest",
+                  "sensor_foot_stab",
+                  "sensor_foot_floor",
+                  "sensor_foot_colp"
+                ]
+              };
+              await Deno.writeTextFile("./stage/" + stagename + ".json",
+                JSON.stringify(first));
+              ret = JSON.stringify(first);
+            }
             break;
+          }
 
           case 'all':
             let retAry = [];
@@ -56,6 +102,12 @@ class Body extends Server {
               "insert into freemode_results values(" + prms + ")"
             );
             break;
+
+          case 'save': {
+            const prmv = JSON.stringify(prm.problem);
+            await Deno.writeTextFile("./stage/" + prm.name + ".json", prmv);
+            break;
+          }
         }
         break;
 
@@ -145,9 +197,9 @@ class Body extends Server {
               "select story_progress from users where id = \"" + uid + "\""
             ));
             const stageNo = Number(progress[0]["story_progress"]) + 1;
-            try{
+            try {
               ret = await Deno.readTextFile('./story/' + stageNo + '.json');
-            }catch{
+            } catch {
               ret = false;
             }
             break;
