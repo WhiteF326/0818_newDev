@@ -1,0 +1,135 @@
+-- phpMyAdmin SQL Dump
+-- version 4.9.5
+-- https://www.phpmyadmin.net/
+--
+-- ホスト: localhost:3306
+-- 生成日時: 
+-- サーバのバージョン： 5.7.24
+-- PHP のバージョン: 7.4.1
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- データベース: `programgame`
+--
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `false_serif`
+--
+
+CREATE TABLE `false_serif` (
+  `serif_id` int(10) NOT NULL,
+  `question_no` int(10) NOT NULL,
+  `file_name` varchar(30) NOT NULL,
+  `file` blob NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `false_serif`
+--
+
+INSERT INTO `false_serif` (`serif_id`, `question_no`, `file_name`, `file`) VALUES
+(1, 1, '一問目不正解時のセリフ', 0xe5a696e7b2bee3808ce38389e383b3e3839ee382a4efbc81e38282e381a3e3818be38184e38381e383a3e383ace383b3e382b8e38197e381a6e381bfe38288e38186efbc81e3808d),
+(2, 2, '二問目不正解時のセリフ', 0xe5a696e7b2bee3808ce9a091e5bcb5e3828cefbc81e38282e381a3e3818be38184e38381e383a3e383ace383b3e382b8e38197e381a6e381bfe38288e38186efbc81e3808d);
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `message`
+--
+
+CREATE TABLE `message` (
+  `id` int(11) NOT NULL,
+  `serif_id` int(11) NOT NULL,
+  `serif_file` blob NOT NULL,
+  `serif_name` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `message`
+--
+
+INSERT INTO `message` (`id`, `serif_id`, `serif_file`, `serif_name`) VALUES
+(1, 1, 0xe5a696e7b2bee3808ce381bee3819fe382ace383a9e382afe382bfe3818ce68da8e381a6e38289e3828ce381a6e3828befbc81e698a8e697a5e9a091e5bcb5e381a3e381a6e7b6bae9ba97e381abe38197e3819fe381aee381abefbc81e3808d2c0d0ae5a696e7b2bee3808ce280a6e381a3e381a6e38182e3828cefbc9fe4babae99693efbc9fe3818ae383bce38184e38081e5a4a7e4b888e5a4abefbc9fe3808d2c0d0ae280a6e3839de38381e383832c0d0ae382a2e383b3e38389e383ade382a4e38389e3808ce5889de38281e381bee38197e381a6e38082e3818ae4b896e8a9b1e59e8be382a2e383b3e38389e383ade382a4e38389e381aee382a4e382a2e381a8e794b3e38197e381bee38199e38082e3808d2c0d0ae5a696e7b2bee3808ce38182e38081e382a2e383b3e38389e383ade382a4e38389efbc9fe3808d2c0d0ae382a2e383b3e38389e383ade382a4e38389e3808ce381afe38184e38082e5aeb6e4ba8be585a8e888ace381afe38282e381a1e3828de38293e381aee38193e381a8e38081e58a9be4bb95e4ba8be38292e587bae69da5e381bee38199e381aee381a7e4bd95e381aae3828ae381a8e3818ae794b3e38197e4bb98e38191e3818fe381a0e38195e38184e38082e3808d2c0d0ae5a696e7b2bee3808ce381b8e38187efbd9ee38199e38194e38184e38198e38283e38293efbc81e381a8e38193e3828de381a7e38081e381aae38293e381a7e38193e38293e381aae381a8e38193e3828de381abe38184e3828be381aeefbc9fe3808d2c0d0ae382a2e383b3e38389e383ade382a4e38389e3808ce280a6e38199e381bfe381bee3819be38293e38082e8a898e686b6e383a1e383a2e383aae3818ce5889de69c9fe58c96e38195e3828ce381a6e38197e381bee381a3e381a6e38184e3828be381aee381a7e9818ee58ebbe381aee38193e381a8e3818ce58886e3818be3828ae381bee3819be38293e38082e3808d2c0d0ae5a696e7b2bee3808ce38288e3818fe3828fe3818be38293e381aae38184e38191e381a9e38081e8a898e686b6e381aae3818fe38197e381a1e38283e381a3e3819fe381bfe3819fe38184e381ade38082e38186e383bce38293e280a6e3808d2c0d0ae5a696e7b2bee3808ce38198e38283e38182e38081e38193e381aee6a3aee38292e5bea9e6b4bbe38199e3828be3818ae6898be4bc9de38184e4b880e7b792e381abe38199e3828befbc9fe381aae38293e3818be38284e381a3e381a6e3819fe38289e6809de38184e587bae38199e3818be38282e38197e3828ce381aae38184e38197e38082e3808d2c0d0ae5a696e7b2bee3808ce7a781e381aee5908de5898de381afe38395e382a7e382a4e38288e38081e38288e3828de38197e3818fe381ade382a4e382a2e38082e3808d2c0d0ae382a2e383b3e38389e383ade382a4e38389e3808ce58886e3818be3828ae381bee38197e3819fe38081e38288e3828de38197e3818fe3818ae9a198e38184e38197e381bee38199e38082e38395e382a7e382a4e38195e38293e38082e3808d, 'オープニング');
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `true_serif`
+--
+
+CREATE TABLE `true_serif` (
+  `serif_id` int(10) NOT NULL,
+  `question_no` int(10) NOT NULL,
+  `file_name` varchar(30) NOT NULL,
+  `file` blob NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `true_serif`
+--
+
+INSERT INTO `true_serif` (`serif_id`, `question_no`, `file_name`, `file`) VALUES
+(1, 1, '一問目正解時のセリフ', 0xe5a696e7b2bee3808ce38284e381a3e3819fe381adefbc81e38193e381aee8aabfe5ad90e381a7e381a9e38293e381a9e38293e8a18ce3818fe38288efbc81e3808d2c0d0ae5a696e7b2bee3808ce6aca1e381afe38182e381a3e381a1e581b4e381aee382ace383a9e382afe382bfe38292e78987e4bb98e38191e38288e38186efbc81e3808d2c0d0ae382a2e383b3e38389e383ade382a4e38389e3808ce4ba86e8a7a3e38184e3819fe38197e381bee38197e3819fe38082e3808d),
+(2, 2, '二問目正解時のセリフ', 0xe5a696e7b2bee3808ce38184e38284e38181e383bce7b6bae9ba97e381abe381aae381a3e3819fe381ade38082e796b2e3828ce3819fe38197e38081e7a781e381aee5aeb6e381a7e4bc91e686a9e38197e38288e38082e3808d2c0d0ae382a2e383b3e38389e383ade382a4e38389e3808ce58886e3818be3828ae381bee38197e3819fe38082e3808d2c0d0ae382a2e383b3e38389e383ade382a4e38389e381aee4bdbfe38188e3828be98193e585b7e3818ce8a7a3e694bee38195e3828ce381bee38197e3819fe38082efbc9ae381aee38193e3818ee3828a2c0d0ae99a9ce5aeb3e789a9e38292e7a0b4e5a38ae381a7e3818de3828be38288e38186e381abe381aae3828ae381bee38197e3819fe380820d0a);
+
+--
+-- ダンプしたテーブルのインデックス
+--
+
+--
+-- テーブルのインデックス `false_serif`
+--
+ALTER TABLE `false_serif`
+  ADD UNIQUE KEY `serif_id` (`serif_id`);
+
+--
+-- テーブルのインデックス `message`
+--
+ALTER TABLE `message`
+  ADD UNIQUE KEY `id` (`id`),
+  ADD KEY `serif_id` (`serif_id`);
+
+--
+-- テーブルのインデックス `true_serif`
+--
+ALTER TABLE `true_serif`
+  ADD UNIQUE KEY `serif_id` (`serif_id`);
+
+--
+-- ダンプしたテーブルのAUTO_INCREMENT
+--
+
+--
+-- テーブルのAUTO_INCREMENT `false_serif`
+--
+ALTER TABLE `false_serif`
+  MODIFY `serif_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- テーブルのAUTO_INCREMENT `message`
+--
+ALTER TABLE `message`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- テーブルのAUTO_INCREMENT `true_serif`
+--
+ALTER TABLE `true_serif`
+  MODIFY `serif_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
