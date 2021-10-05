@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ストーリーモード</title>
+</head>
+<script type="module">
+  import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
+  window.onload = async () => {
+    // 本来ならば進捗を読み込む
+    const progress = await fetchJSON("api/story/getProgress", {
+      "userid": localStorage.getItem("userid")
+    });
+    if(progress == "0"){
+      window.location.href = "http://localhost/static/story/opening.php";
+    }else{
+      await fetchJSON("api/story/abort", {
+        "userid": localStorage.getItem("userid")
+      });
+      window.location.href = "http://localhost:80/static/story/game.php?" +
+          "&clear=yes&userid=" + localStorage.getItem("userid");
+    }
+  }
+</script>
+<body>
+  
+</body>
+</html>

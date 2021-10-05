@@ -377,19 +377,30 @@ window.onload = async () => {
     || !localStorage.getItem("gameEnabled")) {
     history.back();
   }
-  // php
-  // const mapinfo = await fetch(
-  //   "./api/stage.php?name=" + stagename
-  // ).then(res => res.text()).then(t => {
-  //   return JSON.parse(t);
-  // });
+
+  if (localStorage.getItem("gameEnabled") === "story") {
+    document.getElementById("retry").remove();
+  } else {
+    document.getElementById("retry").addEventListener("click", () => {
+      progBoad.save();
+      location.reload();
+    });
+  }
 
   // deno
-  const mapinfo = JSON.parse(
-    await fetchJSON('api/stage/select', {
-      'name': localStorage.getItem("selectedStage")
-    })
-  );
+  const mapinfo = localStorage.getItem("gameEnabled") === "free" ?
+    JSON.parse(
+      await fetchJSON('api/stage/select', {
+        'name': localStorage.getItem("selectedStage")
+      })
+    ) : JSON.parse(
+      await fetchJSON('api/story/select', {
+        "userid": localStorage.getItem("userid")
+      })
+    );
+  if (!mapinfo) {
+    window.location.href = "betaEnd.html";
+  }
   const gameBody = new Body(mapinfo);
 
   const progBoad = new ProgBoad(gameBody);
@@ -397,11 +408,6 @@ window.onload = async () => {
   if (localStorage.getItem("savedProgram" + stageNo)) {
     progBoad.loadFromText(localStorage.getItem("savedProgram" + stageNo));
   }
-
-  document.getElementById("retry").addEventListener("click", () => {
-    progBoad.save();
-    location.reload();
-  });
 
   window.onbeforeunload = () => {
     progBoad.save();
@@ -415,16 +421,30 @@ window.onload = async () => {
       "stagename": localStorage.getItem("selectedStage"),
       "cost": progBoad.costCalculate()
     });
-    setInterval(() => {
-      window.location = "freeStageSelect.html";
-    }, 1000);
+    if (localStorage.getItem("gameEnabled") === "free") {
+      setInterval(() => {
+        window.location.href = "freeStageSelect.html";
+      }, 1000);
+    } else {
+      setInterval(() => {
+        window.location.href = "http://localhost:80/static/story/game.php?" +
+          "&clear=yes&userid=" + localStorage.getItem("userid");
+      }, 1000);
+    }
   });
 
   const fmodal = document.getElementsByClassName("fmodalback")[0];
   fmodal.addEventListener("click", async () => {
     fmodal.setAttribute("style", "width: 0%");
-    setInterval(() => {
-      window.location = "freeStageSelect.html";
-    }, 1000);
+    if (localStorage.getItem("gameEnabled") === "free") {
+      setInterval(() => {
+        window.location.href = "freeStageSelect.html";
+      }, 1000);
+    } else {
+      setInterval(() => {
+        window.location.href = "http://localhost:80/static/story/game.php?" +
+          "&clear=no&userid=" + localStorage.getItem("userid");
+      }, 1000);
+    }
   });
 }

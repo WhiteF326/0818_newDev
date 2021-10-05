@@ -127,7 +127,7 @@ class Body extends Server {
                   "where userid = \"" + uid + "\""
                 );
                 break;
-              
+
               case 'story':
                 await this.client.execute(
                   "update users set story = 0 where userid = \"" + uid + "\""
@@ -135,38 +135,48 @@ class Body extends Server {
                 break;
             }
           }
+        }
 
-          case 'story': {
-            switch (path.split('/')[5]) {
-              case 'finish': {
-                const uid = prm.userid;
-                const progress = prm.progress;
-                const success = prm.success;
-                await fetch("url", {
-                  "method": "POST",
-                  "body": JSON.stringify(
-                    {
-                      "userid": uid,
-                      "progress": progress,
-                      "success": success
-                    }
-                  )
-                });
-                break;
-              }
-
-              case 'getprogress': {
-                const uid = prm.userid;
-                const result = await this.client.query(
-                  "select story_progress from users where id = \"" + uid + "\""
-                );
-                ret = result
-              }
+      case 'story': {
+        switch (path.split('/')[3]) {
+          case 'select': {
+            const uid = prm.userid;
+            const progress = (await this.client.query(
+              "select story_progress from users where id = \"" + uid + "\""
+            ));
+            const stageNo = Number(progress[0]["story_progress"]) + 1;
+            try{
+              ret = await Deno.readTextFile('./story/' + stageNo + '.json');
+            }catch{
+              ret = false;
             }
+            break;
+          }
+
+          case 'getProgress': {
+            const uid = prm.userid;
+            const progress = (await this.client.query(
+              "select story_progress from users where id = \"" + uid + "\""
+            ));
+            ret = progress[0]["story_progress"];
+            break;
+          }
+
+          case 'abort': {
+            const uid = prm.userid;
+            const progress = (await this.client.query(
+              "select story_progress from users where id = \"" + uid + "\""
+            ));
+            const progNo = progress[0]["story_progress"];
+            this.client.execute(
+              "update users set story_progress = " + (progNo - 1)
+              + " where id = \"" + uid + "\""
+            );
             break;
           }
         }
         break;
+      }
     }
     return ret;
   }

@@ -48,7 +48,7 @@
     for (let i = 0; i < Math.ceil(stages.length / vertical); i++) {
       const row = document.createElement("div");
       row.classList.add("row");
-      row.style.display = "block"
+      row.style.display = "block";
 
       for (let j = 0; j < vertical; j++) {
         const ptr = i * vertical + j;
@@ -113,7 +113,7 @@
         tile.onclick = () => {
           if (stages[ptr]) {
             localStorage.setItem("selectedStage", String(ptr + 1));
-            localStorage.setItem("gameEnabled", "true");
+            localStorage.setItem("gameEnabled", "free");
             window.location = "gameBody.html";
           }
         }
