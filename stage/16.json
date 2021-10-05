@@ -34,5 +34,16 @@
     "if": 1
   },
   "maxCost": 25,
-  "maxStep": 40
+  "maxStep": 40,
+  "unlocked": [
+    "move",
+    "destroy",
+    "create",
+    "loop",
+    "if",
+    "sensor_loop",
+    "sensor_foot_dest",
+    "sensor_foot_stab",
+    "sensor_foot_floor"
+  ]
 }
