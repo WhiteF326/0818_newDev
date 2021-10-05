@@ -135,6 +135,36 @@ class Body extends Server {
                 break;
             }
           }
+
+          case 'story': {
+            switch (path.split('/')[5]) {
+              case 'finish': {
+                const uid = prm.userid;
+                const progress = prm.progress;
+                const success = prm.success;
+                await fetch("url", {
+                  "method": "POST",
+                  "body": JSON.stringify(
+                    {
+                      "userid": uid,
+                      "progress": progress,
+                      "success": success
+                    }
+                  )
+                });
+                break;
+              }
+
+              case 'getprogress': {
+                const uid = prm.userid;
+                const result = await this.client.query(
+                  "select story_progress from users where id = \"" + uid + "\""
+                );
+                ret = result
+              }
+            }
+            break;
+          }
         }
         break;
     }

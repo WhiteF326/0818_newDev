@@ -79,7 +79,7 @@ class CharaAuto {
         && Math.abs(this.pendingMove[0][0] == 0)) {
         this.pendingMove.shift();
         return 1;
-      }else{
+      } else {
         return 0;
       }
     }
@@ -113,7 +113,7 @@ class CharaAuto {
   updateJunp = () => {
     if (this.isJunping) {
       this.jumpTime++;
-      if (this.jumpTime == 0) {
+      if(!Math.floor(this.jumpTime)){
         jumpSound.currentTime = 0;
         jumpSound.play();
       }
