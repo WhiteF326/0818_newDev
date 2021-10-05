@@ -32,6 +32,7 @@
     "create",
     "loop",
     "if",
-    "sensor_loop"
+    "sensor_foot_dest",
+    "sensor_foot_floor"
   ]
 }
