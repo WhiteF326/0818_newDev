@@ -100,7 +100,7 @@ const defaultStep = 100;
 const allBlocks = [
   "move",
   "destroy",
-  "creae",
+  "create",
   "repair",
   "loop",
   "if",
