@@ -96,3 +96,17 @@ document.onclick = () => {
 }
 
 const defaultStep = 100;
+
+const allBlocks = [
+  "move",
+  "destroy",
+  "creae",
+  "repair",
+  "loop",
+  "if",
+  "sensor_loop",
+  "sensor_foot_dest",
+  "sensor_foot_stab",
+  "sensor_foot_floor",
+  "sensor_foot_colp"
+];
