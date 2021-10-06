@@ -58,9 +58,12 @@
         tile.classList.add("tile");
         const numText = document.createElement("span");
         numText.appendChild(
-          document.createTextNode(stages[ptr] || "Coming Soon")
+          document.createTextNode((
+            String(Math.floor((stages[ptr] - 1) / 8) + 1)
+            + "-" + String((ptr % 8) + 1)
+          ) || "Coming Soon")
         );
-        numText.style.color = retTextColor(ptr % 7);
+        numText.style.color = retTextColor(Math.floor(ptr / 8));
         tile.appendChild(numText);
         const clearedText = document.createElement("span");
         if (cleared.find(elm => elm.stagename === Number(stages[ptr]))) {
@@ -93,7 +96,7 @@
         tile.appendChild(clearedText);
         tile.style.padding = "5px";
 
-        const plist = retColor(ptr % 7);
+        const plist = retColor(Math.floor(ptr / 8));
         let gradStr = "";
         Object.keys(plist).forEach(p => {
           gradStr += plist[p] + " " + String(p) + "%, "

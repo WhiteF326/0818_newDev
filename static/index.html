@@ -27,7 +27,7 @@
     display: block;
     height: fit-content;
   }
-  
+
   .left {
     float: left;
   }
@@ -37,7 +37,7 @@
   }
 </style>
 <script>
-  window.onload =  () => {
+  window.onload = () => {
     localStorage.setItem("gameEnabled", "false");
     const cursor = document.createElement("img");
     cursor.setAttribute("src", "img/arrow.png");
@@ -58,12 +58,25 @@
           break;
 
         case "Enter":
-          window.location =
-            document.getElementById("ref" + point)
-              .childNodes[1].getAttribute("href");
+          if (document.getElementById("ref" + point)
+            .childNodes[1]) {
+            window.location =
+              document.getElementById("ref" + point)
+                .childNodes[1].getAttribute("href");
+          }
           break;
       }
       document.getElementById("sel" + point).appendChild(cursor);
+    }
+
+    if (localStorage.getItem("userid")) {
+      // ログイン時の処理
+      document.getElementById("ref0").innerHTML = "<s>ログイン</s>";
+      document.getElementById("ref1").innerHTML = "<s>新規登録</s>";
+    } else {
+      // 未ログイン時の処理
+      document.getElementById("ref2").innerHTML = "<s>セレクトモード</s>";
+      document.getElementById("ref3").innerHTML = "<s>ストーリーモード</s>";
     }
   }
 </script>
