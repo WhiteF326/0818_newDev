@@ -89,7 +89,7 @@ class ProgBoad {
     }
 
     // コスト表の作成
-    Object.keys(progListText).forEach(eachType => {
+    Object.keys(defaultCost).forEach(eachType => {
       const value = this.gameBody.costList[eachType];
 
       const tr = document.createElement("tr");
