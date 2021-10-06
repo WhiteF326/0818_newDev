@@ -4,9 +4,9 @@ $serif = [];
 //セリフ番号
 $serifId = 1;
 //サーバーからセリフファイルを呼び出してstory.jsに送る
-$dsn = "mysql:dbname=proggame;localhost=3306";
-$user = "proggame";
-$pass = "proguser1143";
+$dsn = "mysql:dbname=LAA1355306-proggame;localhost=3306";
+$user = "LAA1355306";
+$pass = "Fukui2021";
 try {
   $pdo = new PDO($dsn, $user, $pass);
   //sql文作成

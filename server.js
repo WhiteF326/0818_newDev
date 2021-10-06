@@ -10,10 +10,10 @@ class Body extends Server {
   }
   connectDB = async () => {
     this.client = await new Client().connect({
-      host: "127.0.0.1:3306",
-      username: "proggame",
-      db: "proggame",
-      password: "proguser1143"
+      hostname: "localhost",
+      username: "LAA1355306",
+      db: "LAA1355306-proggame",
+      password: Deno.env.get("dbPassword")
     });
   }
   async api(path, prm) {
