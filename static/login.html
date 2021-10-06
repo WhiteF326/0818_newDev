@@ -20,7 +20,7 @@
   }
 </style>
 <script type="module">
-  import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
+  import { fetchJSON } from './js/fetchP.js';
   document.getElementById("usubmit").onclick = async () => {
     const uid = document.getElementById("uid").value;
     const upass = document.getElementById("upass").value;
@@ -37,6 +37,7 @@
         "userid": uid,
         "password": upass
       });
+      console.log(loginResult);
       if (loginResult) {
         localStorage.setItem("userid", uid);
         localStorage.setItem("username", loginResult);

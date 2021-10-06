@@ -1,6 +1,6 @@
 let moving = false;
 
-import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
+import { fetchJSON } from './js/fetchP.js';
 
 class Body {
   constructor(mapinfo) {

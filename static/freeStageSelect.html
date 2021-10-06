@@ -12,7 +12,7 @@
 
 <script src="js/Tools.js"></script>
 <script type="module">
-  import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
+  import { fetchJSON } from './js/fetchP.js';
   window.onload = async () => {
     localStorage.getItem("gameEnabled") === "false"
 
@@ -28,13 +28,14 @@
     );
 
     const stages = JSON.parse(await fetchJSON("api/stage/all", {}));
+    console.log(stages);
 
     let cleared = [];
 
     if (localStorage.getItem("userid")) {
-      cleared = (await fetchJSON(
+      JSON.parse((await fetchJSON(
         "api/user/free", { "userid": localStorage.getItem("userid") }
-      ));
+      ))).forEach(elm => cleared.push(elm));
     }
     console.log(cleared);
 
@@ -58,10 +59,10 @@
         tile.classList.add("tile");
         const numText = document.createElement("span");
         numText.appendChild(
-          document.createTextNode((
-            String(Math.floor((stages[ptr] - 1) / 8) + 1)
-            + "-" + String((ptr % 8) + 1)
-          ) || "Coming Soon")
+          document.createTextNode(stages[ptr] ?
+            (String(Math.floor((stages[ptr] - 1) / 8) + 1)
+              + "-" + String((ptr % 8) + 1))
+            : "Coming Soon")
         );
         numText.style.color = retTextColor(Math.floor(ptr / 8));
         tile.appendChild(numText);

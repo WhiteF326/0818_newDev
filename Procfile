@@ -1,1 +1,0 @@
-worker: denon start
