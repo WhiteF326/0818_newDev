@@ -7,7 +7,7 @@
   <title>ストーリーモード</title>
 </head>
 <script type="module">
-  import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
+  import { fetchJSON } from './js/fetchP.js';
   window.onload = async () => {
     // 本来ならば進捗を読み込む
     const progress = await fetchJSON("api/story/getProgress", {

@@ -234,7 +234,7 @@ switch(explode("/", $path)[1]){
           $ret = file_get_contents("./story/". $stageNo. ".json");
           echo $ret;
         }else{
-          echo false;
+          echo json_encode([]);
         }
         break;
       }

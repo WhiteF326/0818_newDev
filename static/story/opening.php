@@ -149,7 +149,7 @@ $js_array = json_encode($serif);
           btn.onclick = function() {
             //ボタンが押された時
             localStorage.setItem("gameEnabled", "story");
-            location = "http://localhost:4478/toStage.html";
+            location = "http://localhost/static/toStage.html";
           };
           next.appendChild(btn);
           //console.log("終わり");
@@ -170,7 +170,7 @@ $js_array = json_encode($serif);
     //スキップしたいときの関数
     function skip() {
       localStorage.setItem("gameEnabled", "story");
-      location = "http://localhost:4478/toStage.html";
+      location = "http://localhost/static/toStage.html";
     }
   </script>
 </body>

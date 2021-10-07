@@ -67,7 +67,7 @@
         numText.style.color = retTextColor(Math.floor(ptr / 8));
         tile.appendChild(numText);
         const clearedText = document.createElement("span");
-        if (cleared.find(elm => elm.stagename === Number(stages[ptr]))) {
+        if (cleared.find(elm => elm.stagename === String(stages[ptr]))) {
           const clearedImage = document.createElement("img");
           clearedImage.setAttribute("src", "img/stageclear.png");
           clearedImage.style.height = "48px";

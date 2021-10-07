@@ -207,13 +207,13 @@ $js_array = json_encode($serif);
   if ($questionflg == true) {
     //
   ?>
-    <form action="http://localhost:4478/toStage.html" method="post">
+    <form action="http://localhost/static/toStage.html" method="post">
       <input type="submit" value="次の問題へ">
     </form>
   <?php } else {
     //
   ?>
-    <form action="http://localhost:4478/toStage.html" method="post">
+    <form action="http://localhost/static/toStage.html" method="post">
       <input type="submit" value="問題に戻る">
     </form>
   <?php } ?>

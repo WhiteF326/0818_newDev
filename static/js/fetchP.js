@@ -1,6 +1,8 @@
 const fetchJSON = async (path, prm) => {
   prm["path"] = path;
 
+  console.log(path);
+
   const req = {
     "method": "POST",
     "mode": "cors",

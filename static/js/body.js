@@ -1,6 +1,6 @@
 let moving = false;
 
-import { fetchJSON } from './js/fetchP.js';
+import { fetchJSON } from './fetchP.js';
 
 class Body {
   constructor(mapinfo) {
@@ -398,7 +398,7 @@ window.onload = async () => {
         "userid": localStorage.getItem("userid")
       })
     );
-  if (!mapinfo) {
+  if (!mapinfo.length) {
     window.location.href = "betaEnd.html";
   }
   const gameBody = new Body(mapinfo);
