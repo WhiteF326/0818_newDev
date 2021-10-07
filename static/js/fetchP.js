@@ -11,7 +11,7 @@ const fetchJSON = async (path, prm) => {
     "body": JSON.stringify(prm),
   }
 
-  const res = await (await fetch("http://localhost/api.php", req)).text();
+  const res = await (await fetch("http://fkiohr-blockln.main.jp/api.php", req)).text();
   return res;
 }
 

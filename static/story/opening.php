@@ -1,14 +1,18 @@
 <?php
+require_once("./../../settings/env.php");
 //セリフ入れる配列
 $serif = [];
 //セリフ番号
 $serifId = 1;
 //サーバーからセリフファイルを呼び出してstory.jsに送る
-$dsn = "mysql:dbname=LAA1355306-proggame;localhost=3306";
-$user = "LAA1355306";
-$pass = "Fukui2021";
+$username = "LAA1355306";
+$database = "LAA1355306-proggame";
+$password = $env["dbPassword"];
+$dsn = "mysql:dbname=". $database. ";host=mysql153.phy.lolipop.lan";
+
+$pdo = new PDO($dsn, $username, $password);
 try {
-  $pdo = new PDO($dsn, $user, $pass);
+  $pdo = new PDO($dsn, $username, $password);
   //sql文作成
   $sql = "SELECT serif_file FROM message
     WHERE $serifId = serif_id";
@@ -149,7 +153,7 @@ $js_array = json_encode($serif);
           btn.onclick = function() {
             //ボタンが押された時
             localStorage.setItem("gameEnabled", "story");
-            location = "http://localhost/static/toStage.html";
+            location = "./../toStage.html";
           };
           next.appendChild(btn);
           //console.log("終わり");
@@ -170,7 +174,7 @@ $js_array = json_encode($serif);
     //スキップしたいときの関数
     function skip() {
       localStorage.setItem("gameEnabled", "story");
-      location = "http://localhost/static/toStage.html";
+      location = "./../toStage.html";
     }
   </script>
 </body>

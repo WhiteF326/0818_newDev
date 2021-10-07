@@ -8,12 +8,10 @@ class ProgBoad {
       "height: " + String(floor(window.innerHeight / 2.2)) + "px; " +
       "width: " + document.getElementById("stages").innerWidth + "px;");
     // 解禁済みブロックの適用
-    console.log(gameBody.mapinfo['unlocked']);
     if (gameBody.mapinfo['unlocked']) {
       gameBody.mapinfo['unlocked'].forEach(r => {
         const block = document.createElement("block");
         block.setAttribute("type", r);
-        console.log(block);
         document.getElementById("toolbox").appendChild(block);
       });
     } else {

@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+require_once("./../../settings/env.php");
+
 $questionflg = $_SESSION["clear"];
 $userid = $_SESSION["userid"];
 
@@ -11,9 +13,9 @@ $questionNo = strval(intval($_SESSION["questionNo"]) + 1);
 //データベースに接続
 $serif = [];
 //サーバーからセリフファイルを呼び出してstory.jsに送る
-$dsn = "mysql:dbname=LAA1355306-proggame;localhost=3306";
+$dsn = "mysql:dbname=LAA1355306-proggame;host=mysql153.phy.lolipop.lan";
 $user = "LAA1355306";
-$pass = "Fukui2021";
+$pass = $env["dbPassword"];
 try {
   $pdo = new PDO($dsn, $user, $pass);
   if ($questionflg == true) {
@@ -207,13 +209,13 @@ $js_array = json_encode($serif);
   if ($questionflg == true) {
     //
   ?>
-    <form action="http://localhost/static/toStage.html" method="post">
+    <form action="./../toStage.html" method="post">
       <input type="submit" value="次の問題へ">
     </form>
   <?php } else {
     //
   ?>
-    <form action="http://localhost/static/toStage.html" method="post">
+    <form action="./../toStage.html" method="post">
       <input type="submit" value="問題に戻る">
     </form>
   <?php } ?>

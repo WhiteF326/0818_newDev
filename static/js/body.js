@@ -387,7 +387,6 @@ window.onload = async () => {
     });
   }
 
-  // deno
   const mapinfo = localStorage.getItem("gameEnabled") === "free" ?
     JSON.parse(
       await fetchJSON('api/stage/select', {
@@ -398,14 +397,15 @@ window.onload = async () => {
         "userid": localStorage.getItem("userid")
       })
     );
-  if (!mapinfo.length) {
+  if (!(Object.keys(mapinfo).length)) {
     window.location.href = "betaEnd.html";
   }
   const gameBody = new Body(mapinfo);
 
   const progBoad = new ProgBoad(gameBody);
   const stageNo = localStorage.getItem("selectedStage");
-  if (localStorage.getItem("savedProgram" + stageNo)) {
+  if (localStorage.getItem("savedProgram" + stageNo)
+      && localStorage.getItem("gameEnabled") === "free") {
     progBoad.loadFromText(localStorage.getItem("savedProgram" + stageNo));
   }
 
@@ -427,7 +427,7 @@ window.onload = async () => {
       }, 1000);
     } else {
       setInterval(() => {
-        window.location.href = "http://localhost:80/static/story/game.php?" +
+        window.location.href = "./story/game.php?" +
           "&clear=yes&userid=" + localStorage.getItem("userid");
       }, 1000);
     }
@@ -442,7 +442,7 @@ window.onload = async () => {
       }, 1000);
     } else {
       setInterval(() => {
-        window.location.href = "http://localhost:80/static/story/game.php?" +
+        window.location.href = "./story/game.php?" +
           "&clear=no&userid=" + localStorage.getItem("userid");
       }, 1000);
     }

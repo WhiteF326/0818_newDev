@@ -14,12 +14,12 @@
       "userid": localStorage.getItem("userid")
     });
     if(progress == "0"){
-      window.location.href = "http://localhost/static/story/opening.php";
+      window.location.href = "./story/opening.php";
     }else{
       await fetchJSON("api/story/abort", {
         "userid": localStorage.getItem("userid")
       });
-      window.location.href = "http://localhost:80/static/story/game.php?" +
+      window.location.href = "./story/game.php?" +
           "&clear=yes&userid=" + localStorage.getItem("userid");
     }
   }

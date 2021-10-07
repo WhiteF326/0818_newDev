@@ -1,4 +1,8 @@
 <?php
+ini_set( 'display_errors', 1 );
+
+require_once("./settings/env.php");
+
 $prm = json_decode(file_get_contents("php://input"), true);
 
 // var_dump($prm);
@@ -7,9 +11,9 @@ header("Content-type: text/plain; charset=UTF-8");
 
 // db に繋ぐ
 $username = "LAA1355306";
-$database = "laa1355306-proggame";
-$password = getenv("dbPassword");
-$dsn = "mysql:dbname=". $database. ";host=localhost";
+$database = "LAA1355306-proggame";
+$password = $env["dbPassword"];
+$dsn = "mysql:dbname=". $database. ";host=mysql153.phy.lolipop.lan";
 
 $pdo = new PDO($dsn, $username, $password);
 
