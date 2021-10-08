@@ -36,5 +36,6 @@
     "sensor_foot_dest",
     "sensor_foot_stab",
     "sensor_foot_floor"
-  ]
+  ],
+  "message":"ゴールに導こう！"
 }

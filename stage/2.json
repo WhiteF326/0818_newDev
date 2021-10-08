@@ -26,5 +26,6 @@
     "move",
     "destroy",
     "loop"
-  ]
+  ],
+  "message": "岩を連続で壊そう！"
 }

@@ -40,5 +40,6 @@
     "sensor_loop",
     "sensor_foot_dest",
     "sensor_foot_floor"
-  ]
+  ],
+  "message":"足元がゆかである時に行動を変えてみよう"
 }

@@ -42,5 +42,6 @@
     "if",
     "sensor_foot_dest",
     "sensor_foot_floor"
-  ]
+  ],
+  "message":"条件によって動きを変えてみよう！"
 }

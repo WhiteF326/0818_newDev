@@ -39,5 +39,6 @@
     "sensor_foot_dest",
     "sensor_foot_stab",
     "sensor_foot_floor"
-  ]
+  ],
+  "message":"足元が壊せない岩である時に行動を変えてみよう"
 }

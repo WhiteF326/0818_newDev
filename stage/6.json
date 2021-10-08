@@ -31,6 +31,7 @@
     "destroy",
     "create",
     "loop"
-  ]
+  ],
+  "message":"どの岩を壊せばいいのだろう？"
   
 }

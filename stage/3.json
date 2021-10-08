@@ -29,5 +29,6 @@
     "destroy",
     "create",
     "loop"
-  ]
+  ],
+  "message": "岩を置いてゴールに導こう！"
 }
