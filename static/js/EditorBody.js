@@ -24,8 +24,6 @@ class EditorBody {
 
     // キー操作実装
     document.body.addEventListener("keypress", e => {
-      console.log(e.key);
-
       if (e.key === "W") {
         this.#changeMapSize(0, -1);
       }
@@ -66,8 +64,7 @@ class EditorBody {
         this.problem["param"][this.selected[1]][this.selected[0]]--;
       }
       if (e.key.match("[0-9]")) {
-        if (!document.activeElement.name
-          || !document.activeElement.name.startsWith("cost")) {
+        if (!(document.activeElement.tagName !== "BODY")) {
           this.problem["stage"][this.selected[1]][this.selected[0]]
             = Number(e.key);
         }
@@ -114,6 +111,33 @@ class EditorBody {
       costList.appendChild(r);
     });
 
+    // コスト制限、歩数制限
+    const costR = document.createElement("tr");
+    const costD = document.createElement("td");
+    costD.appendChild(document.createTextNode("総コスト"));
+    const maxCostCell = document.createElement("td");
+    const maxCostEdit = document.createElement("input");
+    maxCostEdit.type = "number";
+    maxCostEdit.value = this.problem["maxCost"];
+    maxCostEdit.name = "maxCost";
+    maxCostCell.appendChild(maxCostEdit);
+    costR.appendChild(costD);
+    costR.appendChild(maxCostCell);
+    costList.appendChild(costR);
+
+    const walkR = document.createElement("tr");
+    const walkD = document.createElement("td");
+    walkD.appendChild(document.createTextNode("最大歩数"));
+    const maxWalkCell = document.createElement("td");
+    const maxWalkEdit = document.createElement("input");
+    maxWalkEdit.type = "number";
+    maxWalkEdit.value = this.problem["maxStep"];
+    maxWalkEdit.name = "maxStep";
+    maxWalkCell.appendChild(maxWalkEdit);
+    walkR.appendChild(walkD);
+    walkR.appendChild(maxWalkCell);
+    costList.appendChild(walkR);
+
     // ブロック一覧を作成
     const blockList = document.getElementById("blockList");
     allBlocks.forEach(blockId => {
@@ -137,6 +161,10 @@ class EditorBody {
 
       blockList.appendChild(r);
     });
+
+    // 開始メッセージ
+    document.getElementById("startMessage").value
+      = this.problem["message"];
   }
 
   #render() {
@@ -273,7 +301,9 @@ class EditorBody {
     // コスト一覧、ブロック一覧の評価
     document.getElementById("costList").childNodes.forEach(n => {
       const ctr = n.lastChild.firstChild;
-      this.problem["costList"][ctr.name.split("_")[1]] = ctr.value;
+      if(ctr.name.includes("_")){
+        this.problem["costList"][ctr.name.split("_")[1]] = ctr.value;
+      }
     });
 
     this.problem["unlocked"] = [];
@@ -283,6 +313,16 @@ class EditorBody {
         this.problem["unlocked"].push(ctr.name.split("_")[1]);
       }
     });
+
+    // コストと歩数の評価
+    this.problem["maxCost"]
+      = document.getElementsByName("maxCost")[0].value;
+    this.problem["maxStep"]
+      = document.getElementsByName("maxStep")[0].value;
+    
+    // 開始メッセージの評価
+    this.problem["message"]
+      = document.getElementById("startMessage").value;
 
     return this.problem;
   }

@@ -19,7 +19,7 @@
   <script type="text/javascript" src="js/EditorBody.js"></script>
 </head>
 <script type="module">
-  import { fetchJSON } from 'https://js.sabae.cc/fetchJSON.js';
+  import { fetchJSON } from './js/fetchP.js';
 
   window.onload = async () => {
     const stageName =
@@ -79,7 +79,15 @@
   }
 
   .blockList {
-    transform: translateY(-55%);
+    transform: translateY(-50%);
+  }
+
+  #body {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
   }
 </style>
 
@@ -100,6 +108,13 @@
       <table>
         <caption>ブロック一覧</caption>
         <tbody id="blockList"></tbody>
+      </table>
+      <br>
+      <table>
+        <caption>開始メッセージ</caption>
+        <tr>
+          <td><textarea id="startMessage"></textarea></td>
+        </tr>
       </table>
       <br>
       <table>
