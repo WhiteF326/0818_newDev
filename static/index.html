@@ -35,6 +35,15 @@
   .right {
     float: right;
   }
+
+  #ref4 {
+    transition: 5s;
+    transition-timing-function: cubic-bezier(1, 0, 1, 0);
+    height: 24px;
+    background-image: url("https://isyokuju.com/wp-content/uploads/2018/11/%E9%9F%B3%E5%89%B2%E3%82%8C%E3%83%9D%E3%83%83%E3%82%BF%E3%83%BC_2.jpg");
+    background-color: rgba(249, 249, 249, 1);
+    background-blend-mode: lighten;
+  }
 </style>
 <script>
   window.onload = () => {
@@ -67,6 +76,18 @@
           break;
       }
       document.getElementById("sel" + point).appendChild(cursor);
+    }
+
+    console.log(document.getElementsByTagName("img"));
+
+    document.getElementsByTagName("img")[0].onclick = () => {
+      document.getElementById("ref4").style.position = "absolute";
+      document.getElementById("ref4").style.fontSize = "5em";
+      document.getElementById("ref4").style.height = "500px";
+      document.getElementById("ref4").style.backgroundImage;
+      document.getElementById("ref4").style.backgroundColor
+        = "rgba(249, 249, 249, 0)";
+      new Audio("./audio/harry.mp3").play();
     }
 
     if (localStorage.getItem("userid")) {
