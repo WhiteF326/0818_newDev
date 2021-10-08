@@ -70,7 +70,7 @@
     float: right;
   }
 
-  #blocklyComputeCanvas{
+  #blocklyComputeCanvas {
     position: relative;
     z-index: 1;
   }
@@ -120,7 +120,30 @@
     top: 50%;
     transform: translateY(-50%);
   }
+
+  .smodalback {
+    transition: 0.5s;
+    position: absolute;
+    top: 0%;
+    display: block;
+    z-index: 9998;
+    background-color: rgba(234, 254, 254, 0.64);
+    height: 0%;
+    width: 85%;
+    margin: 0 auto;
+    transform: translateY(-500px);
+    text-align: center;
+  }
+
+  .smodal {
+    transition: 0.5s;
+    position: relative;
+    display: flexbox;
+    color: #980098;
+    font-size: 2em;
+  }
 </style>
+
 <body id="body">
   <form action="index.html">
     <input type="submit" value="トップに戻る">
@@ -155,7 +178,9 @@
       <img src="img/stagefailed_take.png">
     </div>
   </div>
-  
+  <div class="smodalback">
+    <div class="smodal"></div>
+  </div>
 </body>
 
 </html>

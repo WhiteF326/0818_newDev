@@ -447,4 +447,30 @@ window.onload = async () => {
       }, 1000);
     }
   });
+
+  const smodal = document.getElementsByClassName("smodal")[0];
+  const smodalback = document.getElementsByClassName("smodalback")[0];
+  if(localStorage.getItem("gameEnabled") === "free"){
+    const stageNo = Number(localStorage.getItem("selectedStage"));
+    const titleText = document.createElement("h2");
+    titleText.innerText = (
+      String(Math.floor((stageNo - 1) / 8) + 1) + "-"
+      + String(stageNo % 8)
+    );
+    smodal.appendChild(titleText);
+    const frontText = mapinfo["message"] || "Not yet";
+    smodal.appendChild(
+      document.createTextNode(frontText)
+    );
+    setTimeout( () => {
+      smodalback.style.height = "100%";
+      smodalback.style.transform = "translateY(0%)";
+      smodal.style.transform = "translateY(calc(50% + 250px))";
+    }, 500);
+  }
+  smodalback.addEventListener("click", async () => {
+    smodalback.style.height = "0%";
+    smodalback.style.transform = "translateY(-500px)";
+    smodal.style.transform = "";
+  });
 }
