@@ -8,7 +8,7 @@ $serifId = 1;
 $username = "LAA1355306";
 $database = "LAA1355306-proggame";
 $password = $env["dbPassword"];
-$dsn = "mysql:dbname=". $database. ";host=mysql153.phy.lolipop.lan";
+$dsn = "mysql:dbname=". $database. ";host=localhost";
 
 $pdo = new PDO($dsn, $username, $password);
 try {

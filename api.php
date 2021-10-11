@@ -13,7 +13,7 @@ header("Content-type: text/plain; charset=UTF-8");
 $username = "LAA1355306";
 $database = "LAA1355306-proggame";
 $password = $env["dbPassword"];
-$dsn = "mysql:dbname=". $database. ";host=mysql153.phy.lolipop.lan";
+$dsn = "mysql:dbname=". $database. ";host=localhost";
 
 $pdo = new PDO($dsn, $username, $password);
 
@@ -69,7 +69,8 @@ switch(explode("/", $path)[1]){
               "sensor_foot_stab",
               "sensor_foot_floor",
               "sensor_foot_colp"
-            ]
+            ],
+            "message" => ""
           );
 
           fwrite(
@@ -215,6 +216,38 @@ switch(explode("/", $path)[1]){
             $stm->execute();
 
             echo null;
+            break;
+          }
+        }
+      }
+
+      case "settings": {
+        $uid = $prm["userid"];
+        switch (explode("/", $path)[3]) {
+          // read
+          case "read":{
+            $sql = "select * from users where id = :id";
+            $stm = $pdo->prepare($sql);
+            $stm->bindValue(":id", $uid);
+            $stm->execute();
+
+            $result = $stm->fetchAll(PDO::FETCH_ASSOC);
+
+            echo json_encode($result);
+            break;
+          }
+        
+          // write
+          case "write":{
+            $sql = "update users set
+              sfx_volume = ". $prm["sfxVolume"]. ",".
+              "bgm_volume = ". $prm["bgmVolume"]. ",".
+              "gamespeed = ". $prm["gameSpeed"]. " where id = :id";
+            $stm = $pdo->prepare($sql);
+            $stm->bindValue(":id", $uid);
+            $stm->execute();
+
+            echo json_encode($result = $stm->fetchAll(PDO::FETCH_ASSOC));
             break;
           }
         }

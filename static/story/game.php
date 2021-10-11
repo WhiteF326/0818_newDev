@@ -16,7 +16,7 @@ require_once("./../../settings/env.php");
 <body>
   <p>ゲーム中</p>
   <?php
-  $dsn = "mysql:dbname=LAA1355306-proggame;host=mysql153.phy.lolipop.lan";
+  $dsn = "mysql:dbname=LAA1355306-proggame;host=localhost";
   $user = "LAA1355306";
   $pass = $env["dbPassword"];
   try {
