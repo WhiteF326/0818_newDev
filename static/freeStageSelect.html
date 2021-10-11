@@ -97,7 +97,9 @@
         tile.appendChild(clearedText);
         tile.style.padding = "5px";
 
-        const plist = retColor(Math.floor(ptr / 8));
+        const plist = retColor(
+          Math.floor(ptr / 8), Math.ceil(stages.length / 8), ptr % 8
+        );
         let gradStr = "";
         Object.keys(plist).forEach(p => {
           gradStr += plist[p] + " " + String(p) + "%, "
