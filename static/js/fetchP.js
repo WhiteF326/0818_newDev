@@ -11,8 +11,8 @@ const fetchJSON = async (path, prm) => {
     "body": JSON.stringify(prm),
   }
 
-  const res = await (await fetch("http://localhost/api.php", req)).text();
-  return res;
+  const res = await fetch("http://localhost/api.php", req);
+  return await res.text();
 }
 
 export { fetchJSON };

@@ -6,83 +6,131 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>トップ画面</title>
+  <link rel="stylesheet" href="css/destyle.css" type="text/css">
   <link rel="stylesheet" href="css/sakura.css" type="text/css">
+  <style>
+    img {
+      display: flexbox;
+      padding: 0px;
+      margin: 0px;
+    }
+
+    img[src$="img/arrow.png"] {
+      height: 16px;
+      width: 16px;
+    }
+
+    img[src$="img/blocklun_logo.png"] {
+      height: 100%;
+      width: 100%;
+    }
+
+    img[src$="img/selectmode.png"] {
+      height: 70%;
+      width: 70%;
+    }
+
+    img[src$="img/selectmode.png"]:hover {
+      height: 90%;
+      width: 90%;
+    }
+
+    img[src$="img/storymode.png"] {
+      height: 70%;
+      width: 70%;
+    }
+
+    img[src$="img/storymode.png"]:hover {
+      height: 90%;
+      width: 90%;
+    }
+
+    a {
+      text-decoration: none !important;
+    }
+
+    a:hover {
+      text-decoration: none !important;
+    }
+
+    .account-info {
+      position: absolute;
+      bottom: 0;
+      background-color: #ffffff3a;
+      color: black;
+      display: block;
+      height: fit-content;
+    }
+
+    body {
+      background-color: #96dcf8fb;
+      height: 10%;
+      width: 30%;
+    }
+
+    .left {
+      float: left;
+    }
+
+    .right {
+      float: right;
+    }
+
+    #ref5 {
+      transition: 5s;
+      transition-timing-function: cubic-bezier(1, 0, 1, 0);
+      height: 24px;
+      background-image: url("https://isyokuju.com/wp-content/uploads/2018/11/%E9%9F%B3%E5%89%B2%E3%82%8C%E3%83%9D%E3%83%83%E3%82%BF%E3%83%BC_2.jpg");
+      background-color: #96dcf8fb;
+      background-blend-mode: lighten;
+    }
+  </style>
 </head>
-<style>
-  img[src$="img/arrow.png"] {
-    height: 100%;
-    width: 100%;
-  }
 
-  td[src$="img/blocklun_logo.png"] {
-    height: 100%;
-    width: 100%;
-  }
-
-  img[src$="img/selectmode.png"] {
-    height: 50%;
-    width: 50%;
-  }
-
-  img[src$="img/selectmode.png"]:hover {
-    height: 70%;
-    width: 70%;
-  }
-
-  img[src$="img/storymode.png"] {
-    height: 50%;
-    width: 50%;
-  }
-
-  img[src$="img/storymode.png"]:hover {
-    height: 70%;
-    width: 70%;
-  }
-
-  .account-info {
-    position: absolute;
-    bottom: 0;
-    background-color: #ffffff3a;
-    color: black;
-    display: block;
-    height: fit-content;
-  }
-
-  body {
-    background-color: #96dcf8fb;
-    height: 10%;
-    width: 30%;
-  }
-
-  .left {
-    float: left;
-  }
-
-  .right {
-    float: right;
-  }
-
-  #ref4 {
-    transition: 5s;
-    transition-timing-function: cubic-bezier(1, 0, 1, 0);
-    height: 24px;
-    background-image: url("https://isyokuju.com/wp-content/uploads/2018/11/%E9%9F%B3%E5%89%B2%E3%82%8C%E3%83%9D%E3%83%83%E3%82%BF%E3%83%BC_2.jpg");
-    background-color: #96dcf8fb;
-    background-blend-mode: lighten;
-  }
-</style>
 <script>
   window.onload = () => {
+    let diff = 0;
+    let endPoint = 2;
+    for (let i = 0; i < 5; i++) {
+      document.getElementById("sel" + i).style.width = "32px";
+    }
+    if (localStorage.getItem("userid")) {
+      // ログイン時の処理
+      document.getElementById("sel0").remove();
+      document.getElementById("sel1").remove();
+      document.getElementById("ref0").remove();
+      document.getElementById("ref1").remove();
+      diff = 2;
+      endPoint = 3;
+    } else {
+      // 未ログイン時の処理
+      for(let i = 2; i <= 5; i++){
+        document.getElementById("sel" + i).remove();
+        document.getElementById("ref" + i).remove();
+      }
+    }
+
     localStorage.setItem("gameEnabled", "false");
     const cursor = document.createElement("img");
     cursor.setAttribute("src", "img/arrow.png");
     cursor.style.margin = "0";
     cursor.style.padding = "0";
     let point = 0;
-    const endPoint = 4;
-    document.getElementById("sel" + point).appendChild(cursor);
+    document.getElementById("sel" + (point + diff)).appendChild(cursor);
+    document.getElementById("ref2").onclick = () => {
+      window.location.href = "freeStageSelect.html";
+    }
+    document.getElementById("ref2").childNodes[1].onclick = () => {
+      window.location.href = "freeStageSelect.html";
+    }
+    document.getElementById("ref3").onclick = () => {
+      window.location.href = "story.html";
+    }
+    document.getElementById("ref3").childNodes[1].onclick = () => {
+      window.location.href = "story.html";
+    }
     window.onkeydown = (e) => {
-      document.getElementById("sel" + point).innerHTML = "";
+      document.getElementById("sel" + (point + diff)).innerHTML = "";
       switch (e.key) {
         case "ArrowUp":
           point = (point + endPoint - 1) % endPoint;
@@ -93,37 +141,46 @@
           break;
 
         case "Enter":
-          if (document.getElementById("ref" + point)
-            .childNodes[1]) {
-            window.location =
-              document.getElementById("ref" + point)
-                .childNodes[1].getAttribute("href");
+          switch (point + diff) {
+            case 0: {
+              window.location.href = "login.html";
+              break;
+            }
+
+            case 1: {
+              window.location.href = "register.html";
+              break;
+            }
+
+            case 2: {
+              window.location.href = "freeStageSelect.html";
+              break;
+            }
+
+            case 3: {
+              window.location.href = "story.html";
+              break;
+            }
+
+            case 4: {
+              window.location.href = "settings.html";
+              break;
+            }
           }
           break;
       }
-      document.getElementById("sel" + point).appendChild(cursor);
+      console.log(point, diff + point);
+      document.getElementById("sel" + (point + diff)).appendChild(cursor);
     }
-
-    console.log(document.getElementsByTagName("img"));
 
     document.getElementsByTagName("img")[0].onclick = () => {
-      document.getElementById("ref4").style.position = "absolute";
-      document.getElementById("ref4").style.fontSize = "5em";
-      document.getElementById("ref4").style.height = "500px";
-      document.getElementById("ref4").style.backgroundImage;
-      document.getElementById("ref4").style.backgroundColor
+      document.getElementById("ref5").style.position = "absolute";
+      document.getElementById("ref5").style.fontSize = "5em";
+      document.getElementById("ref5").style.height = "500px";
+      document.getElementById("ref5").style.backgroundImage;
+      document.getElementById("ref5").style.backgroundColor
         = "rgba(249, 249, 249, 0)";
       new Audio("./audio/harry.mp3").play();
-    }
-
-    if (localStorage.getItem("userid")) {
-      // ログイン時の処理
-      document.getElementById("ref0").innerHTML = "<s>ログイン</s>";
-      document.getElementById("ref1").innerHTML = "<s>新規登録</s>";
-    } else {
-      // 未ログイン時の処理
-      document.getElementById("ref2").innerHTML = "<s>セレクトモード</s>";
-      document.getElementById("ref3").innerHTML = "<s>ストーリーモード</s>";
     }
   }
 </script>
@@ -148,18 +205,26 @@
       <tr>
         <td id="sel2"></td>
         <td id="ref2">
-          <a href="freeStageSelect.html"><img src="img/selectmode.png"></a>
+          <img src="img/selectmode.png">
         </td>
       </tr>
       <tr>
         <td id="sel3"></td>
         <td id="ref3">
-          <a href="story.html"><img src="img/storymode.png"></a>
+          <img src="img/storymode.png">
         </td>
       </tr>
       <tr>
         <td id="sel4"></td>
-        <td id="ref4">Coming Soon……</td>
+        <td id="ref4">
+          <a href="settings.html">設定</a>
+        </td>
+      </tr>
+      <tr>
+        <td id="sel5"></td>
+        <td id="ref5">
+          Coming soon……
+        </td>
       </tr>
     </tbody>
   </table>

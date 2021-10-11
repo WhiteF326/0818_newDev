@@ -27,9 +27,6 @@
   <script src="./js/CostCalculator.js"></script>
   <script src="./js/ProgBoad.js"></script>
 
-  <!-- account -->
-  <script type="text/javascript" src="./js/AccountStatus.js"></script>
-
   <!-- Audio -->
   <!-- <audio src="https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/forest.mp3" loop id="forest"></audio> -->
 </head>
@@ -47,7 +44,7 @@
     margin: 0;
   }
 
-  body{
+  body {
     background-color: #96dcf8fb;
   }
 
@@ -57,12 +54,14 @@
     font-weight: 600;
   }
 
-  .move{
+  .move {
     border-style: outset;
+    width: 15.5%;
   }
 
-  .retry{
+  .retry {
     border-style: outset;
+    width: calc(15% * 120 / 77);
   }
 
   .costTable,
@@ -78,6 +77,10 @@
   .costTable tr,
   .costTable td {
     padding: 5px;
+  }
+
+  .costTable{
+    width: 75%;
   }
 
   .account-info {
@@ -170,7 +173,6 @@
     color: #980098;
     font-size: 2em;
   }
-  
 </style>
 
 <body id="body">
@@ -186,9 +188,9 @@
         <tbody id="costList">
         </tbody>
       </table>
-      <span id="cost" class="cost" style="display: inline-block;"></span><br>
-      <span id="step" class="cost" style="display: inline-block;"></span>
-      <div style="display: block">
+      <div class="horizontal">
+        <span id="cost" class="cost" style="display: inline-block;"></span><br>
+        <span id="step" class="cost" style="display: inline-block;"></span>
         <button id="move" class="move"><img src="img/move.png"></button>
         <button id="retry" class="retry"><img src="img/retry.png"></button>
       </div>
@@ -196,7 +198,6 @@
     <div id="blocklyDiv"></div>
     <xml id="toolbox"></xml>
   </div>
-  <div class="account-info" id="accountInfo"></div>
   <div class="modalback">
     <div class="modal">
       <img src="img/stageclear_take.png">

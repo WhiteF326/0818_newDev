@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>トップ画面</title>
+  <link rel="stylesheet" href="css/destyle.css" type="text/css">
+  <link rel="stylesheet" href="css/sakura.css" type="text/css">
+  <style>
+    .account-info {
+      position: absolute;
+      bottom: 0;
+      background-color: #ffffff3a;
+      color: black;
+      display: block;
+      height: fit-content;
+    }
+
+    body {
+      background-color: #96dcf8fb;
+      height: 10%;
+    }
+
+    .left {
+      float: left;
+    }
+
+    .right {
+      float: right;
+    }
+
+    #ref5 {
+      transition: 5s;
+      transition-timing-function: cubic-bezier(1, 0, 1, 0);
+      height: 24px;
+      background-image: url("https://isyokuju.com/wp-content/uploads/2018/11/%E9%9F%B3%E5%89%B2%E3%82%8C%E3%83%9D%E3%83%83%E3%82%BF%E3%83%BC_2.jpg");
+      background-color: #96dcf8fb;
+      background-blend-mode: lighten;
+    }
+
+    .horizontal>* {
+      display: inline-block;
+    }
+
+    .horizontal>h4 {
+      margin-right: 40px;
+      width: 40%;
+    }
+
+    .horizontal>span {
+      width: 40%;
+    }
+
+    button {
+      margin-top: 30px;
+    }
+  </style>
+</head>
+
+<script type="module">
+  import { fetchJSON } from './js/fetchP.js';
+  window.onload = async () => {
+    // read
+    const settings = JSON.parse(await fetchJSON("api/user/settings/read", {
+      "userid": localStorage.getItem("userid"),
+    }))[0];
+    document.getElementById("bgmVolume").value = Number(settings["bgm_volume"]);
+    document.getElementById("sfxVolume").value = Number(settings["sfx_volume"]);
+    document.getElementById("gameSpeed").value = Number(settings["gamespeed"]);
+
+    // スライダー動作設定
+    document.getElementById("speedValue").innerText
+      = document.getElementById("gameSpeed").value;
+    document.getElementById("gameSpeed").oninput = () => {
+      document.getElementById("speedValue").innerText
+        = document.getElementById("gameSpeed").value;
+    }
+    document.getElementById("sfxValue").innerText
+      = document.getElementById("sfxVolume").value;
+    document.getElementById("sfxVolume").oninput = () => {
+      document.getElementById("sfxValue").innerText
+        = document.getElementById("sfxVolume").value;
+    }
+    document.getElementById("bgmValue").innerText
+      = document.getElementById("bgmVolume").value;
+    document.getElementById("bgmVolume").oninput = () => {
+      document.getElementById("bgmValue").innerText
+        = document.getElementById("bgmVolume").value;
+    }
+  }
+  document.getElementById("save").onclick = async () => {
+    // write
+    const prm = {
+      "userid": localStorage.getItem("userid"),
+      "bgmVolume": document.getElementById("bgmVolume").value,
+      "sfxVolume": document.getElementById("sfxVolume").value,
+      "gameSpeed": document.getElementById("gameSpeed").value,
+    };
+    console.log(await fetchJSON("api/user/settings/write", prm));
+  }
+  document.getElementById("cncl").onclick = () => {
+    // cancel
+    window.location.href = "index.html";
+  }
+</script>
+
+<script type="text/javascript" src="js/AccountStatus.js"></script>
+
+<body>
+  <h1>設定</h1>
+  <hr>
+  <h2>画面表示</h2>
+  <div class="horizontal">
+    <h4>ゲームの速度</h4>
+    <span>
+      <input type="range" min="1" max="5" value="3" id="gameSpeed">
+      <span id="speedValue"></span>
+    </span>
+  </div>
+  <hr>
+  <h2>音声</h2>
+  <div class="horizontal">
+    <h4>効果音</h4>
+    <span>
+      <input type="range" min="0" max="100" value="50" id="sfxVolume">
+      <span id="sfxValue"></span>
+    </span>
+  </div>
+  <div class="horizontal">
+    <h4>BGM(未実装)</h4>
+    <span>
+      <input type="range" min="0" max="100" value="50" id="bgmVolume">
+      <span id="bgmValue"></span>
+    </span>
+  </div>
+  <hr>
+  <button id="cncl">キャンセル</button>
+  <button id="save">保存</button>
+  <div class="account-info" id="accountInfo"></div>
+</body>
+
+</html>

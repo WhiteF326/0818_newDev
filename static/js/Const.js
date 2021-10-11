@@ -35,31 +35,31 @@ const makeCostText = (current, target) => {
 
 // 足音
 const footstepsSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/footsteps.mp3");
-footstepsSound.volume = 0.5;
+const footstepsSoundBase = 0.5;
 
 // ジャンプ音
 const jumpSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/jump_ver2.mp3");
-jumpSound.volume = 0.5;
+const jumpSoundBase = 0.5;
 
 // スイッチ音
 const switchSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/switch.mp3");
-switchSound.volume = 1;
+const switchSoundBase = 1;
 
 //崖崩れ音
 const rubbleSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/rubble.mp3");
-rubbleSound.volume = 1;
+const rubbleSoundBase = 1;
 
 //破壊音
 const destroySound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/destroy.mp3");
-destroySound.volume = 0.5;
+const destroySoundBase = 0.5;
 
 // 配置音
 const putSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/put.mp3");
-putSound.volume = 1;
+const putSoundBase = 1;
 
 // 選択音
 const selectSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/select.mp3");
-selectSound.volume = 1;
+const selectSoundBase = 1;
 
 const floorList = [1, 3, 5, 7, 8, 9];
 const contains = (ary, elm) => {
@@ -88,11 +88,6 @@ const defaultCost = {
   "repair": 10,
   "loop": 1,
   "if": 1
-}
-
-document.onclick = () => {
-  selectSound.currentTime = 0;
-  selectSound.play();
 }
 
 const defaultStep = 100;

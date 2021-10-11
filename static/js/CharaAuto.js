@@ -1,5 +1,5 @@
 class CharaAuto {
-  constructor(vector, tileSize) {
+  constructor(vector, tileSize, settings) {
     this.charaX = 32;
     this.charaY = 48;
     this.posX = 0;
@@ -23,6 +23,8 @@ class CharaAuto {
     this.isChained = false;
 
     this.tileSize = tileSize;
+
+    this.settings = settings;
   }
 
   getAsset(frame) {
@@ -49,17 +51,19 @@ class CharaAuto {
   }
 
   addMove(y, x, isJunp) {
+    footstepsSound.volume
+      0.5 * this.settings["sfx_volume"] / 100;
     footstepsSound.play();
     this.pendingMove.push([y, x, (isJunp ? 2 : 0)]);
   }
   moveFrame(speed) {
-    this.updateJunp();
+    this.updateJump(speed);
     if (this.pendingMove.length != 0) {
       const xway = this.sign(this.pendingMove[0][1]);
       const yway = this.sign(this.pendingMove[0][0]);
       const isJunp = this.pendingMove[0][2];
       if (isJunp == 2) {
-        this.setJunp();
+        this.setJump(speed);
         this.pendingMove[0][2] = 1;
       }
       const xmove = Math.min(
@@ -104,28 +108,29 @@ class CharaAuto {
 
   #degToRad = (deg) => deg * Math.PI / 180;
 
-  setJunp = () => {
+  setJump = (charaSpeed) => {
     this.velocity = -32;
     this.isJunping = true;
     this.difference = 0;
-    this.jumpTime = -(this.tileSize / CHARASPEED / 2);
+    this.jumpTime = -(this.tileSize / charaSpeed / 2);
   }
-  updateJunp = () => {
+  updateJump = (charaSpeed) => {
     if (this.isJunping) {
       this.jumpTime++;
       if(!Math.floor(this.jumpTime)){
         jumpSound.currentTime = 0;
+        jumpSound.volume = 0.5  * this.settings["sfx_volume"] / 100;
         jumpSound.play();
       }
       if (this.jumpTime >= 0 || this.isChained) {
         this.isChained = true;
         this.difference = this.tileSize * Math.sin(
           this.#degToRad(
-            Math.abs(this.jumpTime) * 180 / (1.5 * this.tileSize / CHARASPEED)
+            Math.abs(this.jumpTime) * 180 / (1.5 * this.tileSize / charaSpeed)
           )
         );
       }
-      if (this.jumpTime > (this.tileSize / CHARASPEED) * 1.5) {
+      if (this.jumpTime > (this.tileSize / charaSpeed) * 1.5) {
         this.difference = 0;
         this.isJunping = false;
       }

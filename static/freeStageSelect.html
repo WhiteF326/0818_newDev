@@ -28,7 +28,6 @@
     );
 
     const stages = JSON.parse(await fetchJSON("api/stage/all", {}));
-    console.log(stages);
 
     let cleared = [];
 
@@ -37,7 +36,6 @@
         "api/user/free", { "userid": localStorage.getItem("userid") }
       ))).forEach(elm => cleared.push(elm));
     }
-    console.log(cleared);
 
     const tileWidth = 128;
     const marginWidth = 16;
@@ -64,7 +62,9 @@
               + "-" + String((ptr % 8) + 1))
             : "Coming Soon")
         );
-        numText.style.color = retTextColor(Math.floor(ptr / 8));
+        numText.style.color = retTextColor(
+          Math.floor(ptr / 8), Math.ceil(stages.length / 8)
+        );
         tile.appendChild(numText);
         const clearedText = document.createElement("span");
         if (cleared.find(elm => elm.stagename === String(stages[ptr]))) {
@@ -273,7 +273,6 @@
   </form>
   <h1><img src="img/stageselect.png"></h1>
   <button id="reset">クリア状況をリセットする</button>
-  <button id="stat">統計情報を表示する</button>
   <div id="stages" class="stages"></div>
   <div class="account-info" id="accountInfo"></div>
   <div class="modalback">

@@ -3,7 +3,9 @@ let moving = false;
 import { fetchJSON } from './fetchP.js';
 
 class Body {
-  constructor(mapinfo) {
+  constructor(mapinfo, settings) {
+    // ユーザ設定の取得
+    this.settings = settings;
     // マップ情報の取得
     this.mapinfo = mapinfo;
     this.map = this.mapinfo['stage'];
@@ -62,7 +64,7 @@ class Body {
       64, floor(this.sh / 2.2 / Math.max(this.map.length, this.map[0].length)));
 
     // キャラ情報の取得
-    this.charaAuto = new CharaAuto(this.start[2], this.tilesize);
+    this.charaAuto = new CharaAuto(this.start[2], this.tilesize, settings);
     this.charaHand = new CharaHand('right');
     this.endFlg = false;
 
@@ -163,6 +165,7 @@ class Body {
     if (this.map[y][x] === 2) {
       this.map[y][x] = 1;
       destroySound.currentTime = 0;
+      destroySound.volume = 0.5 * this.settings["sfx_volume"] / 100;
       destroySound.play();
     }
   }
@@ -173,6 +176,7 @@ class Body {
       console.log(y, x);
       this.map[y][x] = 2;
       putSound.currentTime = 0;
+      putSound.volume = this.settings["sfx_volume"] / 100;
       putSound.play();
     }
   }
@@ -210,7 +214,9 @@ class Body {
     }
     this.drawChar(this.charaAuto, this.frame >> this.endFrame);
     this.drawChar(this.charaHand, this.frame >> this.endFrame);
-    const stepSpend = this.charaAuto.moveFrame(CHARASPEED);
+    const stepSpend = this.charaAuto.moveFrame(
+      Math.pow(2, Number(this.settings["gamespeed"]) - 1)
+    );
     if (stepSpend) {
       this.lastStep--;
       if (!this.lastStep) {
@@ -220,7 +226,9 @@ class Body {
         moving = false;
       }
     }
-    const action = this.charaHand.moveFrame(CHARASPEED);
+    const action = this.charaHand.moveFrame(
+      Math.pow(2, Number(this.settings["gamespeed"]) - 1)
+    );
     if (typeof action === "string") {
       const y = this.cursorY, x = this.cursorX;
       if (action === "create") {
@@ -273,7 +281,9 @@ class Body {
           }
           if (this.map[this.currentY][this.currentX] === 5) {
             this.map[this.currentY][this.currentX] = 7;
-            if (this.doors.pushed(this.param[this.currentY][this.currentX])) {
+            if (this.doors.pushed(
+              this.param[this.currentY][this.currentX], this.settings
+            )) {
               const doorNo = this.param[this.currentY][this.currentX];
               if (this.doorPos[doorNo].length) {
                 this.map[this.doorPos[doorNo][0]][this.doorPos[doorNo][1]] = 8;
@@ -400,12 +410,15 @@ window.onload = async () => {
   if (!(Object.keys(mapinfo).length)) {
     window.location.href = "betaEnd.html";
   }
-  const gameBody = new Body(mapinfo);
+  const settings = JSON.parse(await fetchJSON("api/user/settings/read", {
+    "userid": localStorage.getItem("userid"),
+  }))[0];
+  const gameBody = new Body(mapinfo, settings);
 
   const progBoad = new ProgBoad(gameBody);
   const stageNo = localStorage.getItem("selectedStage");
   if (localStorage.getItem("savedProgram" + stageNo)
-      && localStorage.getItem("gameEnabled") === "free") {
+    && localStorage.getItem("gameEnabled") === "free") {
     progBoad.loadFromText(localStorage.getItem("savedProgram" + stageNo));
   }
 
@@ -450,7 +463,7 @@ window.onload = async () => {
 
   const smodal = document.getElementsByClassName("smodal")[0];
   const smodalback = document.getElementsByClassName("smodalback")[0];
-  if(localStorage.getItem("gameEnabled") === "free"){
+  if (localStorage.getItem("gameEnabled") === "free") {
     const stageNo = Number(localStorage.getItem("selectedStage"));
     const titleText = document.createElement("h2");
     titleText.innerText = (
@@ -462,7 +475,7 @@ window.onload = async () => {
     smodal.appendChild(
       document.createTextNode(frontText)
     );
-    setTimeout( () => {
+    setTimeout(() => {
       smodalback.style.height = "100%";
       smodalback.style.transform = "translateY(0%)";
       smodal.style.transform = "translateY(calc(50% + 250px))";
@@ -472,5 +485,11 @@ window.onload = async () => {
     smodalback.style.height = "0%";
     smodalback.style.transform = "translateY(-500px)";
     smodal.style.transform = "";
+  });
+
+  document.addEventListener("click", () => {
+    selectSound.currentTime = 0;
+    selectSound.volume = settings["sfx_volume"] / 100;
+    selectSound.play();
   });
 }

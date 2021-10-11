@@ -49,7 +49,6 @@ const hsv2rgb = (hsv) => {
 }
 
 const hues = (p, e) => {
-  console.log(Math.floor(120 / (e - 1)) * p);
   return 120 - Math.floor(120 / (e - 1)) * p;
 }
 
@@ -64,6 +63,7 @@ const retColor = (p, e, d) => {
   }
 }
 
-const retTextColor = (p) => {
+const retTextColor = (p, e) => {
+  if(hues(p, e) >= 40 && hues(p, e) <= 80) return "black";
   return "white";
 }
