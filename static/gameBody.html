@@ -36,8 +36,15 @@
 
 <style>
   img[src$="img/costtable.png"] {
-    height: 50%;
-    width: 50%;
+    margin: 0;
+  }
+
+  img[src$="img/move.png"] {
+    margin: 0;
+  }
+
+  img[src$="img/retry.png"] {
+    margin: 0;
   }
 
   body{
@@ -48,6 +55,14 @@
     font: 1.5em serif;
     font-family: "M PLUS 1p";
     font-weight: 600;
+  }
+
+  .move{
+    border-style: outset;
+  }
+
+  .retry{
+    border-style: outset;
   }
 
   .costTable,
@@ -174,8 +189,8 @@
       <span id="cost" class="cost" style="display: inline-block;"></span><br>
       <span id="step" class="cost" style="display: inline-block;"></span>
       <div style="display: block">
-        <button id="move">開始</button>
-        <button id="retry">やり直し</button>
+        <button id="move" class="move"><img src="img/move.png"></button>
+        <button id="retry" class="retry"><img src="img/retry.png"></button>
       </div>
     </div>
     <div id="blocklyDiv"></div>
