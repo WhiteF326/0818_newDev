@@ -16,7 +16,9 @@
   window.onload = async () => {
     localStorage.getItem("gameEnabled") === "false"
 
-    let stgHeight = window.innerHeight - 64;
+    let stgHeight
+      = window.innerHeight
+      - document.getElementById("accountInfo").clientHeight;
     document.body.childNodes.forEach(r => {
       if (r.nodeName !== "#text"
         && r.getAttribute("id") !== "stages") {
@@ -63,7 +65,7 @@
             : "Coming Soon")
         );
         numText.style.color = retTextColor(
-          Math.floor(ptr / 8), Math.ceil(stages.length / 8)
+          Math.floor(ptr / 8), Math.ceil(stages.length / 8), ptr % 8
         );
         tile.appendChild(numText);
         const clearedText = document.createElement("span");
@@ -145,6 +147,7 @@
       modal.style.transition = "1s";
       modal.style.transform = "translateY(0)";
       modal.style.height = "100%";
+      modal.style.width = document.body.clientWidth + "px";
 
       silen.play();
     });
@@ -199,9 +202,12 @@
   body {
     height: 100%;
     background-color: #96dcf8fb;
+    width: 100%;
   }
 
   .stages {
+    display: block;
+    text-align: center;
     overflow-y: scroll;
   }
 
@@ -224,19 +230,19 @@
   }
 
   #reset {
+    margin-left: 15px;
     margin-bottom: 10px;
   }
 
   .modalback {
     transition: 0.5s;
-    position: absolute;
+    position: fixed;
     top: 0%;
     transform: translateY(-500px);
     display: block;
     z-index: 9998;
     background-color: rgba(254, 254, 234, 0.78);
     height: 0%;
-    width: 75%;
     margin: 0 auto;
   }
 
@@ -244,12 +250,13 @@
     position: relative;
     display: flexbox;
     z-index: 9999;
-    width: fit-content;
+    width: inherit;
     height: fit-content;
     margin: 0 auto;
     top: 50%;
     transform: translateY(-50%);
     color: rgba(245, 2, 3, 1);
+    text-align: center;
   }
 
   #delete_yes {
@@ -264,6 +271,11 @@
   img[src$="img/stageselect.png"] {
     height: 60%;
     width: 60%;
+    margin: 0;
+  }
+
+  h1 {
+    margin: 0;
   }
 </style>
 
@@ -278,7 +290,8 @@
   <div class="modalback">
     <div class="modal">
       <h2>注意</h2>
-      全ての問題がクリアしていない状態になり、ベストスコア、最小コストの記録が削除されます。<br>
+      全ての問題がクリアしていない状態になり、<br>
+      ベストスコア、最小コストの記録が削除されます。<br>
       この操作は取り消せません。よろしいですか？<br>
       <br>
       <button id="delete_yes" class="delete_button">はい</button>

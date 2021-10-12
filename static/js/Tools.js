@@ -2,7 +2,9 @@ const hsv2rgb = (hsv) => {
   const h = hsv[0] / 60;
   const s = hsv[1];
   const v = hsv[2] >= 1 ? 1 : hsv[2];
-  if (s === 0) return [v * 255, v * 255, v * 255];
+  if (s === 0) return (
+    "#" + [v * 255, v * 255, v * 255].map(r => r.toString(16)).join()
+  );
 
   let rgb = [];
   const i = parseInt(h);
@@ -63,7 +65,7 @@ const retColor = (p, e, d) => {
   }
 }
 
-const retTextColor = (p, e) => {
+const retTextColor = async (p, e, d) => {
   if(hues(p, e) >= 40 && hues(p, e) <= 80) return "black";
   return "white";
 }
