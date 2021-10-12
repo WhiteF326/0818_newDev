@@ -9,6 +9,12 @@
   <link rel="stylesheet" href="css/destyle.css" type="text/css">
   <link rel="stylesheet" href="css/sakura.css" type="text/css">
   <style>
+    img[src$="img/setting.png"] {
+      height: 20%;
+      width: 20%;
+      margin: 0;
+    }
+
     img[src$="img/display.png"] {
       height: 20%;
       width: 20%;
@@ -16,8 +22,8 @@
     }
 
     img[src$="img/gamespeed.png"] {
-      height: 40%;
-      width: 40%;
+      height: 30%;
+      width: 30%;
       margin: 0;
     }
 
@@ -28,14 +34,26 @@
     }
 
     img[src$="img/effectsound.png"] {
-      height: 40%;
-      width: 40%;
+      height: 30%;
+      width: 30%;
       margin: 0;
     }
 
     img[src$="img/bgm.png"] {
-      height: 40%;
-      width: 40%;
+      height: 30%;
+      width: 30%;
+      margin: 0;
+    }
+
+    img[src$="img/cancel.png"] {
+      height: 50px;
+      width: 80px;
+      margin: 0;
+    }
+
+    img[src$="img/save.png"] {
+      height: 50px;
+      width: 80px;
       margin: 0;
     }
 
@@ -84,10 +102,10 @@
     }
 
     button {
-      height: 150px;
-      width: 200px;
+      height: fit-content;
       /* background-image: url(./img/harry.png); */
       margin-top: 30px;
+      border-style: outset;
     }
   </style>
 </head>
@@ -142,7 +160,7 @@
 <script type="text/javascript" src="js/AccountStatus.js"></script>
 
 <body>
-  <h1>設定</h1>
+  <h1><img src="img/setting.png"></h1>
   <hr>
   <h2><img src="img/display.png"></h2>
   <div class="horizontal">
@@ -162,15 +180,15 @@
     </span>
   </div>
   <div class="horizontal">
-    <h4><img src="img/bgm.png">(未実装)</h4>
+    <h4><img src="img/bgm.png"></h4>
     <span>
       <input type="range" min="0" max="100" value="50" id="bgmVolume">
       <span id="bgmValue"></span>
     </span>
   </div>
   <hr>
-  <button id="cncl">キャンセル</button>
-  <button id="save">保存</button>
+  <button id="cncl"><img src="img/cancel.png"></button>
+  <button id="save"><img src="img/save.png"></button>
   <div class="account-info" id="accountInfo"></div>
 </body>
 
