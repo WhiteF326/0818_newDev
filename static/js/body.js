@@ -468,7 +468,7 @@ window.onload = async () => {
     const titleText = document.createElement("h2");
     titleText.innerText = (
       String(Math.floor((stageNo - 1) / 8) + 1) + "-"
-      + String(stageNo % 8 !== 0 ? stage % 8 : 8)
+      + String(stageNo % 8 !== 0 ? stageNo % 8 : 8)
     );
     smodal.appendChild(titleText);
     const frontText = mapinfo["message"] || "Not yet";
