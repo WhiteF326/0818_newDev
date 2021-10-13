@@ -25,6 +25,7 @@
         window.location.href = "./story/opening.php";
       }
     } else {
+      document.getElementById("ref0").innerText = "つづきから";
       document.getElementById("ref0").onclick = async () => {
         await fetchJSON("api/story/abort", {
           "userid": localStorage.getItem("userid")
@@ -72,7 +73,7 @@
 </script>
 <style>
   body {
-    background-color: #96dcf8fb;
+    background-color: #eafcfa;
     height: 10%;
     width: fit-content;
     text-align: center;
@@ -108,9 +109,21 @@
     color: rgba(245, 2, 3, 1);
     text-align: center;
   }
+
+  form input {
+    position: absolute;
+    left: 0%;
+    margin: 20px;
+    height: 34px;
+    width: 101px;
+    font-size: 0.7em;
+  }
 </style>
 
 <body>
+  <form action="index.html">
+    <input type="submit" value="トップに戻る">
+  </form>
   <h1>すとーりーもぉど</h1>
   <table>
     <tbody>
@@ -118,7 +131,6 @@
         <td id="sel0"></td>
         <td id="ref0">
           <!-- <img src="img/login.png"> -->
-          つづきから
         </td>
       </tr>
       <tr>
