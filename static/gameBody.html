@@ -32,6 +32,15 @@
 </head>
 
 <style>
+  canvas {
+    border-style: ridge;
+    border-width: 4px;
+    border-radius: 40px;
+    border-block-color: rgba(88, 88, 88, 0.74);
+    border-inline-color: rgba(88, 88, 88, 0.63);
+    filter: brightness(80%);
+  }
+
   img[src$="img/costtable.png"] {
     margin: 0;
   }
@@ -78,10 +87,11 @@
 
   .costTable tr,
   .costTable td {
-    padding: 5px;
+    padding: 4px;
+    width: 150px;
   }
 
-  .costTable{
+  .costTable {
     min-width: fit-content;
     width: fit-content;
   }
