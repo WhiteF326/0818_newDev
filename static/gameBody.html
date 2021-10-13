@@ -178,6 +178,14 @@
   }
 </style>
 
+<script>
+  window.addEventListener("load", () => {
+    if(localStorage.getItem("userid") === ""){
+      window.location.href = "accountError.html";
+    }
+  });
+</script>
+
 <body id="body">
   <form action="index.html">
     <input type="submit" value="トップに戻る">
@@ -203,7 +211,7 @@
   </div>
   <div class="modalback">
     <div class="modal">
-      <img src="img/stageclear_take.png">
+      <img src="img/stageclear_take.png" id="yj">
     </div>
   </div>
   <div class="fmodalback">

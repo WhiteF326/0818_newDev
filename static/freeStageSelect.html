@@ -14,6 +14,9 @@
 <script type="module">
   import { fetchJSON } from './js/fetchP.js';
   window.onload = async () => {
+    if(localStorage.getItem("userid") === ""){
+      window.location.href = "accountError.html";
+    }
     localStorage.getItem("gameEnabled") === "false"
 
     let stgHeight
@@ -111,13 +114,6 @@
           tile.getAttribute("style")
           + " background: linear-gradient(to bottom right, " + gradStr + ");")
 
-        tile.onmouseover = () => {
-          tile.style.borderStyle = "ridge";
-        }
-        tile.onmouseleave = () => {
-          tile.style.borderStyle = "groove";
-        }
-
         tile.onclick = () => {
           if (stages[ptr]) {
             localStorage.setItem("selectedStage", String(ptr + 1));
@@ -182,11 +178,16 @@
   }
 
   .tile {
-    transition: 0.1s;
+    transition: 0.5s;
     width: 128px;
     height: 128px;
     border: 3px aliceblue;
     border-style: groove;
+  }
+
+  .tile:hover {
+    transition: 0.5s;
+    border-style: ridge;
   }
 
   .tile.tile {

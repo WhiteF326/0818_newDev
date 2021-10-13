@@ -55,7 +55,7 @@ const hues = (p, e) => {
 }
 
 const retColor = (p, e, d) => {
-  const sdiff = d >= 6 ? 0.15 : 0;
+  const sdiff = d >= 6 ? 0.10 : 0;
   return {
     0: hsv2rgb([hues(p, e), 0.79, 0.77 + sdiff]),
     20: hsv2rgb([hues(p, e), 0.66, 0.93 + sdiff]),
@@ -65,7 +65,7 @@ const retColor = (p, e, d) => {
   }
 }
 
-const retTextColor = async (p, e, d) => {
-  if(hues(p, e) >= 40 && hues(p, e) <= 80) return "black";
-  return "white";
+const retTextColor = (p, e, d) => {
+  if(hues(p, e) >= 40 && hues(p, e) <= 80) return "#000000";
+  return "#FFFFFF";
 }

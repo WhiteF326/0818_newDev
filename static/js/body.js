@@ -441,7 +441,8 @@ window.onload = async () => {
     } else {
       setInterval(() => {
         window.location.href = "./story/game.php?" +
-          "&clear=yes&userid=" + localStorage.getItem("userid");
+          "clear=yes&userid=" + localStorage.getItem("userid") + 
+          "&hinttext=none";
       }, 1000);
     }
   });
@@ -456,7 +457,8 @@ window.onload = async () => {
     } else {
       setInterval(() => {
         window.location.href = "./story/game.php?" +
-          "&clear=no&userid=" + localStorage.getItem("userid");
+          "&clear=no&userid=" + localStorage.getItem("userid") + 
+          "&hinttext=" + encodeURIComponent(mapinfo["hint"]);
       }, 1000);
     }
   });

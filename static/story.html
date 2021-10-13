@@ -10,6 +10,9 @@
   import { fetchJSON } from './js/fetchP.js';
   window.onload = async () => {
     // 本来ならば進捗を読み込む
+    if(localStorage.getItem("userid") === ""){
+      window.location.href = "accountError.html";
+    }
     const progress = await fetchJSON("api/story/getProgress", {
       "userid": localStorage.getItem("userid")
     });

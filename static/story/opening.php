@@ -8,7 +8,7 @@ $serifId = 1;
 $username = "LAA1355306";
 $database = "LAA1355306-proggame";
 $password = $env["dbPassword"];
-$dsn = "mysql:dbname=". $database. ";host=localhost";
+$dsn = "mysql:dbname=" . $database . ";host=localhost";
 
 $pdo = new PDO($dsn, $username, $password);
 try {
@@ -40,7 +40,7 @@ $js_array = json_encode($serif);
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>オープニング</title>
   <link rel="stylesheet" href="style.css">
-
+  <script type="text/javascript" src="./../js/LoginCheck.js"></script>
 </head>
 
 <body>

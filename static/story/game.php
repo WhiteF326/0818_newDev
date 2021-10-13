@@ -11,6 +11,8 @@ require_once("./../../settings/env.php");
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ゲーム画面</title>
+
+  <script type="text/javascript" src="./../js/LoginCheck.js"></script>
 </head>
 
 <body>
@@ -45,6 +47,9 @@ require_once("./../../settings/env.php");
 
   // ユーザー情報を転送
   $_SESSION["userid"] = $_GET["userid"];
+  // ヒントを転送
+  $_SESSION["hinttext"] = $_GET["hinttext"];
+  var_dump($_GET);
   ?>
   <script>
     // 飛ばす

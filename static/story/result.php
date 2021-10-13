@@ -53,9 +53,6 @@ try {
 $js_array = json_encode($serif);
 ?>
 
-
-
-
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -65,8 +62,33 @@ $js_array = json_encode($serif);
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>result</title>
   <link rel="stylesheet" href="style.css">
-
+  <script type="text/javascript" src="./../js/LoginCheck.js"></script>
 </head>
+
+<style>
+  .modal {
+    transition: 0.5s;
+    opacity: 0;
+    position: absolute;
+    left: 0%;
+    top: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: #f2feeeae;
+    z-index: -1;
+    text-align: center;
+  }
+
+  .center {
+    color: #561f16;
+    position: relative;
+    top: 40%;
+  }
+
+  .hintbody {
+    font-size: 1.2em;
+  }
+</style>
 
 <body onload="message()">
   <div id="area">
@@ -125,8 +147,16 @@ $js_array = json_encode($serif);
       const hbtn = document.createElement("button");
       hbtn.innerHTML = "ヒントを見る";
       hbtn.onclick = function() {
-        //
-        alert("ヒントです。");
+        document.getElementById("modal").style.opacity = "1";
+        document.getElementById("modal").style.zIndex = "1000";
+        
+        document.getElementById("hintText").innerText
+          = <?= '"' . $_SESSION["hinttext"] . '"' ?>;
+        
+        document.getElementById("modal").onclick = () => {
+          document.getElementById("modal").style.opacity = "0";
+          document.getElementById("modal").style.zIndex = "-1";
+        }
       };
       btnDiv.appendChild(hbtn);
 
@@ -219,6 +249,11 @@ $js_array = json_encode($serif);
       <input type="submit" value="問題に戻る">
     </form>
   <?php } ?>
+  <div class="modal" id="modal">
+    <span class="center">ヒント：</span><br><br>
+    <span class="center hintbody" id="hintText"></span><br><br><br>
+    <span class="center">(画面をクリックすると閉じます)</span>
+  </div>
 </body>
 
 </html>
