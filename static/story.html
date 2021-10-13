@@ -1,33 +1,145 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ストーリーモード</title>
+  <link rel="stylesheet" href="css/destyle.css" type="text/css">
+  <link rel="stylesheet" href="css/sakura.css" type="text/css">
 </head>
 <script type="module">
   import { fetchJSON } from './js/fetchP.js';
   window.onload = async () => {
     // 本来ならば進捗を読み込む
-    if(localStorage.getItem("userid") === ""){
+    if (localStorage.getItem("userid") === "") {
       window.location.href = "accountError.html";
     }
     const progress = await fetchJSON("api/story/getProgress", {
       "userid": localStorage.getItem("userid")
     });
-    if(progress == "0"){
-      window.location.href = "./story/opening.php";
-    }else{
-      await fetchJSON("api/story/abort", {
-        "userid": localStorage.getItem("userid")
-      });
-      window.location.href = "./story/game.php?" +
+    if (progress == "0") {
+      document.getElementById("ref0").innerText = "はじめから";
+      document.getElementById("ref0").onclick = () => {
+        window.location.href = "./story/opening.php";
+      }
+    } else {
+      document.getElementById("ref0").onclick = async () => {
+        await fetchJSON("api/story/abort", {
+          "userid": localStorage.getItem("userid")
+        });
+        window.location.href = "./story/game.php?" +
           "&clear=yes&userid=" + localStorage.getItem("userid");
+      }
     }
+
+    const silen = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/silen.mp3");
+    silen.volume = 1;
+    silen.loop = true;
+    document.getElementById("ref1").addEventListener("click", () => {
+      const modal = document.getElementsByClassName("modalback")[0];
+      modal.style.transition = "1s";
+      modal.style.transform = "translateY(0)";
+      modal.style.height = "100%";
+      modal.style.width = document.body.clientWidth + "px";
+
+      silen.play();
+    });
+    document.getElementById("delete_yes").addEventListener(
+      "click", async () => {
+        const modal = document.getElementsByClassName("modalback")[0];
+        modal.style.transform = "translateY(-500px)";
+        modal.style.height = "0%";
+
+        silen.pause();
+        silen.currentTime = 0;
+
+        await fetchJSON("api/user/reset/story", {
+          "userid": localStorage.getItem("userid")
+        });
+        window.location.reload();
+      });
+    document.getElementById("delete_no").addEventListener("click", () => {
+      const modal = document.getElementsByClassName("modalback")[0];
+      modal.style.transform = "translateY(-500px)";
+      modal.style.height = "0%";
+
+      silen.pause();
+      silen.currentTime = 0;
+    });
   }
 </script>
+<style>
+  body {
+    background-color: #96dcf8fb;
+    height: 10%;
+    width: fit-content;
+    text-align: center;
+    left: 50%
+  }
+
+  table {
+    left: 50%;
+  }
+
+  .modalback {
+    transition: 0.5s;
+    position: fixed;
+    top: 0%;
+    transform: translateY(-500px);
+    display: block;
+    z-index: 9998;
+    background-color: rgba(254, 254, 234, 0.78);
+    height: 0%;
+    margin: 0 auto;
+    width: fit-content;
+  }
+
+  .modal {
+    position: relative;
+    display: flexbox;
+    z-index: 9999;
+    width: fit-content;
+    height: fit-content;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(245, 2, 3, 1);
+    text-align: center;
+  }
+</style>
+
 <body>
-  
+  <h1>すとーりーもぉど</h1>
+  <table>
+    <tbody>
+      <tr>
+        <td id="sel0"></td>
+        <td id="ref0">
+          <!-- <img src="img/login.png"> -->
+          つづきから
+        </td>
+      </tr>
+      <tr>
+        <td id="sel1"></td>
+        <td id="ref1">
+          <!-- <img src="img/signin.png"> -->
+          データをけす
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="modalback">
+    <div class="modal">
+      <h2>注意</h2>
+      ストーリーをオープニングからやり直すことになります。<br>
+      この操作は取り消せません。よろしいですか？<br>
+      <br>
+      <button id="delete_yes" class="delete_button">はい</button>
+      <button id="delete_no" class="delete_button">いいえ</button>
+    </div>
+  </div>
 </body>
+
 </html>

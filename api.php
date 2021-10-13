@@ -200,7 +200,7 @@ switch(explode("/", $path)[1]){
         $uid = $prm["userid"];
         switch (explode("/", $path)[3]) {
           case "free":{
-            $sql = "update freemode_results set deleted = 1 where userid = :id";
+            $sql = "update freemode_results set deleted = 1 where id = :id";
             $stm = $pdo->prepare($sql);
             $stm->bindValue(":id", $uid);
             $stm->execute();
@@ -210,7 +210,7 @@ switch(explode("/", $path)[1]){
           }
 
           case "story":{
-            $sql = "update users set story_progress = 1 where userid = :id";
+            $sql = "update users set story_progress = 0 where id = :id";
             $stm = $pdo->prepare($sql);
             $stm->bindValue(":id", $uid);
             $stm->execute();
