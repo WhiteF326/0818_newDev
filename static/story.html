@@ -74,16 +74,23 @@
   }
 </script>
 <style>
+img[src$="img/storymode_icon.png"] {
+    height: 60%;
+    width: 60%;
+    margin: 0;
+  }
+
   body {
     background-color: #eafcfa;
     height: 10%;
     width: fit-content;
     text-align: center;
-    left: 50%
+    left: 50%;
   }
 
   table {
     left: 50%;
+        text-align: center;
   }
 
   .modalback {
@@ -126,18 +133,17 @@
   <form action="index.html">
     <input type="submit" value="トップに戻る">
   </form>
-  <h1>すとーりーもぉど</h1>
+  <h1><img src="img/storymode_icon.png"></h1>
   <table>
     <tbody>
       <tr>
         <td id="ref0">
-          <!-- <img src="img/login.png"> -->
+          <img src="img/continued.png" id="continued">
         </td>
       </tr>
       <tr>
         <td id="ref1">
-          <!-- <img src="img/signin.png"> -->
-          はじめから
+          <img src="img/begin.png" id="begin">
         </td>
       </tr>
     </tbody>
