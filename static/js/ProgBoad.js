@@ -5,7 +5,7 @@ class ProgBoad {
     this.endFlg = false;
     const workdiv = document.getElementById("blocklyDiv");
     workdiv.setAttribute("style",
-      "height: " + String(floor(window.innerHeight / 2.2)) + "px; " +
+      "height: " + String(floor(window.innerHeight / 2) - 2) + "px; " +
       "width: " + document.getElementById("stages").innerWidth + "px;");
     // 解禁済みブロックの適用
     if (gameBody.mapinfo['unlocked']) {
@@ -81,6 +81,8 @@ class ProgBoad {
         this.parse(code.split("\n"));
         this.gameBody.endFlg = true;
         document.getElementById("move").disabled = true;
+        document.getElementById("help").disabled = true;
+        document.getElementById("backToTop").disabled = true;
         document.getElementById("blocklyDiv").disabled = true;
       }
     }

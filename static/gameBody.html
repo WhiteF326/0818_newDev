@@ -114,8 +114,9 @@
   .right {
     float: right;
   }
-
-  #blocklyComputeCanvas {
+  
+  .blocklyComputeCanvas {
+    display: none;
     position: relative;
     z-index: 1;
   }
@@ -126,7 +127,7 @@
     bottom: 0%;
     display: block;
     z-index: 9998;
-    background-color: rgba(234, 254, 234, 0.64);
+    background-color: rgba(234, 254, 234, 0.94);
     height: 100%;
     width: 0%;
     margin: 0 auto;
@@ -149,7 +150,7 @@
     bottom: 0%;
     display: block;
     z-index: 9998;
-    background-color: rgba(254, 234, 234, 0.64);
+    background-color: rgba(254, 234, 234, 0.94);
     height: 100%;
     width: 0%;
     margin: 0 auto;
@@ -172,7 +173,7 @@
     top: 0%;
     display: block;
     z-index: 9998;
-    background-color: rgba(234, 254, 254, 0.64);
+    background-color: rgba(234, 254, 254, 0.94);
     height: 0%;
     width: 85%;
     margin: 0 auto;
@@ -187,11 +188,49 @@
     color: #980098;
     font-size: 2em;
   }
+
+  .buttons {
+    display: inline;
+    align-items: flex-end;
+  }
+
+  img {
+    margin: 0%;
+  }
+
+  #help {
+    position: absolute;
+    margin: 5px;
+    transform: translateY(-5px);
+    border-style: outset;
+  }
+
+  #helpimg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .helpmodal {
+    transition: 0.5s;
+    position: absolute;
+    bottom: 0%;
+    display: block;
+    z-index: -810;
+    background-color: rgba(234, 234, 234, 0.94);
+    height: 100%;
+    width: 85%;
+    opacity: 0;
+  }
+
+  form {
+    position: absolute;
+    display: inline;
+  }
 </style>
 
 <script>
   window.addEventListener("load", () => {
-    if(localStorage.getItem("userid") === ""){
+    if (localStorage.getItem("userid") === "") {
       window.location.href = "accountError.html";
     }
   });
@@ -199,7 +238,7 @@
 
 <body id="body">
   <form action="index.html">
-    <input type="submit" value="トップに戻る">
+    <input type="submit" value="トップに戻る" id="backToTop">
   </form>
   <script type="module" src="./js/body.js"></script>
   <div id="stages">
@@ -213,8 +252,13 @@
       <div class="horizontal">
         <span id="cost" class="cost" style="display: inline-block;"></span><br>
         <span id="step" class="cost" style="display: inline-block;"></span>
-        <button id="move" class="move"><img src="img/move.png"></button>
-        <button id="retry" class="retry"><img src="img/retry.png"></button>
+        <div class="buttons">
+          <button id="move" class="move"><img src="img/move.png"></button>
+          <button id="retry" class="retry"><img src="img/retry.png"></button>
+        </div>
+        <button id="help" class="help" style="display: none;">
+          <img src="img/help.png" id="helpimg">
+        </button>
       </div>
     </div>
     <div id="blocklyDiv"></div>
@@ -233,6 +277,7 @@
   <div class="smodalback">
     <div class="smodal"></div>
   </div>
+  <div class="helpmodal"></div>
 </body>
 
 </html>

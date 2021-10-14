@@ -473,30 +473,24 @@ window.onload = async () => {
       + String(stageNo % 8 !== 0 ? stageNo % 8 : 8)
     );
     smodal.appendChild(titleText);
-    const frontText = mapinfo["message"] || "Not yet";
-    smodal.appendChild(
-      document.createTextNode(frontText)
-    );
-    setTimeout(() => {
-      smodalback.style.height = "100%";
-      smodalback.style.transform = "translateY(0%)";
-      smodal.style.transform = "translateY(calc(50% + 250px))";
-    }, 500);
   } else {
+    smodalback.style.backgroundColor = "rgba(220, 249, 231, 0.94)"
+    smodal.style.color = "#511341"
     const stageNo = Number(mapinfo["level"]);
     const titleText = document.createElement("h2");
     titleText.innerText = "ステージ" + stageNo;
     smodal.appendChild(titleText);
-    const frontText = mapinfo["message"] || "Not yet";
-    smodal.appendChild(
-      document.createTextNode(frontText)
-    );
-    setTimeout(() => {
-      smodalback.style.height = "100%";
-      smodalback.style.transform = "translateY(0%)";
-      smodal.style.transform = "translateY(calc(50% + 250px))";
-    }, 500);
   }
+  const frontText = mapinfo["message"] || "Not yet";
+  smodal.appendChild(
+    document.createTextNode(frontText)
+  );
+  setTimeout(() => {
+    smodalback.style.height = "100%";
+    smodalback.style.transform = "translateY(0%)";
+    smodal.style.transform = "translateY(calc(50% + 250px))";
+  }, 100);
+
   smodalback.addEventListener("click", async () => {
     smodalback.style.height = "0%";
     smodalback.style.transform = "translateY(-500px)";
@@ -508,4 +502,15 @@ window.onload = async () => {
     selectSound.volume = settings["sfx_volume"] / 100;
     selectSound.play();
   });
+
+  const helpmodal = document.getElementsByClassName("helpmodal")[0];
+  helpmodal.innerHTML = "test";
+  document.getElementById("help").onclick = () => {
+    helpmodal.style.zIndex = 99999;
+    helpmodal.style.opacity = 1;
+  }
+  helpmodal.onclick = () => {
+    helpmodal.style.zIndex = -810;
+    helpmodal.style.opacity = 0;
+  }
 }
