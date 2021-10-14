@@ -482,6 +482,20 @@ window.onload = async () => {
       smodalback.style.transform = "translateY(0%)";
       smodal.style.transform = "translateY(calc(50% + 250px))";
     }, 500);
+  } else {
+    const stageNo = Number(mapinfo["level"]);
+    const titleText = document.createElement("h2");
+    titleText.innerText = "ステージ" + stageNo;
+    smodal.appendChild(titleText);
+    const frontText = mapinfo["message"] || "Not yet";
+    smodal.appendChild(
+      document.createTextNode(frontText)
+    );
+    setTimeout(() => {
+      smodalback.style.height = "100%";
+      smodalback.style.transform = "translateY(0%)";
+      smodal.style.transform = "translateY(calc(50% + 250px))";
+    }, 500);
   }
   smodalback.addEventListener("click", async () => {
     smodalback.style.height = "0%";
