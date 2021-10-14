@@ -201,7 +201,7 @@ $faceNum_array = json_encode($faceNum);
           btn.innerHTML = "スタート！";
           btn.onclick = function() {
             //ボタンが押された時
-            location = "game.php";
+            location = "./../toStage.html";
           };
           next.appendChild(btn);
 
