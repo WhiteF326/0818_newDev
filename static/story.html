@@ -79,7 +79,7 @@
   }
 </script>
 <style>
-img[src$="img/storymode_icon.png"] {
+  img[src$="img/storymode_icon.png"] {
     height: 60%;
     width: 60%;
     margin: 0;
@@ -95,7 +95,7 @@ img[src$="img/storymode_icon.png"] {
 
   table {
     left: 50%;
-        text-align: center;
+    text-align: center;
   }
 
   .modalback {
@@ -132,6 +132,14 @@ img[src$="img/storymode_icon.png"] {
     width: 101px;
     font-size: 0.7em;
   }
+
+  .modeSelector {
+    transition: 0.1s;
+    width: 240px;
+  }
+  .modeSelector:hover {
+    width: 320px;
+  }
 </style>
 
 <body>
@@ -143,12 +151,12 @@ img[src$="img/storymode_icon.png"] {
     <tbody>
       <tr>
         <td id="ref0">
-          <img src="img/continued.png" id="select1">
+          <img src="img/continued.png" id="select1" class="modeSelector">
         </td>
       </tr>
       <tr>
         <td id="ref1">
-          <img src="img/begin.png" id="select2">
+          <img src="img/begin.png" id="select2" class="modeSelector">
         </td>
       </tr>
     </tbody>
