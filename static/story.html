@@ -19,21 +19,6 @@
     const progress = await fetchJSON("api/story/getProgress", {
       "userid": localStorage.getItem("userid")
     });
-    if (progress == "0") {
-      document.getElementById("ref0").innerText = "はじめから";
-      document.getElementById("ref0").onclick = () => {
-        window.location.href = "./story/opening.php";
-      }
-    } else {
-      document.getElementById("ref0").innerText = "つづきから";
-      document.getElementById("ref0").onclick = async () => {
-        await fetchJSON("api/story/abort", {
-          "userid": localStorage.getItem("userid")
-        });
-        window.location.href = "./story/game.php?" +
-          "&clear=yes&userid=" + localStorage.getItem("userid");
-      }
-    }
 
     const silen = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/silen.mp3");
     silen.volume = 1;
@@ -69,6 +54,23 @@
       silen.pause();
       silen.currentTime = 0;
     });
+
+    if (progress == "0") {
+      document.getElementById("ref0").innerText = "はじめから";
+      document.getElementById("ref0").onclick = () => {
+        window.location.href = "./story/opening.php";
+      }
+      document.getElementById("ref1").remove();
+    } else {
+      document.getElementById("ref0").innerText = "つづきから";
+      document.getElementById("ref0").onclick = async () => {
+        await fetchJSON("api/story/abort", {
+          "userid": localStorage.getItem("userid")
+        });
+        window.location.href = "./story/game.php?" +
+          "&clear=yes&userid=" + localStorage.getItem("userid");
+      }
+    }
   }
 </script>
 <style>
@@ -128,16 +130,14 @@
   <table>
     <tbody>
       <tr>
-        <td id="sel0"></td>
         <td id="ref0">
           <!-- <img src="img/login.png"> -->
         </td>
       </tr>
       <tr>
-        <td id="sel1"></td>
         <td id="ref1">
           <!-- <img src="img/signin.png"> -->
-          データをけす
+          はじめから
         </td>
       </tr>
     </tbody>
