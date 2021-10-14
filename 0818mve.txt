@@ -1,0 +1,26 @@
+動作確認環境
+[使用ブラウザ]
+・Google Chrome 92 以降
+・Mozilla Firefox 78 以降
+・Microsoft Edge 89 以降
+・Android Chrome 92 以降
+[OS]
+・Microsoft Windows 10, 11 (64bitOS)
+・Mac OS 11.0 以上
+・Android 7.0 以上
+[性能]
+CPU Intel i5 第四世代またはそれ以上
+RAM 2GB 以上
+画面解像度 1080x720 以上
+
+
+推奨環境
+[使用ブラウザ]
+・Google Chrome 最新版
+・Microsoft Edge 最新版
+[OS]
+・Microsoft Windows 10, 11
+[性能]
+CPU Intel i5 第六世代またはそれ以上
+RAM 4GB 以上
+画面解像度 1280x720 (HD) 以上
