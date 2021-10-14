@@ -429,12 +429,12 @@ window.onload = async () => {
   const modal = document.getElementsByClassName("modalback")[0];
   modal.addEventListener("click", async () => {
     modal.setAttribute("style", "width: 0%");
-    await fetchJSON("api/stage/clear", {
-      "userid": localStorage.getItem("userid"),
-      "stagename": localStorage.getItem("selectedStage"),
-      "cost": progBoad.costCalculate()
-    });
     if (localStorage.getItem("gameEnabled") === "free") {
+      await fetchJSON("api/stage/clear", {
+        "userid": localStorage.getItem("userid"),
+        "stagename": localStorage.getItem("selectedStage"),
+        "cost": progBoad.costCalculate()
+      });
       setInterval(() => {
         window.location.href = "freeStageSelect.html";
       }, 1000);
