@@ -96,5 +96,6 @@
     "move",
     "destroy"
   ],
-  "message": "岩を壊してゴールに導こう！"
+  "message": "岩を壊してゴールに導こう！",
+  "bgm": "forest_ver2"
 }

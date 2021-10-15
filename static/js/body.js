@@ -489,6 +489,14 @@ window.onload = async () => {
     smodalback.style.height = "100%";
     smodalback.style.transform = "translateY(0%)";
     smodal.style.transform = "translateY(calc(50% + 250px))";
+
+    const bgm = new Audio(
+      "https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/"
+       + (mapinfo["bgm"] || "forest_ver2") + ".mp3"
+      );
+    bgm.volume = settings["bgm_volume"] / 300;
+    bgm.loop = true;
+    bgm.play();
   }, 100);
 
   smodalback.addEventListener("click", async () => {

@@ -42,7 +42,6 @@ $faceNum_array = json_encode($faceNum);
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ストーリー</title>
   <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body onload="message()">
@@ -59,6 +58,20 @@ $faceNum_array = json_encode($faceNum);
   </div>
 
   <script>
+    let mutedFlg = true;
+    document.body.innerHTML += '<button id="toggleBGM">BGM を ON にする</button>';
+    const tgl = document.getElementById("toggleBGM");
+    const bgm = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/forest_ver2.mp3")
+    bgm.volume = 0.166;
+    tgl.onclick = () => {
+      mutedFlg = !mutedFlg;
+      tgl.innerText = mutedFlg ? "BGM を ON にする" : "BGM を OFF にする"
+      if(!mutedFlg){
+        bgm.play();
+      }else{
+        bgm.pause();
+      }
+    }
     //キャンバスの作成
     const canvas = document.getElementById("can");
     const ctx = canvas.getContext("2d");
