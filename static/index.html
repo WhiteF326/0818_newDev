@@ -119,9 +119,6 @@
   window.onload = () => {
     let diff = 0;
     let endPoint = 2;
-    for (let i = 0; i < 5; i++) {
-      document.getElementById("sel" + i).style.width = "32px";
-    }
     const moveToList = [
       "login.html",
       "register.html",
@@ -139,8 +136,6 @@
     }
     if (localStorage.getItem("userid")) {
       // ログイン時の処理
-      document.getElementById("sel0").remove();
-      document.getElementById("sel1").remove();
       document.getElementById("ref0").remove();
       document.getElementById("ref1").remove();
       diff = 2;
@@ -148,34 +143,8 @@
     } else {
       // 未ログイン時の処理
       for (let i = 2; i <= 5; i++) {
-        document.getElementById("sel" + i).remove();
         document.getElementById("ref" + i).remove();
       }
-    }
-
-    localStorage.setItem("gameEnabled", "false");
-    const cursor = document.createElement("img");
-    cursor.setAttribute("src", "img/arrow.png");
-    cursor.style.margin = "0";
-    cursor.style.padding = "0";
-    let point = 0;
-    document.getElementById("sel" + (point + diff)).appendChild(cursor);
-    window.onkeydown = (e) => {
-      document.getElementById("sel" + (point + diff)).innerHTML = "";
-      switch (e.key) {
-        case "ArrowUp":
-          point = (point + endPoint - 1) % endPoint;
-          break;
-
-        case "ArrowDown":
-          point = (point + 1) % endPoint;
-          break;
-
-        case "Enter":
-          window.location.href = moveToList[point + diff];
-          break;
-      }
-      document.getElementById("sel" + (point + diff)).appendChild(cursor);
     }
   }
 </script>
@@ -186,37 +155,31 @@
   <table>
     <tbody>
       <tr>
-        <td id="sel0"></td>
         <td id="ref0">
           <img src="img/login.png">
         </td>
       </tr>
       <tr>
-        <td id="sel1"></td>
         <td id="ref1">
           <img src="img/signin.png">
         </td>
       </tr>
       <tr>
-        <td id="sel2"></td>
         <td id="ref2">
           <img src="img/selectmode.png">
         </td>
       </tr>
       <tr>
-        <td id="sel3"></td>
         <td id="ref3">
           <img src="img/storymode.png">
         </td>
       </tr>
       <tr>
-        <td id="sel4"></td>
         <td id="ref4">
           <img src="img/config.png">
         </td>
       </tr>
       <tr>
-        <td id="sel5"></td>
         <td id="ref5">
           Coming soon...
         </td>
