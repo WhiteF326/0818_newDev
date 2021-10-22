@@ -30,7 +30,9 @@ class Body {
     if (!this.lastStep) this.lastStep = defaultStep;
     document.getElementById("step").innerText =
       "残り歩数 : " + (this.lastStep - 1);
-
+    document.getElementById("step").style.fontFamily = "cursive";
+    document.getElementById("step").style.textShadow = "1px 1px 1px white";
+    document.getElementById("step").style.color = "darkslategray";
     // スイッチ情報の管理
     this.doorPos = [[], [], [], [], []];
     let firstSwitchs = [0, 0, 0, 0, 0];
@@ -219,6 +221,9 @@ class Body {
     );
     if (stepSpend) {
       this.lastStep--;
+      if (this.lastStep <= 11) {
+        document.getElementById("step").style.color = "crimson";
+      }
       if (!this.lastStep) {
         const modal = document.getElementsByClassName("fmodalback")[0];
         modal.style.transition = "1s";
