@@ -185,7 +185,7 @@ class Body {
   repairCursor = (y, x) => {
     if (this.map[y][x] === 4) {
       this.param[y][x]++;
-      repairSound.currentTime=0;
+      repairSound.currentTime = 0;
       repairSound.volume = this.settings["sfx_volume"] / 100;
       repairSound.play();
     }

@@ -55,7 +55,7 @@ const destroySoundBase = 0.5;
 
 //こわれるゆか修復音
 const repairSound= new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/repair.mp3");
-const repairSoundBase = 0.5;
+const repairSoundBase = 0.1;
 
 // 配置音
 const putSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/put.mp3");
