@@ -171,7 +171,8 @@ switch(explode("/", $path)[1]){
         }
 
         $sql = "insert into users values(
-          :id, :name, :pass, 0, current_timestamp()
+          :id, :name, :pass, 0, current_timestamp(),
+          50, 50, 3
         )";
         $stm = $pdo->prepare($sql);
         $stm->bindValue(":id", $uid);
