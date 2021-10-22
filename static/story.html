@@ -71,7 +71,7 @@
           "userid": localStorage.getItem("userid")
         });
         window.location.href = "./story/game.php?" +
-          "&clear=yes&userid=" + localStorage.getItem("userid");
+          "&clear=continue&userid=" + localStorage.getItem("userid");
       }
       document.getElementById("ref0").onclick = async () => await cont();
       document.getElementById("select1").onclick = async () => await cont();

@@ -296,7 +296,7 @@ switch(explode("/", $path)[1]){
         $stm->execute();
         $progress = $stm->fetchAll(PDO::FETCH_ASSOC);
         $progNo = $progress[0]["story_progress"];
-        $sql = "update users set story_progress = ". (intval($progNo) - 1)
+        $sql = "update users set story_progress = ". (intval($progNo))
           . " where id = :id";
         $stm = $pdo->prepare($sql);
         $stm->bindValue(":id", $uid);

@@ -30,9 +30,6 @@ try {
       $serif[] = explode(",", $row["file"]);
       $imgPath = $row["back_img"];
     }
-    $sql = "UPDATE users SET story_progress = $questionNo where id = \"$userid\"";
-    $pdo->query($sql);
-    $questionNo++;
   } else {
     //不正解のとき
     //sql文作成
@@ -177,7 +174,6 @@ $js_array = json_encode($serif);
         }
       };
       btnDiv.appendChild(hbtn);
-
     }
 
     //phpからセリフの配列受け取り

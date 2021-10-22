@@ -41,8 +41,15 @@ require_once("./../../settings/env.php");
   // クリア判定
   if ($_GET["clear"] == "yes") {
     $_SESSION["clear"] = true;
-  } else {
+    $sql = "UPDATE users SET story_progress = " . ($_SESSION["questionNo"] + 1)
+      . " where id = \"" . $_GET["userid"] . "\"";
+    $pdo->query($sql);
+  } else if($_GET["clear"] == "no"){
     $_SESSION["clear"] = false;
+  } else{
+    // continue
+    $_SESSION["clear"] = true;
+    $_SESSION["questionNo"]--;
   }
 
   // ユーザー情報を転送
