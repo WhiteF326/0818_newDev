@@ -93,7 +93,6 @@ class EditorBody {
     const costList = document.getElementById("costList");
     Object.keys(defaultCost).forEach(blockId => {
       const r = document.createElement("tr");
-
       const blockName = progListText[blockId];
       const nameCell = document.createElement("td");
       nameCell.appendChild(document.createTextNode(blockName));
