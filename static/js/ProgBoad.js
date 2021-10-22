@@ -32,10 +32,14 @@ class ProgBoad {
       document.getElementById("cost").innerText = makeCostText(
         cost, gameBody.mapinfo["maxCost"]
       );
+      document.getElementById("cost").style.fontFamily = "cursive";
+      document.getElementById("cost").style.textShadow="1px 1px 1px white";
+      document.getElementById("cost").style.borderBlockEndStyle="dashed";
+      document.getElementById("cost").style.borderBlockColor="grey";
       if (cost > gameBody.mapinfo["maxCost"]) {
         document.getElementById("cost").style.color = "Red";
       } else {
-        document.getElementById("cost").style.color = "Black";
+        document.getElementById("cost").style.color = "black";
       }
     }
 
