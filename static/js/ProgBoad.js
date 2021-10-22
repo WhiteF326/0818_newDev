@@ -149,6 +149,8 @@ class ProgBoad {
             // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
             break;
           case "sensor_foot_floor":
+            repairSound.currentTime=0;
+            repairSound.play();
             judge = this.gameBody.sensor_foot([1]);
             // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
             break;
