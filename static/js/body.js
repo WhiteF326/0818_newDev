@@ -1,9 +1,10 @@
 let moving = false;
 
 import { fetchJSON } from './fetchP.js';
+import { ResultScoreText } from './ResultScoreText.js';
 
 class Body {
-  constructor(mapinfo, settings) {
+  constructor(mapinfo, settings, scoreTable) {
     // ユーザ設定の取得
     this.settings = settings;
     // マップ情報の取得
@@ -132,7 +133,15 @@ class Body {
 
     this.maptileGoal = new Chip('./img/goal.png');
 
+    this.progBoad = null;
+    this.score = 0;
+    this.scoreTable = scoreTable;
+
     this.render();
+  }
+
+  assignProgBoad = (progBoad) => {
+    this.progBoad = progBoad;
   }
 
   cMove = (y, x) => {
@@ -159,7 +168,6 @@ class Body {
   }
 
   sensor_foot = (targ) => {
-    console.log(this.map[this.futureCursorY][this.futureCursorX]);
     return contains(targ, this.map[this.futureCursorY][this.futureCursorX]);
   }
 
@@ -264,6 +272,50 @@ class Body {
       const modal = document.getElementsByClassName("modalback")[0];
       modal.style.transition = "1s";
       modal.style.width = "85%";
+      // 残り歩数
+      const lastStep = this.lastStep - 1;
+      // 残りコスト
+      const lastCost = this.progBoad.calculateLastCost();
+      // ブロック数 * 3 の減点
+      const progXML = this.progBoad.getXML();
+      let baseArr = [];
+      for (let i = 0; i < progXML.length; i++) {
+        baseArr[i] = i;
+      }
+      const blockCnt
+        = baseArr.map(i => progXML.substr(i, 6) === "/block")
+          .reduce((a, b) => a + b) - 1;
+      // destroy, create, repair
+      const dcrCnt
+        = baseArr.map(i => {
+          if (
+            progXML.substr(i, 7) === "destroy"
+            || progXML.substr(i, 6) === "create"
+            || progXML.substr(i, 6) === "repair"
+          ) {
+            return 1;
+          } else {
+            return 0;
+          }
+        }).reduce((a, b) => a + b);
+      const repeatSum
+        = Array.from(
+          new DOMParser().parseFromString(progXML, "text/xml")
+            .getElementsByName("REPEATAMOUNT")
+        ).map(r => Number(r.innerHTML))
+          .reduce((a, b) => (a + b));
+      // スコア
+      this.score = lastStep * lastCost - 3 * blockCnt - dcrCnt - repeatSum;
+      // スコア計算式を表示
+      document.getElementById("scoreFormula").innerText = "";
+      if (localStorage.getItem("gameEnabled") === "free") {
+        const formula = document.getElementById("scoreFormula");
+        formula.appendChild(
+          ResultScoreText(
+            lastStep, lastCost, blockCnt, dcrCnt, repeatSum, this.scoreTable
+          )
+        );
+      }
     }
 
     if (moving) {
@@ -421,9 +473,12 @@ window.onload = async () => {
   const settings = JSON.parse(await fetchJSON("api/user/settings/read", {
     "userid": localStorage.getItem("userid"),
   }))[0];
-  const gameBody = new Body(mapinfo, settings);
+  const scoreTable = await (await fetch("./ScoreTable.html")).text();
+  console.log(scoreTable)
+  const gameBody = new Body(mapinfo, settings, scoreTable);
 
   const progBoad = new ProgBoad(gameBody);
+  gameBody.assignProgBoad(progBoad);
   const stageNo = localStorage.getItem("selectedStage");
   if (localStorage.getItem("savedProgram" + stageNo)
     && localStorage.getItem("gameEnabled") === "free") {
@@ -437,46 +492,16 @@ window.onload = async () => {
   const modal = document.getElementsByClassName("modalback")[0];
   modal.addEventListener("click", async () => {
     modal.setAttribute("style", "width: 0%");
+    modal.style.fontSize = "0px";
     if (localStorage.getItem("gameEnabled") === "free") {
-      // 残り歩数
-      const lastStep = gameBody.lastStep - 1;
-      // 残りコスト
-      const lastCost = progBoad.calculateLastCost();
-      // ブロック数 * 3 の減点
-      const progXML = progBoad.getXML();
-      let baseArr = [];
-      for(let i = 0; i < progXML.length; i++){
-        baseArr[i] = i;
-      }
-      const blockCnt
-        = baseArr.map(i => progXML.substr(i, 6) === "/block")
-        .reduce((a, b) => a + b) - 1;
-      // destroy, create, repair
-      const dcrCnt
-        = baseArr.map(i => {
-          if(
-            progXML.substr(i, 7) === "destroy"
-            || progXML.substr(i, 6) === "create"
-            || progXML.substr(i, 6) === "repair"
-          ){
-            return 1;
-          }else{
-            return 0;
-          }
-        }).reduce((a, b) => a + b);
-      const repeatSum
-        = Array.from(
-          new DOMParser().parseFromString(progXML, "text/xml")
-          .getElementsByName("REPEATAMOUNT")
-        ).map(r => Number(r.innerHTML))
-        .reduce((a, b) => (a + b));
-      // スコア
-      const score = lastStep * lastCost - 3 * blockCnt - dcrCnt - repeatSum;
+      document.getElementsByClassName("scoreTable")[0].style.fontSize = "0px";
+      document.getElementsByClassName("scoreTable")[0].style.opacity = "0%";
+      document.getElementById("yj").style.width = "0";
       await fetchJSON("api/stage/clear", {
         "userid": localStorage.getItem("userid"),
         "stagename": localStorage.getItem("selectedStage"),
         "cost": progBoad.costCalculate(),
-        "score": score
+        "score": gameBody.score
       });
       setInterval(() => {
         window.location.href = "freeStageSelect.html";

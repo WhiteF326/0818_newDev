@@ -123,7 +123,7 @@
   .right {
     float: right;
   }
-  
+
   .blocklyComputeCanvas {
     display: none;
     position: relative;
@@ -140,6 +140,8 @@
     height: 100%;
     width: 0%;
     margin: 0 auto;
+    font-size: 0px;
+    text-align: center;
   }
 
   .modal {
@@ -235,6 +237,46 @@
     position: absolute;
     display: inline;
   }
+
+  .plus {
+    color: blue;
+  }
+
+  .minus {
+    color: red;
+  }
+
+  .scoreTable {
+    margin-top: 50px;
+    transform: translateY(50px);
+    transition: 0.5s;
+    font-size: 16px;
+    opacity: 100%;
+  }
+
+  .scoreTable tbody td,
+  .scoreTable tbody th {
+    border: solid 2px #808080;
+    padding: 2px;
+  }
+
+  .center {
+    text-align: center;
+  }
+
+  .tRight {
+    text-align: right;
+  }
+
+  .finalCell{
+    font-size: 3em;
+    color: #322e32;
+    height: 3em;
+  }
+
+  .bigScore{
+    font-size: 1.5em;
+  }
 </style>
 
 <script>
@@ -275,7 +317,8 @@
   </div>
   <div class="modalback">
     <div class="modal">
-      <img src="img/stageclear_take.png" id="yj">
+      <img src="img/stageclear_take.png" id="yj"><br>
+      <span id="scoreFormula">ここにスコア計算式を挿入</span>
     </div>
   </div>
   <div class="fmodalback">

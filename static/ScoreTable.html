@@ -1,0 +1,38 @@
+<table class="scoreTable">
+  <caption>今回のスコア</caption>
+  <tr>
+    <th class="center">区分け</th>
+    <th class="center">総合スコア</th>
+    <th>要素</th>
+    <th>スコア</th>
+  </tr>
+  <tr>
+    <td rowspan="2">基本スコア<br><br><span class="plus">プラス</span></td>
+    <td rowspan="2" id="baseScoreCell" class="center bigScore plus"></th>
+    <td>残りコスト</td>
+    <td id="costCell" class="tRight"></td>
+  </tr>
+  <tr>
+    <td>残り歩数</td>
+    <td id="stepCell" class="tRight"></td>
+  </tr>
+  <tr>
+    <td rowspan="3">減点<br><br><span class="minus">マイナス</span></td>
+    <td rowspan="3" id="penaltyCell" class="center bigScore minus"></td>
+    <td>配置したブロックの数 × 3</td>
+    <td id="blockCountCell" class="tRight"></td>
+  </tr>
+  <tr>
+    <td>黄色、緑色ブロックの数</td>
+    <td id="dcrCountCell" class="tRight"></td>
+  </tr>
+  <tr>
+    <td>ループ回数の合計</td>
+    <td id="loopCell" class="tRight"></td>
+  </tr>
+  <tr>
+    <td>最終スコア</td>
+    <td id="finalCell" class="finalCell center"></td>
+    <td colspan="2">基本スコア - 減点スコア</td>
+  </tr>
+</table>
