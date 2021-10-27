@@ -56,7 +56,6 @@ require_once("./../../settings/env.php");
   $_SESSION["userid"] = $_GET["userid"];
   // ヒントを転送
   $_SESSION["hinttext"] = $_GET["hinttext"];
-  var_dump($_GET);
   ?>
   <script>
     // 飛ばす

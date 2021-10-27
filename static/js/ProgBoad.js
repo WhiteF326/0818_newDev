@@ -193,4 +193,14 @@ class ProgBoad {
       )
     );
   }
+
+  calculateLastCost = () => {
+    return this.gameBody.mapinfo["maxCost"] - this.costCalculate();
+  }
+
+  getXML = () => {
+    return Blockly.Xml.domToPrettyText(
+      Blockly.Xml.workspaceToDom(this.workspace)
+    );
+  }
 }

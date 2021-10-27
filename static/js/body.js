@@ -438,10 +438,45 @@ window.onload = async () => {
   modal.addEventListener("click", async () => {
     modal.setAttribute("style", "width: 0%");
     if (localStorage.getItem("gameEnabled") === "free") {
+      // 残り歩数
+      const lastStep = gameBody.lastStep - 1;
+      // 残りコスト
+      const lastCost = progBoad.calculateLastCost();
+      // ブロック数 * 3 の減点
+      const progXML = progBoad.getXML();
+      let baseArr = [];
+      for(let i = 0; i < progXML.length; i++){
+        baseArr[i] = i;
+      }
+      const blockCnt
+        = baseArr.map(i => progXML.substr(i, 6) === "/block")
+        .reduce((a, b) => a + b) - 1;
+      // destroy, create, repair
+      const dcrCnt
+        = baseArr.map(i => {
+          if(
+            progXML.substr(i, 7) === "destroy"
+            || progXML.substr(i, 6) === "create"
+            || progXML.substr(i, 6) === "repair"
+          ){
+            return 1;
+          }else{
+            return 0;
+          }
+        }).reduce((a, b) => a + b);
+      const repeatSum
+        = Array.from(
+          new DOMParser().parseFromString(progXML, "text/xml")
+          .getElementsByName("REPEATAMOUNT")
+        ).map(r => Number(r.innerHTML))
+        .reduce((a, b) => (a + b));
+      // スコア
+      const score = lastStep * lastCost - 3 * blockCnt - dcrCnt - repeatSum;
       await fetchJSON("api/stage/clear", {
         "userid": localStorage.getItem("userid"),
         "stagename": localStorage.getItem("selectedStage"),
-        "cost": progBoad.costCalculate()
+        "cost": progBoad.costCalculate(),
+        "score": score
       });
       setInterval(() => {
         window.location.href = "freeStageSelect.html";
