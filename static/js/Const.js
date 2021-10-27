@@ -45,21 +45,25 @@ const jumpSoundBase = 0.5;
 const switchSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/switch.mp3");
 const switchSoundBase = 1;
 
-//こわれるゆか崩れ音
+// こわれるゆか崩れ音
 const rubbleSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/rubble.mp3");
 const rubbleSoundBase = 1;
+
+// こわれるゆか修復音
+const repairSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/repair.mp3");
+const repairSoundBase = 0.5;
 
 //破壊音
 const destroySound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/destroy.mp3");
 const destroySoundBase = 0.5;
 
-//こわれるゆか修復音
-const repairSound= new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/repair.mp3");
-const repairSoundBase = 0.1;
-
 // 配置音
 const putSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/put.mp3");
 const putSoundBase = 1;
+
+//ステージクリア音
+const stageClearSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/stageclear.mp3");
+const stageClearSoundBase = 1;
 
 // 選択音
 const selectSound = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/select.mp3");

@@ -66,7 +66,7 @@ Blockly.defineBlocksWithJsonArray(
   },
   {
     'type': 'loop',
-    'message0': '%1 回繰り返し実行 %2 %3',
+    'message0': '%1 回くりかえし実行 %2 %3',
     'args0': [
       {
         'type': 'field_number',
@@ -88,7 +88,7 @@ Blockly.defineBlocksWithJsonArray(
     'previousStatement': null,
     'nextStatement': null,
     'colour': 180,
-    'tooltip': '中に含まれるブロックを繰り返し実行します。',
+    'tooltip': '中にふくまれるブロックをくりかえし実行します。',
     'helpUrl': '',
   },
   {
@@ -116,7 +116,7 @@ Blockly.defineBlocksWithJsonArray(
   },
   {
     "type": "sensor_loop",
-    "message0": "ループ %1 回目かそれより後である %2",
+    "message0": "くりかえし %1 回目かそれより後である %2",
     "args0": [
       {
         "type": "field_number",
@@ -131,7 +131,7 @@ Blockly.defineBlocksWithJsonArray(
     ],
     "output": "Boolean",
     "colour": 300,
-    "tooltip": "今回っているループが指定回数目かそれ以降ならば真を返します。",
+    "tooltip": "今回っているくりかえしのループが指定回数目かそれ以降ならば真を返します。",
     "helpUrl": ""
   },
   {
@@ -155,7 +155,7 @@ Blockly.defineBlocksWithJsonArray(
     'message0': '足元がゆかである',
     'output': 'Boolean',
     'colour': 300,
-    'tooltip': 'カーソルの真下が床ならば真を返します。',
+    'tooltip': 'カーソルの真下がゆかならば真を返します。',
     'helpUrl': '',
   },
   {

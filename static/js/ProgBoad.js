@@ -66,7 +66,7 @@ class ProgBoad {
         if (loopNumbers.reduce((p, c) => p + c) > 50) {
           // エラーで止まる
           runnable = false;
-          alert("ループ回数が多すぎます。");
+          alert("くりかえしのループ回数が多すぎます。");
         }
       }
       const illegalIf = [...code.matchAll("if[0-1]")];
@@ -149,8 +149,6 @@ class ProgBoad {
             // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
             break;
           case "sensor_foot_floor":
-            repairSound.currentTime=0;
-            repairSound.play();
             judge = this.gameBody.sensor_foot([1]);
             // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
             break;
