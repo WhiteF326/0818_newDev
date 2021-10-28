@@ -100,13 +100,14 @@ switch(explode("/", $path)[1]){
         $cost = $prm["cost"];
         $score = $prm["score"];
         $sql = "insert into freemode_results values(
-          null, :uid, :stagename, :score, :cost, null, current_timestamp(), 0
+          null, :uid, :stagename, :score, :cost, :program, current_timestamp(), 0
         )";
         $stm = $pdo->prepare($sql);
         $stm->bindValue(":uid", $uid);
         $stm->bindValue(":stagename", $stageName);
         $stm->bindValue(":cost", $cost);
         $stm->bindValue(":score", $score);
+        $stm->bindValue(":program", $prm["program"]);
         $result = $stm->execute();
 
         echo json_encode($result);

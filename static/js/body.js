@@ -506,7 +506,8 @@ window.onload = async () => {
         "userid": localStorage.getItem("userid"),
         "stagename": localStorage.getItem("selectedStage"),
         "cost": progBoad.costCalculate(),
-        "score": gameBody.score
+        "score": gameBody.score,
+        "program": progBoad.getXML()
       });
       setInterval(() => {
         window.location.href = "freeStageSelect.html";
