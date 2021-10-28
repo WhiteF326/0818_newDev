@@ -1,26 +1,26 @@
-����m�F��
-[�g�p�u���E�U]
-�EGoogle Chrome 92 �ȍ~
-�EMozilla Firefox 78 �ȍ~
-�EMicrosoft Edge 89 �ȍ~
-�EAndroid Chrome 92 �ȍ~
+動作確認環境
+[使用ブラウザ]
+・Google Chrome 92 以降
+・Mozilla Firefox 78 以降
+・Microsoft Edge 89 以降
+・Android Chrome 92 以降
 [OS]
-�EMicrosoft Windows 10, 11 (64bitOS)
-�EMac OS 11.0 �ȏ�
-�EAndroid 7.0 �ȏ�
-[���\]
-CPU Intel i5 ��l����܂��͂���ȏ�
-RAM 2GB �ȏ�
-��ʉ𑜓x 1080x720 �ȏ�
+・Microsoft Windows 10, 11 (64bitOS)
+・Mac OS 11.0 以上
+・Android 7.0 以上
+[性能]
+CPU Intel i5 第四世代またはそれ以上
+RAM 2GB 以上
+画面解像度 1080x720 以上
 
 
-������
-[�g�p�u���E�U]
-�EGoogle Chrome �ŐV��
-�EMicrosoft Edge �ŐV��
+推奨環境
+[使用ブラウザ]
+・Google Chrome 最新版
+・Microsoft Edge 最新版
 [OS]
-�EMicrosoft Windows 10, 11
-[���\]
-CPU Intel i5 ��Z����܂��͂���ȏ�
-RAM 4GB �ȏ�
-��ʉ𑜓x 1280x720 (HD) �ȏ�
+・Microsoft Windows 10, 11
+[性能]
+CPU Intel i5 第六世代またはそれ以上
+RAM 4GB 以上
+画面解像度 1280x720 (HD) 以上

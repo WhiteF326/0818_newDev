@@ -1,0 +1,1 @@
+ALTER TABLE `freemode_results` ADD `program` TEXT NULL AFTER `cost`;
