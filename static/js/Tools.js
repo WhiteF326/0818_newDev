@@ -66,6 +66,6 @@ const retColor = (p, e, d) => {
 }
 
 const retTextColor = (p, e, d) => {
-  if(hues(p, e) >= 40 && hues(p, e) <= 80) return "#000000";
+  if(hues(p, e) >= 40 && hues(p, e) <= 110) return "#000000";
   return "#FFFFFF";
 }

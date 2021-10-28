@@ -14,7 +14,7 @@
 <script type="module">
   import { fetchJSON } from './js/fetchP.js';
   window.onload = async () => {
-    if(localStorage.getItem("userid") === ""){
+    if (localStorage.getItem("userid") === "") {
       window.location.href = "accountError.html";
     }
     localStorage.getItem("gameEnabled") === "false"
@@ -94,11 +94,18 @@
             )
           ));
         }
+        const slip = String(Math.max(
+          ...cleared.filter(elm => elm.stagename == Number(stages[ptr]))
+            .map(elm => elm.score)
+        )).length;
+        const slipPx = [35, 35, 35, 35, 5, 5, 0][slip]
         clearedText.setAttribute(
-          "style", "transform: translateY(35px); float: right; "
+          "style", "transform: translateY(" + slipPx + "px); float: right; "
         + "text-align: right; font-size: 0.8em;"
         );
-        clearedText.style.color = "white";
+        clearedText.style.color = retTextColor(
+          Math.floor(ptr / 8), Math.ceil(stages.length / 8), ptr % 8
+        );
         tile.appendChild(clearedText);
         tile.style.padding = "5px";
 
