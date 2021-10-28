@@ -8,6 +8,7 @@
   <title>トップ画面</title>
   <link rel="stylesheet" href="css/destyle.css" type="text/css">
   <link rel="stylesheet" href="css/sakura.css" type="text/css">
+  <link rel="stylesheet" href="css/message.css" type="text/css">
   <style>
     img {
       display: flexbox;
@@ -93,12 +94,17 @@
       color: black;
       display: block;
       height: fit-content;
+      max-width: 30%;
     }
 
     body {
       background-color: #eafcfa;
       height: 10%;
-      width: 30%;
+    }
+
+    .main {
+      margin: auto;
+      max-width: 30%;
     }
 
     .left {
@@ -115,6 +121,8 @@
     }
   </style>
 </head>
+
+<script type="text/javascript" src="js/OperatorMessage.js"></script>
 
 <script>
   window.onload = () => {
@@ -152,42 +160,44 @@
 <script type="text/javascript" src="js/AccountStatus.js"></script>
 
 <body>
-  <h1><img src="img/blocklun_logo.png"></h1>
-  <table>
-    <tbody>
-      <tr>
-        <td id="ref0">
-          <img src="img/login.png">
-        </td>
-      </tr>
-      <tr>
-        <td id="ref1">
-          <img src="img/signin.png">
-        </td>
-      </tr>
-      <tr>
-        <td id="ref2">
-          <img src="img/selectmode.png">
-        </td>
-      </tr>
-      <tr>
-        <td id="ref3">
-          <img src="img/storymode.png">
-        </td>
-      </tr>
-      <tr>
-        <td id="ref4">
-          <img src="img/config.png">
-        </td>
-      </tr>
-      <tr>
-        <td id="ref5">
-          Coming soon...
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="account-info" id="accountInfo"></div>
+  <div class="main">
+    <h1><img src="img/blocklun_logo.png"></h1>
+    <table>
+      <tbody>
+        <tr>
+          <td id="ref0">
+            <img src="img/login.png">
+          </td>
+        </tr>
+        <tr>
+          <td id="ref1">
+            <img src="img/signin.png">
+          </td>
+        </tr>
+        <tr>
+          <td id="ref2">
+            <img src="img/selectmode.png">
+          </td>
+        </tr>
+        <tr>
+          <td id="ref3">
+            <img src="img/storymode.png">
+          </td>
+        </tr>
+        <tr>
+          <td id="ref4">
+            <img src="img/config.png">
+          </td>
+        </tr>
+        <tr>
+          <td id="ref5">
+            Coming soon...
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="account-info" id="accountInfo"></div>
+  </div>
 </body>
 
 </html>

@@ -1,0 +1,34 @@
+#message {
+  position: absolute;
+  top: 0%;
+  right: 0%;
+  margin: 50px;
+  width: fit-content;
+}
+
+#message td {
+  border: 0;
+}
+
+#message img {
+  width: 72px;
+}
+
+.msgmodal {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0%;
+  right: 0%;
+  background-color: rgba(240, 240, 240, 0.9);
+  opacity: 0%;
+  transition: 1s;
+  transition-property: opacity;
+  z-index: -10000;
+  text-align: center;
+}
+
+.textBody{
+  margin-top: auto;
+  margin-bottom: auto;
+}
