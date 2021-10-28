@@ -298,12 +298,17 @@ class Body {
             return 0;
           }
         }).reduce((a, b) => a + b);
-      const repeatSum
-        = Array.from(
-          new DOMParser().parseFromString(progXML, "text/xml")
-            .getElementsByName("REPEATAMOUNT")
-        ).map(r => Number(r.innerHTML))
-          .reduce((a, b) => (a + b));
+      let repeatCalc = 0;
+      try{
+        repeatCalc
+          = Array.from(
+            new DOMParser().parseFromString(progXML, "text/xml")
+              .getElementsByName("REPEATAMOUNT")
+          ).map(r => Number(r.innerHTML))
+            .reduce((a, b) => (a + b));
+      }catch{
+      }
+      const repeatSum = repeatCalc;
       // スコア
       this.score = lastStep * lastCost - 3 * blockCnt - dcrCnt - repeatSum;
       // スコア計算式を表示
