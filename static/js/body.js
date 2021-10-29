@@ -239,6 +239,10 @@ class Body {
         const modal = document.getElementsByClassName("fmodalback")[0];
         modal.style.transition = "1s";
         modal.style.width = "85%";
+        Array.from(document.getElementsByClassName("failed")).forEach(r => {
+          r.style.display = "unset";
+          r.style.width = "100px";
+        });
         moving = false;
       }
     }
@@ -525,12 +529,9 @@ window.onload = async () => {
 
   const fmodal = document.getElementsByClassName("fmodalback")[0];
   fmodal.addEventListener("click", async () => {
-    fmodal.setAttribute("style", "width: 0%");
     if (localStorage.getItem("gameEnabled") === "free") {
-      setInterval(() => {
-        window.location.href = "freeStageSelect.html";
-      }, 1000);
     } else {
+      fmodal.setAttribute("style", "width: 0%");
       setInterval(() => {
         window.location.href = "./story/game.php?" +
           "&clear=no&userid=" + localStorage.getItem("userid") +

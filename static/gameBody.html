@@ -181,6 +181,7 @@
     margin: 0 auto;
     top: 50%;
     transform: translateY(-50%);
+    text-align: center;
   }
 
   .smodalback {
@@ -286,6 +287,16 @@
   .bigScore{
     font-size: 1.5em;
   }
+
+  .failed{
+    width: 0px;
+    display: none;
+    height: 100px;
+  }
+
+  .failed+.failed{
+    margin-left: 100px;
+  }
 </style>
 
 <script>
@@ -336,6 +347,8 @@
   <div class="fmodalback">
     <div class="fmodal">
       <img src="img/stagefailed_take.png">
+      <button id="failedRetry" class="failed" onclick="location.reload()">リトライ</button>
+      <button id="failedRetire" class="failed" onclick='location.href="freeStageSelect.html"'>諦める</button>
     </div>
   </div>
   <div class="smodalback">
