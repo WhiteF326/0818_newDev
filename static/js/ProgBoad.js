@@ -86,9 +86,7 @@ class ProgBoad {
         this.gameBody.endFlg = true;
         document.getElementById("move").disabled = true;
         document.getElementById("help").disabled = true;
-        Array.from(document.getElementsByTagName("input")).forEach(r => {
-          r.disabled = true;
-        });
+        document.getElementById("backToTop").disabled = true;
         document.getElementById("blocklyDiv").disabled = true;
       }
     }

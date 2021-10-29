@@ -11,3 +11,12 @@ const progListText = {
   "sensor_foot_floor": "足元がゆか",
   "sensor_foot_colp": "足元がこわれるゆか"
 };
+
+const progListSymbol={
+  "move": "../img/symbol_move.png",
+  "destroy": "../img/symbol_destroy.png",
+  "create": "../img/symbol_destroy.png",
+  "repair": "../img/symbol_destroy.png",
+  "loop": "../img/symbol_loop.png",
+  "if": "../img/symbol_if.png",
+}
