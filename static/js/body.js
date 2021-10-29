@@ -557,10 +557,8 @@ window.onload = async () => {
     titleText.innerText = "ステージ" + stageNo;
     smodal.appendChild(titleText);
   }
-  const frontText = mapinfo["message"] || "Not yet";
-  smodal.appendChild(
-    document.createTextNode(frontText)
-  );
+  const frontText = mapinfo["message"].replace("\n", "<br>") || "Not yet";
+  smodal.innerHTML += frontText;
   setTimeout(() => {
     smodalback.style.height = "100%";
     smodalback.style.transform = "translateY(0%)";
