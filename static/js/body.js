@@ -455,7 +455,6 @@ window.onload = async () => {
 
   if (localStorage.getItem("gameEnabled") === "story") {
     document.getElementById("retry").remove();
-    document.getElementById("backToSelect").remove();
   } else {
     document.getElementById("retry").addEventListener("click", () => {
       progBoad.save();
