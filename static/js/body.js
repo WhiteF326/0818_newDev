@@ -310,7 +310,7 @@ class Body {
       }
       const repeatSum = repeatCalc;
       // スコア
-      this.score = lastStep * lastCost - 3 * blockCnt - dcrCnt - repeatSum;
+      this.score = lastStep * lastCost - 15 * blockCnt - 12 * dcrCnt - 2 * repeatSum;
       // スコア計算式を表示
       document.getElementById("scoreFormula").innerText = "";
       if (localStorage.getItem("gameEnabled") === "free") {
