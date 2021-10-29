@@ -457,6 +457,7 @@ window.onload = async () => {
     document.getElementById("retry").remove();
     document.getElementById("backToSelect").remove();
   } else {
+    document.getElementById("backToTop").remove();
     document.getElementById("retry").addEventListener("click", () => {
       progBoad.save();
       location.reload();
