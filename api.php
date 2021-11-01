@@ -310,4 +310,32 @@ switch(explode("/", $path)[1]){
     }
     break;
   }
+
+  case "ranking": {
+    switch (explode("/", $path)[2]) {
+      case "user": {
+        $uid = $prm["userid"];
+        $stageNo = $prm["stageNo"] + 1;
+        $sql = "select * from freemode_results
+          where userid = :id and stagename = :stagename and score =
+            (
+              select max(score) from freemode_results
+              where userid = :id and stagename = :stagename
+              and date >= \"2021/10/29 11:04:00\"
+            )
+          and date >= \"2021/10/29 11:04:00\"
+          order by cost asc, date desc
+          ";
+        $stm = $pdo->prepare($sql);
+        $stm->bindValue(":id", $uid);
+        $stm->bindValue(":stagename", $stageNo);
+        $stm->execute();
+        $result = $stm->fetchAll(PDO::FETCH_ASSOC);
+
+        echo json_encode($result);
+        break;
+      }
+    break;
+    }
+  }
 }
