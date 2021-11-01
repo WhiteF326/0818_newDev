@@ -59,6 +59,10 @@
     margin: 0;
   }
 
+  img[src$="img/decide_continue.png"] {
+    width: 300px;
+  }
+
   body {
     background-image: url("img/background.png");
     background-size: cover;
@@ -278,23 +282,47 @@
     text-align: right;
   }
 
-  .finalCell{
+  .finalCell {
     font-size: 3em;
     color: #322e32;
     height: 3em;
   }
 
-  .bigScore{
+  .bigScore {
     font-size: 1.5em;
   }
 
-  .failed{
-    width: 0px;
+  .failed {
+    
     display: none;
-    height: 100px;
+    margin: 0;
+    background: #2B8797;
+    align-items: flex-end;
   }
 
-  .failed+.failed{
+  .failed:hover {
+    display: none;
+    margin: 0;
+    background: #2B8797;
+    animation: floating 2s infinite;
+    align-items: flex-end;
+  }
+
+  @keyframes floating {
+    0% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-30px);
+    }
+
+    100% {
+      transform: translateY(0px);
+    }
+  }
+
+  .failed+.failed {
     margin-left: 100px;
   }
 </style>
@@ -346,9 +374,11 @@
   </div>
   <div class="fmodalback">
     <div class="fmodal">
-      <img src="img/stagefailed_take.png">
-      <button id="failedRetry" class="failed" onclick="location.reload()">リトライ</button>
-      <button id="failedRetire" class="failed" onclick='location.href="freeStageSelect.html"'>諦める</button>
+      <img src="img/stagefailed_take.png"><br><br>
+      <img src="img/decide_continue.png"><br>
+      <button id="failedRetry" class="failed" onclick="location.reload()"><img src="img/decide_retry.png"></button>
+      <button id="failedRetire" class="failed" onclick='location.href="freeStageSelect.html"'><img
+          src="img/decide_giveup.png"></button>
     </div>
   </div>
   <div class="smodalback">
