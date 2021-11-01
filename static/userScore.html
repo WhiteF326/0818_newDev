@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>トップ画面</title>
+  <link rel="stylesheet" href="css/destyle.css" type="text/css">
+  <link rel="stylesheet" href="css/sakura.css" type="text/css">
+  <link rel="stylesheet" href="css/message.css" type="text/css">
+  <style>
+    a {
+      color: #1e2c32;
+      text-decoration: none !important;
+    }
+
+    a:hover {
+      color: #701616;
+      text-decoration: none !important;
+    }
+
+    .account-info {
+      position: absolute;
+      bottom: 0;
+      background-color: #ffffff3a;
+      color: black;
+      display: block;
+      height: fit-content;
+      max-width: 100%;
+    }
+
+    body {
+      background-color: #eafcfa;
+    }
+  </style>
+</head>
+<script type="text/javascript" src="js/AccountStatus.js"></script>
+
+<script type="module">
+  import { fetchJSON } from './js/fetchP.js';
+  window.onload = async () => {
+    const prms = new URL(window.location.href).searchParams;
+
+    const stage = prms.get("stage") || 14;
+    document.getElementById("stageName").innerText
+      = String(Math.floor(stage / 8) + 1) + "-" + String((stage % 8) + 1);
+
+    const score = JSON.parse(
+      await fetchJSON("api/ranking/user", {
+        "userid": localStorage.getItem("userid"),
+        "stageNo": stage
+      })
+    )[0];
+
+    document.getElementById("score").innerText += score["score"];
+    document.getElementById("cost").innerText += score["cost"];
+    document.getElementById("date").innerText += score["date"];
+
+    console.log(score);
+  }
+</script>
+
+<body>
+  <h2>自分のスコア</h2>
+  <hr>
+  <h2 id="stageName">1-1</h2>
+  <h3 id="score">スコア：</h3>
+  <h3 id="cost">コスト：</h3>
+  <h3 id="date">日時：</h3>
+</body>
+
+</html>

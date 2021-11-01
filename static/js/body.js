@@ -4,7 +4,7 @@ import { fetchJSON } from './fetchP.js';
 import { ResultScoreText } from './ResultScoreText.js';
 
 class Body {
-  constructor(mapinfo, settings, scoreTable) {
+  constructor(mapinfo, settings, scoreTable, chipName) {
     // ユーザ設定の取得
     this.settings = settings;
     // マップ情報の取得
@@ -76,7 +76,7 @@ class Body {
     this.endFrame = 3;
 
     // チップ情報の取得
-    this.chipList = new ChipList();
+    this.chipList = new ChipList(chipName);
 
     // キャラ描画位置の調整
     this.charaAuto.setPos(
@@ -303,14 +303,14 @@ class Body {
           }
         }).reduce((a, b) => a + b);
       let repeatCalc = 0;
-      try{
+      try {
         repeatCalc
           = Array.from(
             new DOMParser().parseFromString(progXML, "text/xml")
               .getElementsByName("REPEATAMOUNT")
           ).map(r => Number(r.innerHTML))
             .reduce((a, b) => (a + b));
-      }catch{
+      } catch {
       }
       const repeatSum = repeatCalc;
       // スコア
@@ -460,6 +460,17 @@ window.onload = async () => {
   if (localStorage.getItem("gameEnabled") === "story") {
     document.getElementById("retry").remove();
     document.getElementById("backToSelect").remove();
+    document.getElementById("failedRetire").setAttribute(
+      "onclick", 'location.href="index.html"'
+    );
+    document.getElementById("failedRetry").setAttribute(
+      "onclick", ''
+    );
+    document.getElementById("failedRetry").onclick = () => {
+      window.location.href = "./story/game.php?" +
+          "&clear=no&userid=" + localStorage.getItem("userid") +
+          "&hinttext=" + encodeURIComponent(mapinfo["hint"]);
+    }
   } else {
     document.getElementById("backToTop").remove();
     document.getElementById("retry").addEventListener("click", () => {
@@ -485,8 +496,37 @@ window.onload = async () => {
     "userid": localStorage.getItem("userid"),
   }))[0];
   const scoreTable = await (await fetch("./ScoreTable.html")).text();
-  console.log(scoreTable)
-  const gameBody = new Body(mapinfo, settings, scoreTable);
+  // ここを弄るとマップチップを変更可能
+  const chipName = localStorage.getItem("gameEnabled") === "free" ?
+    // フリーモード
+    [
+      ["map01.png"],
+      ["map02.png"],
+      ["map03.png"],
+      ["spring.png"],
+      ["board0.png", "board1.png", "board2.png", "board3.png"],
+      ["switch1.png", "switch2.png", "switch3.png", "switch4.png", "switch5.png"],
+      ["door_off1.png", "door_off2.png", "door_off3.png", "door_off4.png", "door_off5.png"],
+      ["pushed1.png", "pushed2.png", "pushed3.png", "pushed4.png", "pushed5.png"],
+      ["door_on1.png", "door_on2.png", "door_on3.png", "door_on4.png", "door_on5.png"],
+      ["avoidCreate.png"],
+      ["map02.png"]
+    ] :
+    // ストーリーモード
+    [
+      ["map01.png"],
+      ["map02.png"],
+      ["map03.png"],
+      ["spring.png"],
+      ["board0.png", "board1.png", "board2.png", "board3.png"],
+      ["switch1.png", "switch2.png", "switch3.png", "switch4.png", "switch5.png"],
+      ["door_off1.png", "door_off2.png", "door_off3.png", "door_off4.png", "door_off5.png"],
+      ["pushed1.png", "pushed2.png", "pushed3.png", "pushed4.png", "pushed5.png"],
+      ["door_on1.png", "door_on2.png", "door_on3.png", "door_on4.png", "door_on5.png"],
+      ["avoidCreate.png"],
+      ["map02.png"]
+    ];
+  const gameBody = new Body(mapinfo, settings, scoreTable, chipName);
 
   const progBoad = new ProgBoad(gameBody);
   gameBody.assignProgBoad(progBoad);
@@ -523,19 +563,6 @@ window.onload = async () => {
         window.location.href = "./story/game.php?" +
           "clear=yes&userid=" + localStorage.getItem("userid") +
           "&hinttext=none";
-      }, 1000);
-    }
-  });
-
-  const fmodal = document.getElementsByClassName("fmodalback")[0];
-  fmodal.addEventListener("click", async () => {
-    if (localStorage.getItem("gameEnabled") === "free") {
-    } else {
-      fmodal.setAttribute("style", "width: 0%");
-      setInterval(() => {
-        window.location.href = "./story/game.php?" +
-          "&clear=no&userid=" + localStorage.getItem("userid") +
-          "&hinttext=" + encodeURIComponent(mapinfo["hint"]);
       }, 1000);
     }
   });
