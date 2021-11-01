@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>トップ画面</title>
+  <link rel="stylesheet" href="css/destyle.css" type="text/css">
+  <link rel="stylesheet" href="css/sakura.css" type="text/css">
+  <link rel="stylesheet" href="css/message.css" type="text/css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js" integrity="sha512-GMGzUEevhWh8Tc/njS0bDpwgxdCJLQBWG3Z2Ct+JGOpVnEmjvNx6ts4v6A2XJf1HOrtOsfhv3hBKpK9kE5z8AQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <style>
+    a {
+      color: #1e2c32;
+      text-decoration: none !important;
+    }
+
+    a:hover {
+      color: #701616;
+      text-decoration: none !important;
+    }
+
+    .account-info {
+      position: absolute;
+      bottom: 0;
+      background-color: #ffffff3a;
+      color: black;
+      display: block;
+      height: fit-content;
+      max-width: 100%;
+    }
+
+    body {
+      background-color: #eafcfa;
+    }
+  </style>
+</head>
+
+<script type="module">
+  import { fetchJSON } from './js/fetchP.js';
+  window.onload = async () => {
+    const prms = new URL(window.location.href).searchParams;
+
+    const stage = prms.get("stage") || 0;
+    document.getElementById("stageName").innerText
+      = String(Math.floor(stage / 8) + 1) + "-" + String((stage % 8) + 1);
+
+    // どうにかする
+    const scores = JSON.parse(
+      await fetchJSON("api/ranking/all", {
+        "userid": localStorage.getItem("userid"),
+        "stageNo": stage
+      })
+    ).map(r => Number(r.score));
+
+    const low = Math.floor(Math.min(...scores) / 100) * 100;
+    const high = Math.ceil(Math.max(...scores) / 100) * 100;
+    
+    // 10 個の区間に分ける
+    const ranges
+      = (new Array(10)).fill(0).map((_, i) => 
+      [Math.floor(low + ((high - low) * i) / 10),
+      Math.floor(low + ((high - low) * (i  + 1)) / 10),
+      0]
+    );
+    // 区間に所属するデータの件数を検索する
+    const cnt = new Array(10).fill(0);
+    for(let i in scores){
+      const score = scores[i];
+      for(let i = 0; i < 10; i++){
+        if(ranges[i][0] <= score && score < ranges[i][1]){
+          ranges[i][2]++;
+        }
+      }
+    }
+    console.log(ranges);
+
+    const graph = new Chart(document.getElementById("graph"), {
+      type: "bar",
+      data: {
+        labels: ranges.map(r => String(r[0]) + "~" + String(r[1])),
+        datasets: [{
+          label: "人数",
+          data: ranges.map(r => r[2]),
+          backgroundColor: "rgba(122, 221, 210, 0.9)"
+        }],
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+        }
+      }
+    });
+    document.getElementById("graph").setAttribute("height", "150");
+  }
+</script>
+
+<body>
+  <h2>みんなのスコア</h2>
+  <hr>
+  <h2 id="stageName">1-1</h2>
+  <canvas id="graph" height="150"></canvas>
+</body>
+
+</html>

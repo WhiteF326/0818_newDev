@@ -335,6 +335,21 @@ switch(explode("/", $path)[1]){
         echo json_encode($result);
         break;
       }
+
+      case "all": {
+        $stageNo = $prm["stageNo"] + 1;
+        $sql = "select max(score) as score from freemode_results
+          where stagename = :stagename
+          and date >= \"2021/10/29 11:04:00\"
+          group by userid";
+        $stm = $pdo->prepare($sql);
+        $stm->bindValue(":stagename", $stageNo);
+        $stm->execute();
+        $result = $stm->fetchAll(PDO::FETCH_ASSOC);
+
+        echo json_encode($result);
+        break;
+      }
     break;
     }
   }
