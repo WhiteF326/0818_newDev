@@ -35,14 +35,13 @@
     }
   </style>
 </head>
-<script type="text/javascript" src="js/AccountStatus.js"></script>
 
 <script type="module">
   import { fetchJSON } from './js/fetchP.js';
   window.onload = async () => {
     const prms = new URL(window.location.href).searchParams;
 
-    const stage = prms.get("stage") || 14;
+    const stage = prms.get("stage") || 0;
     document.getElementById("stageName").innerText
       = String(Math.floor(stage / 8) + 1) + "-" + String((stage % 8) + 1);
 
@@ -53,11 +52,16 @@
       })
     )[0];
 
-    document.getElementById("score").innerText += score["score"];
-    document.getElementById("cost").innerText += score["cost"];
-    document.getElementById("date").innerText += score["date"];
-
-    console.log(score);
+    if(!score){
+      Array.from(document.getElementsByTagName("h3")).forEach(r => {
+        if(r.id !== "uncleared") r.remove();
+      });
+    }else{
+      document.getElementById("score").innerText += score["score"];
+      document.getElementById("cost").innerText += score["cost"];
+      document.getElementById("date").innerText += score["date"];
+      document.getElementById("uncleared").remove();
+    }
   }
 </script>
 
@@ -68,6 +72,7 @@
   <h3 id="score">スコア：</h3>
   <h3 id="cost">コスト：</h3>
   <h3 id="date">日時：</h3>
+  <h3 id="uncleared">未クリア</h3>
 </body>
 
 </html>

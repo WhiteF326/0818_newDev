@@ -74,6 +74,52 @@
 </head>
 <script type="text/javascript" src="js/AccountStatus.js"></script>
 
+<script type="module">
+  import { fetchJSON } from './js/fetchP.js';
+  let mode = "user";
+  window.onload = async () => {
+    const totalStage = (
+      JSON.parse(await fetchJSON("api/stage/all", {}))
+    ).length;
+    for(let i = 0; i < Math.ceil(totalStage / 8.0); i++){
+      const opt = document.createElement("option");
+      opt.setAttribute("value", String(i + 1));
+      opt.innerText = String(i + 1);
+      document.getElementById("first").appendChild(opt);
+    }
+    const mainFrame = document.getElementById("mainFrame");
+    document.getElementById("user").onclick = () => {
+      mode = "user";
+      const stageNo
+        = (Number(document.getElementById("first").value) - 1) * 8
+        + (Number(document.getElementById("second").value) - 1);
+      console.log(stageNo);
+      mainFrame.contentDocument.location.replace(
+        "userScore.html?stage=" + String(stageNo)
+      );
+    }
+    document.getElementById("grobal").onclick = () => {
+      mode = "global";
+    }
+    document.getElementById("choose").onclick = e => {
+      e.preventDefault();
+      switch (mode) {
+        case "user": {
+          const stageNo
+            = (Number(document.getElementById("first").value) - 1) * 8
+            + (Number(document.getElementById("second").value) - 1);
+          mainFrame.contentDocument.location.replace(
+            "userScore.html?stage=" + String(stageNo)
+          );
+        }
+        case "global": {
+          //
+        }
+      }
+    }
+  }
+</script>
+
 <body>
   <button onclick='location.href="index.html"'>トップに戻る</button>
   <h1>ランキング</h1>
@@ -81,11 +127,10 @@
   <div>
     <button id="user" class="pageSwitch">自分のスコア</button>
     <button id="grobal" class="pageSwitch sRight">みんなのスコア</button>
-    <select class="leftM">
-      <option value=1>1</option>
+    <select class="leftM" id="first">
     </select>
     -
-    <select>
+    <select id="second">
       <option value=1>1</option>
       <option value=2>2</option>
       <option value=3>3</option>
@@ -99,7 +144,7 @@
     <button id="choose">選択</button>
   </div>
   <hr>
-  <iframe src="userScore.html"></iframe>
+  <iframe src="userScore.html" id="mainFrame"></iframe>
   <div class="account-info" id="accountInfo"></div>
 </body>
 
