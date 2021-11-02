@@ -22,6 +22,8 @@ window.addEventListener("load", async () => {
     messageDOM.getElementById("readStatus").setAttribute(
       "src", "img/message_unread.png"
     );
+  }else{
+    messageDOM.getElementById("notificationMark").remove();
   }
 
   // ページへの追加
@@ -42,6 +44,7 @@ window.addEventListener("load", async () => {
     document.getElementById("readStatus").setAttribute(
       "src", "img/message.png"
     );
+    document.getElementById("notificationMark").remove();
   });
   messageModal.addEventListener("click", () => {
     messageModal.style.zIndex = -10000;
