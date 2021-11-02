@@ -86,7 +86,11 @@ class ProgBoad {
         this.gameBody.endFlg = true;
         document.getElementById("move").disabled = true;
         document.getElementById("help").disabled = true;
-        document.getElementById("backToTop").disabled = true;
+        if(localStorage.getItem("gameEnabled") === "free"){
+          document.getElementById("backToSelect").disabled = true;
+        }else{
+          document.getElementById("backToTop").disabled = true;
+        }
         document.getElementById("blocklyDiv").disabled = true;
       }
     }

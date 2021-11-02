@@ -239,10 +239,26 @@ class Body {
         const modal = document.getElementsByClassName("fmodalback")[0];
         modal.style.transition = "1s";
         modal.style.width = "85%";
-        Array.from(document.getElementsByClassName("failed")).forEach(r => {
-          r.style.display = "unset";
-          r.style.width = "100px";
+        Array.from(document.getElementsByClassName("fmodal")).forEach(r => {
+          r.style.opacity = "100%";
+          r.style.zIndex = "10000";
+          r.style.transform = "translateY(-50%)"
+          Array.from(r.children).forEach(c => {
+            if (c.tagName === "BUTTON") {
+              c.style.opacity = "100%";
+              c.style.width = "100px";
+              c.style.zIndex = "10000";
+              Array.from(c.children).forEach(d => {
+                d.style.opacity = "100%";
+                d.style.zIndex = "10000";
+              });
+            } else {
+              c.style.opacity = "100%";
+              c.style.zIndex = "10000";
+            }
+          });
         });
+        document.getElementById("ct").style.width = "300px";
         moving = false;
       }
     }
@@ -441,6 +457,28 @@ class Body {
                 const modal = document.getElementsByClassName("fmodalback")[0];
                 modal.style.transition = "1s";
                 modal.style.width = "85%";
+                Array.from(document.getElementsByClassName("fmodal"))
+                  .forEach(r => {
+                    r.style.opacity = "100%";
+                    r.style.zIndex = "10000";
+                    r.style.transform = "translateY(-50%)"
+                    Array.from(r.children).forEach(c => {
+                      if (c.tagName === "BUTTON") {
+                        c.style.opacity = "100%";
+                        c.style.width = "100px";
+                        c.style.zIndex = "10000";
+                        Array.from(c.children).forEach(d => {
+                          d.style.opacity = "100%";
+                          d.style.zIndex = "10000";
+                        });
+                      } else {
+                        c.style.opacity = "100%";
+                        c.style.zIndex = "10000";
+                      }
+                    });
+                  });
+                document.getElementById("ct").style.width = "300px";
+                moving = false;
               }, 1000)
             }
           }
@@ -468,8 +506,8 @@ window.onload = async () => {
     );
     document.getElementById("failedRetry").onclick = () => {
       window.location.href = "./story/game.php?" +
-          "&clear=no&userid=" + localStorage.getItem("userid") +
-          "&hinttext=" + encodeURIComponent(mapinfo["hint"]);
+        "&clear=no&userid=" + localStorage.getItem("userid") +
+        "&hinttext=" + encodeURIComponent(mapinfo["hint"]);
     }
   } else {
     document.getElementById("backToTop").remove();
@@ -598,7 +636,7 @@ window.onload = async () => {
     );
     bgm.volume = settings["bgm_volume"] / 300;
     bgm.loop = true;
-    bgm.play();
+    // bgm.play();
   }, 100);
 
   smodalback.addEventListener("click", async () => {
@@ -622,5 +660,9 @@ window.onload = async () => {
   helpmodal.onclick = () => {
     helpmodal.style.zIndex = -810;
     helpmodal.style.opacity = 0;
+  }
+
+  document.getElementById("failedRetire").onclick = () => {
+    location.href = "freeStageSelect.html";
   }
 }

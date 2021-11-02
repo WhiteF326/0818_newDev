@@ -60,7 +60,7 @@
   }
 
   img[src$="img/decide_continue.png"] {
-    width: 300px;
+    width: 0;
   }
 
   body {
@@ -105,8 +105,8 @@
 
   .costTable tr,
   .costTable td {
-    padding: 6px 8px;
-    width: 150px;
+    padding: 2px 8px;
+    width: 120px;
     filter: brightness(105%);
   }
 
@@ -178,13 +178,11 @@
 
   .fmodal {
     position: relative;
-    display: flexbox;
-    z-index: 9999;
     width: fit-content;
     height: fit-content;
     margin: 0 auto;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-500%);
     text-align: center;
   }
 
@@ -271,7 +269,8 @@
   .scoreTable tbody td,
   .scoreTable tbody th {
     border: solid 2px #808080;
-    padding: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
   }
 
   .center {
@@ -293,21 +292,20 @@
   }
 
   .failed {
-    
-    display: none;
     margin: 0;
+    opacity: 0;
+    z-index: -10000;
     background: #2B8797;
     align-items: flex-end;
   }
 
-  .failed:hover {
-    display: none;
-    margin: 0;
-    background: #2B8797;
-    align-items: flex-end;
-  }
   .failed+.failed {
     margin-left: 100px;
+  }
+
+  .fmodal img {
+    opacity: 0;
+    z-index: -10000;
   }
 </style>
 
@@ -337,7 +335,7 @@
       </table>
       <div class="horizontal">
         <span id="cost" class="cost" style="display: inline-block;"></span><br>
-        <span id="step" class="cost" style="display: inline-block;"></span>
+        <span id="step" class="cost" style="display: inline-block;"></span><br>
         <div class="buttons">
           <button id="move" class="move"><img src="img/move.png"></button>
           <button id="retry" class="retry"><img src="img/retry.png"></button>
@@ -359,10 +357,13 @@
   <div class="fmodalback">
     <div class="fmodal">
       <img src="img/stagefailed_take.png"><br><br>
-      <img src="img/decide_continue.png"><br>
-      <button id="failedRetry" class="failed" onclick="location.reload()"><img src="img/decide_retry.png"></button>
-      <button id="failedRetire" class="failed" onclick='location.href="freeStageSelect.html"'><img
-          src="img/decide_giveup.png"></button>
+      <img src="img/decide_continue.png" id="ct"><br>
+      <button id="failedRetry" class="failed" onclick="location.reload()">
+        <img src="img/decide_retry.png">
+      </button>
+      <button id="failedRetire" class="failed">
+        <img src="img/decide_giveup.png">
+      </button>
     </div>
   </div>
   <div class="smodalback">
