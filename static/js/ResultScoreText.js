@@ -12,7 +12,9 @@ const ResultScoreText = (
   tbl.getElementById("dcrCountCell").innerText = String(dcrCnt * 12);
   tbl.getElementById("loopCell").innerText = String(repeatSum * 2);
   tbl.getElementById("finalCell").innerText = String(
-    lastCost * lastStep - (blockCnt * 15 + dcrCnt * 12 + repeatSum * 2)
+    Math.max(
+      lastCost * lastStep - (blockCnt * 15 + dcrCnt * 12 + repeatSum * 2), 0
+    )
   );
 
   return tbl.getElementsByTagName("table")[0];
