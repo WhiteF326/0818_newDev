@@ -560,9 +560,9 @@ window.onload = async () => {
       ["spring.png"],
       ["board0.png", "board1.png", "board2.png", "board3.png"],
       ["switch1.png", "switch2.png", "switch3.png", "switch4.png", "switch5.png"],
-      ["door_off1.png", "door_off2.png", "door_off3.png", "door_off4.png", "door_off5.png"],
+      ["flower_harm.png", "door_off2.png", "door_off3.png", "door_off4.png", "door_off5.png"],
       ["pushed1.png", "pushed2.png", "pushed3.png", "pushed4.png", "pushed5.png"],
-      ["door_on1.png", "door_on2.png", "door_on3.png", "door_on4.png", "door_on5.png"],
+      ["flower_harmless.png", "door_on2.png", "door_on3.png", "door_on4.png", "door_on5.png"],
       ["avoidCreate.png"],
       ["map02.png"]
     ];
