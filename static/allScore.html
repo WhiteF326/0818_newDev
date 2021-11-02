@@ -54,6 +54,12 @@
       })
     ).map(r => Number(r.score));
 
+    // 最高スコアの表示
+
+    document.getElementById("maxScore").innerText += Math.max(...scores);
+
+    // 区間として用意する範囲を計算する
+
     const low = Math.floor(Math.min(...scores) / 100) * 100;
     const high = Math.ceil(Math.max(...scores) / 100) * 100;
     
@@ -74,7 +80,6 @@
         }
       }
     }
-    console.log(ranges);
 
     const graph = new Chart(document.getElementById("graph"), {
       type: "bar",
@@ -88,6 +93,18 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  stepsize: 1
+                },
+                gridLines: {
+                  display: false
+                }
+              }
+            ],
+          },
         }
       }
     });
@@ -99,6 +116,7 @@
   <h2>みんなのスコア</h2>
   <hr>
   <h2 id="stageName">1-1</h2>
+  <h2 id="maxScore">最高スコア：</h2>
   <canvas id="graph" height="150"></canvas>
 </body>
 
