@@ -56,6 +56,15 @@
     }
     document.getElementById("errors").innerText = errors;
   }
+
+  document.onload = () => {
+    document.getElementById("upass").oncut = e => e.preventDefault();
+    document.getElementById("upass").oncopy = e => e.preventDefault();
+    document.getElementById("upass").onpaste = e => {
+      console.log("t")
+      e.preventDefault();
+    };
+  }
 </script>
 
 <body>
