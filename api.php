@@ -288,7 +288,7 @@ switch(explode("/", $path)[1]){
         $stm->execute();
         $progress = $stm->fetchAll(PDO::FETCH_ASSOC);
 
-        echo $progress[0]["story_progress"];
+        echo json_encode($progress[0]["story_progress"]);
         break;
       }
 

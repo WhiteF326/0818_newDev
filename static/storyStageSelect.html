@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ステージセレクト</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/sakura.css@1.3.1/css/sakura.css" type="text/css">
+</head>
+
+<script type="module">
+  import { fetchJSON } from './js/fetchP.js';
+  window.onload = async () => {
+    if (localStorage.getItem("userid") === "") {
+      window.location.href = "accountError.html";
+    }
+    localStorage.getItem("gameEnabled") === "false"
+
+    let stgHeight
+      = window.innerHeight
+      - document.getElementById("accountInfo").clientHeight;
+    document.body.childNodes.forEach(r => {
+      if (r.nodeName !== "#text"
+        && r.getAttribute("id") !== "stages") {
+        stgHeight -= r.clientHeight;
+      }
+    });
+    document.getElementById("stages").setAttribute(
+      "style", "height: " + stgHeight + "px;"
+    );
+
+    const tileWidth = 128;
+    const marginWidth = 16;
+
+    const progress = JSON.parse(await fetchJSON("api/story/getProgress", {
+      "userid": localStorage.getItem("userid")
+    }));
+    const progressList
+      = new Array(30).fill(0).map((_, i) => progress & (1 << i) ? 1 : 0);
+    
+    const stageAmount = [2, 4, 4, 4, 4, 4, 4];
+    const stageNames = stageAmount.map(
+      (e, i) => new Array(e).fill(0).map(
+        (_, j) => String(i + 1) + "-" + String(j + 1)
+      )
+    );
+    console.log(stageNames);
+    let sum = 0;
+    for(let amount in stageAmount){
+      const row = document.createElement("div");
+      row.classList.add("row");
+      row.style.display = "block";
+
+      for(let i = 0; i < stageAmount[amount]; i++){
+        const tile = document.createElement("div");
+        tile.style.display = "inline-block"
+        tile.classList.add("tile");
+        const numText = document.createElement("span");
+        numText.appendChild(
+          document.createTextNode(stageNames[amount][i])
+        );
+        tile.appendChild(numText);
+        // 文字の処理
+        row.appendChild(tile);
+      }
+      document.getElementById("stages").appendChild(row);
+
+      document.getElementById("stages").appendChild(
+        document.createElement("hr")
+      );
+      sum += stageAmount[amount];
+    }
+  }
+</script>
+<script type="text/javascript" src="js/AccountStatus.js"></script>
+
+<style>
+  .tile {
+    transition: 0.5s;
+    width: 128px;
+    height: 128px;
+    border: 3px aliceblue;
+    border-style: groove;
+  }
+
+  .tile:hover {
+    transition: 0.5s;
+    border-style: ridge;
+  }
+
+  .tile.tile {
+    margin-left: 16px;
+  }
+
+  .row.row {
+    margin-bottom: 16px;
+  }
+
+  body {
+    height: 100%;
+    background-color: #eafcfa;
+    width: 100%;
+  }
+
+  .stages {
+    display: block;
+    overflow-y: scroll;
+  }
+
+  .account-info {
+    position: absolute;
+    bottom: 0;
+    background-color: #ffffff3a;
+    color: black;
+    display: block;
+    height: fit-content;
+    margin-top: 10px;
+  }
+
+  .left {
+    float: left;
+  }
+
+  .right {
+    float: right;
+  }
+
+  #reset {
+    margin-left: 15px;
+    margin-bottom: 10px;
+  }
+
+  .modalback {
+    transition: 0.5s;
+    position: fixed;
+    top: 0%;
+    transform: translateY(-500px);
+    display: block;
+    z-index: 9998;
+    background-color: rgba(254, 254, 234, 0.78);
+    height: 0%;
+    margin: 0 auto;
+  }
+
+  .modal {
+    position: relative;
+    display: flexbox;
+    z-index: 9999;
+    width: inherit;
+    height: fit-content;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(245, 2, 3, 1);
+    text-align: center;
+  }
+
+  #delete_yes {
+    margin-right: 100px;
+  }
+
+  .delete_button {
+    height: 100px;
+    width: 100px;
+  }
+
+  img[src$="img/stageselect.png"] {
+    height: 60%;
+    width: 60%;
+    margin: 0;
+  }
+
+  h1 {
+    margin: 0;
+  }
+</style>
+
+<body>
+  <form action="index.html">
+    <input type="submit" value="ストーリートップに戻る">
+  </form>
+  <h1><img src="img/stageselect.png"></h1>
+  <div id="stages" class="stages"></div>
+  <div class="account-info" id="accountInfo"></div>
+</body>
+
+</html>
