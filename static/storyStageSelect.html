@@ -12,6 +12,7 @@
 
 <script type="module">
   import { fetchJSON } from './js/fetchP.js';
+  import { lowerBound } from './js/lowerBound.js';
   window.onload = async () => {
     if (localStorage.getItem("userid") === "") {
       window.location.href = "accountError.html";
@@ -39,27 +40,53 @@
     }));
     const progressList
       = new Array(30).fill(0).map((_, i) => progress & (1 << i) ? 1 : 0);
-    
+
     const stageAmount = [2, 4, 4, 4, 4, 4, 4];
     const stageNames = stageAmount.map(
       (e, i) => new Array(e).fill(0).map(
         (_, j) => String(i + 1) + "-" + String(j + 1)
       )
     );
-    console.log(stageNames);
+    const stageRange
+      = new Array(7).fill(0).map((_, i) =>
+        stageAmount.reduce(
+          (a, b, j) => a + (j <= i ? b : 0)
+        )
+      ).map(v => (1 << v) - 2);
+    const reachedStage = lowerBound(stageRange, progress);
+    console.log(reachedStage);
+    const stageTitles = [
+      "1.",
+      "2.",
+      "3.",
+      "4.",
+      "5.",
+      "6.",
+      "7."
+    ];
     let sum = 0;
-    for(let amount in stageAmount){
+    for (let s in stageAmount) {
       const row = document.createElement("div");
       row.classList.add("row");
       row.style.display = "block";
 
-      for(let i = 0; i < stageAmount[amount]; i++){
+      const title = document.createElement("h4");
+      title.innerText = stageTitles[s];
+      row.appendChild(title);
+
+      for (let i = 0; i < stageAmount[s]; i++) {
         const tile = document.createElement("div");
         tile.style.display = "inline-block"
         tile.classList.add("tile");
+        if (progressList[sum + i]) {
+          tile.classList.add("cleared");
+        }
+        if (s > reachedStage) {
+          tile.classList.add("locked");
+        }
         const numText = document.createElement("span");
         numText.appendChild(
-          document.createTextNode(stageNames[amount][i])
+          document.createTextNode(stageNames[s][i])
         );
         tile.appendChild(numText);
         // 文字の処理
@@ -70,7 +97,7 @@
       document.getElementById("stages").appendChild(
         document.createElement("hr")
       );
-      sum += stageAmount[amount];
+      sum += stageAmount[s];
     }
   }
 </script>
@@ -83,6 +110,10 @@
     height: 128px;
     border: 3px aliceblue;
     border-style: groove;
+    background: linear-gradient(45deg,
+        #757575 0%, #9E9E9E 45%, #E8E8E8 70%, #9E9E9E 85%, #757575 90% 100%);
+    color: whitesmoke;
+    padding: 3px;
   }
 
   .tile:hover {
@@ -96,6 +127,16 @@
 
   .row.row {
     margin-bottom: 16px;
+  }
+
+  .cleared {
+    background: linear-gradient(45deg,
+        #B67B03 0%, #DAAF08 45%, #FEE9A0 70%, #DAAF08 85%, #B67B03 90% 100%);
+  }
+
+  .locked {
+    background: gray;
+    color: silver;
   }
 
   body {
@@ -178,7 +219,7 @@
 </style>
 
 <body>
-  <form action="index.html">
+  <form action="story.html">
     <input type="submit" value="ストーリートップに戻る">
   </form>
   <h1><img src="img/stageselect.png"></h1>
