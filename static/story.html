@@ -66,10 +66,7 @@
       document.getElementById("ref1").remove();
     } else {
       document.getElementById("select1").src = "img/continued.png";
-      const cont = async () => {
-        await fetchJSON("api/story/abort", {
-          "userid": localStorage.getItem("userid")
-        });
+      const cont = () => {
         window.location.href = "./story/game.php?" +
           "&clear=continue&userid=" + localStorage.getItem("userid");
       }

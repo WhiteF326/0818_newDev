@@ -291,22 +291,6 @@ switch(explode("/", $path)[1]){
         echo json_encode($progress[0]["story_progress"]);
         break;
       }
-
-      case "abort": {
-        $uid = $prm["userid"];
-        $sql = "select story_progress from users where id = :id";
-        $stm = $pdo->prepare($sql);
-        $stm->bindValue(":id", $uid);
-        $stm->execute();
-        $progress = $stm->fetchAll(PDO::FETCH_ASSOC);
-        $progNo = $progress[0]["story_progress"];
-        $sql = "update users set story_progress = ". (intval($progNo))
-          . " where id = :id";
-        $stm = $pdo->prepare($sql);
-        $stm->bindValue(":id", $uid);
-        $stm->execute();
-        break;
-      }
     }
     break;
   }
