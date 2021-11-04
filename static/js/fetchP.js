@@ -10,7 +10,10 @@ const fetchJSON = async (path, prm) => {
   }
 
   const res = await fetch("http://localhost/api.php", req);
-  return await res.text();
+
+  const ret = await res.text();
+  console.log(ret)
+  return ret;
 }
 
 export { fetchJSON };

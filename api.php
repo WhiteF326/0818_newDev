@@ -100,7 +100,8 @@ switch(explode("/", $path)[1]){
         $cost = $prm["cost"];
         $score = $prm["score"];
         $sql = "insert into freemode_results values(
-          null, :uid, :stagename, :score, :cost, :program, current_timestamp(), 0
+          null, :uid, :stagename, :score, :cost,
+          :program, current_timestamp(), 0
         )";
         $stm = $pdo->prepare($sql);
         $stm->bindValue(":uid", $uid);
@@ -263,13 +264,7 @@ switch(explode("/", $path)[1]){
   case "story": {
     switch (explode("/", $path)[2]) {
       case "select": {
-        $uid = $prm["userid"];
-        $sql = "select story_progress from users where id = :id";
-        $stm = $pdo->prepare($sql);
-        $stm->bindValue(":id", $uid);
-        $stm->execute();
-        $progress = $stm->fetchAll(PDO::FETCH_ASSOC);
-        $stageNo = intval($progress[0]["story_progress"]) + 1;
+        $stageNo = intval($prm["stageNo"]);
 
         if(file_exists("./story/". $stageNo. ".json")){
           $ret = file_get_contents("./story/". $stageNo. ".json");

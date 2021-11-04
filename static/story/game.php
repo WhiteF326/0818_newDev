@@ -16,7 +16,6 @@ require_once("./../../settings/env.php");
 </head>
 
 <body>
-  <p>ゲーム中</p>
   <?php
   $dsn = "mysql:dbname=LAA1355306-proggame;host=localhost";
   $user = "LAA1355306";
@@ -33,7 +32,7 @@ require_once("./../../settings/env.php");
     $stm->execute();
 
     // 問題番号を取得
-    $_SESSION["questionNo"] = $stm->fetchAll()[0]["story_progress"];
+    $_SESSION["questionNo"] = intval($_GET["stage"]);
   } catch (PDOException $e) {
     echo $e->getMessage();
   }
@@ -41,12 +40,43 @@ require_once("./../../settings/env.php");
   // クリア判定
   if ($_GET["clear"] == "yes") {
     $_SESSION["clear"] = true;
-    $sql = "UPDATE users SET story_progress = " . ($_SESSION["questionNo"] + 1)
+    $sql_prg = "SELECT story_progress from users
+      WHERE id = \"" . $_GET["userid"] . "\"";
+    $before = intval(
+      $pdo->query($sql_prg)
+        ->fetchAll(PDO::FETCH_ASSOC)[0]["story_progress"]
+    );
+    $sql = "UPDATE users SET story_progress
+      = story_progress | " . (1 << ($_SESSION["questionNo"]))
       . " where id = \"" . $_GET["userid"] . "\"";
     $pdo->query($sql);
-  } else if($_GET["clear"] == "no"){
+    // ストーリー開始の判定
+    $after = intval(
+      $pdo->query($sql_prg)
+        ->fetchAll(PDO::FETCH_ASSOC)[0]["story_progress"]
+    );
+    $l = 0;
+    $mx = [1, 1, 4, 4, 4, 4, 4, 4];
+    foreach($mx as $cur){
+      $ranges[] = [$l, $l + $cur];
+      $l += $cur;
+    }
+    $callStory = 0;
+    for($r = 0; $r < count($mx); $r++){
+      $range = $ranges[$r];
+      $bc = 0;
+      $ac = 0;
+      for($i = $range[0]; $i < $range[1]; $i++){
+        if($before & (1 << $i)) $bc++;
+        if($after & (1 << $i)) $ac++;
+      }
+      if($bc != $mx[$r] && $ac == $mx[$r]){
+        $callStory = $r;
+      }
+    }
+  } else if ($_GET["clear"] == "no") {
     $_SESSION["clear"] = false;
-  } else{
+  } else {
     // continue
     $_SESSION["clear"] = true;
     $_SESSION["questionNo"]--;

@@ -75,6 +75,14 @@
 
       for (let i = 0; i < stageAmount[s]; i++) {
         const tile = document.createElement("div");
+        const numText = document.createElement("span");
+        numText.appendChild(
+          document.createTextNode(stageNames[s][i])
+        );
+        tile.appendChild(numText);
+
+        const moveTo = sum + i + 1;
+
         tile.style.display = "inline-block"
         tile.classList.add("tile");
         if (progressList[sum + i]) {
@@ -82,12 +90,14 @@
         }
         if (s > reachedStage) {
           tile.classList.add("locked");
+        } else {
+          // クリック処理
+          tile.onclick = () => {
+            localStorage.setItem("storyStage", String(moveTo));
+            localStorage.setItem("gameEnabled", "story");
+            window.location.href = "gameBody.html";
+          }
         }
-        const numText = document.createElement("span");
-        numText.appendChild(
-          document.createTextNode(stageNames[s][i])
-        );
-        tile.appendChild(numText);
         // 文字の処理
         row.appendChild(tile);
       }
