@@ -332,7 +332,7 @@ class Body {
       // スコア
       this.score
         = lastStep * lastCost - 15 * blockCnt - 12 * dcrCnt - 2 * repeatSum;
-      if(this.score < 0) this.score = 0;
+      if (this.score < 0) this.score = 0;
       // スコア計算式を表示
       document.getElementById("scoreFormula").innerText = "";
       if (localStorage.getItem("gameEnabled") === "free") {
@@ -529,9 +529,6 @@ window.onload = async () => {
         "userid": localStorage.getItem("userid")
       })
     );
-  if (!(Object.keys(mapinfo).length)) {
-    window.location.href = "betaEnd.html";
-  }
   const settings = JSON.parse(await fetchJSON("api/user/settings/read", {
     "userid": localStorage.getItem("userid"),
   }))[0];
