@@ -1,8 +1,6 @@
 const fetchJSON = async (path, prm) => {
   prm["path"] = path;
 
-  console.log(path);
-
   const req = {
     "method": "POST",
     "mode": "cors",
@@ -12,7 +10,10 @@ const fetchJSON = async (path, prm) => {
   }
 
   const res = await fetch("http://localhost/api.php", req);
-  return await res.text();
+
+  const ret = await res.text();
+  console.log(ret)
+  return ret;
 }
 
 export { fetchJSON };
