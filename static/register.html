@@ -114,20 +114,11 @@
   elm("repass").oninput = () => {
     comparePassword();
   }
-  elm("upass").onpaste = e => {
-    e.preventDefault();
-    elm("disPaste").classList.toggle("display");
-    setTimeout(() => {
-      elm("disPaste").classList.toggle("display");
-    }, 2000);
-  }
-  elm("repass").onpaste = e => {
-    e.preventDefault();
-    elm("disPasteRe").classList.toggle("display");
-    setTimeout(() => {
-      elm("disPasteRe").classList.toggle("display");
-    }, 2000);
-  }
+  ["mail", "remail"].forEach(r => {
+    elm(r).oninput = () => {
+      //
+    }
+  })
 </script>
 <style>
   body {
@@ -171,6 +162,11 @@
     <input type="password" placeholder="パスワード(再)" id="repass">
     <span>
       <span id="isSame">同じパスワードが入力されています。</span>
+    </span><br>
+    <input type="text" placeholder="メールアドレス" id="mail"><br>
+    <input type="text" placeholder="メールアドレス(再)" id="remail">
+    <span>
+      <span id="isSameMail">同じメールアドレスが入力されています。</span>
     </span><br>
     <button id="rsubmit">登録</button>
   </form><br>
