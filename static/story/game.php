@@ -71,9 +71,18 @@ require_once("./../../settings/env.php");
         if($after & (1 << $i)) $ac++;
       }
       if($bc != $mx[$r] && $ac == $mx[$r]){
-        $callStory = $r;
+        $callStory = $r + 1;
       }
     }
+    if($callStory): ?>
+      <?php $_SESSION["questionNo"] = $callStory - 1; ?>
+    <?php else : ?>
+      <script>
+        window.location.href = "./../storyStageSelect.html"
+      </script>
+    <?php
+    endif;
+
   } else if ($_GET["clear"] == "no") {
     $_SESSION["clear"] = false;
   } else {
