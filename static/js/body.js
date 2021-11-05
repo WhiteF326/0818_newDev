@@ -332,7 +332,7 @@ class Body {
       // スコア
       this.score
         = lastStep * lastCost - 15 * blockCnt - 12 * dcrCnt - 2 * repeatSum;
-      if(this.score < 0) this.score = 0;
+      if (this.score < 0) this.score = 0;
       // スコア計算式を表示
       document.getElementById("scoreFormula").innerText = "";
       if (localStorage.getItem("gameEnabled") === "free") {
@@ -500,19 +500,23 @@ window.onload = async () => {
   if (localStorage.getItem("gameEnabled") === "story") {
     document.getElementById("retry").remove();
     document.getElementById("backToSelect").remove();
-    document.getElementById("failedRetire").setAttribute(
-      "onclick", 'location.href="index.html"'
-    );
+    document.getElementById("failedRetire").onclick = () => {
+      location.href = "storyStageSelect.html";
+    }
     document.getElementById("failedRetry").setAttribute(
       "onclick", ''
     );
     document.getElementById("failedRetry").onclick = () => {
       window.location.href = "./story/game.php?" +
         "&clear=no&userid=" + localStorage.getItem("userid") +
-        "&hinttext=" + encodeURIComponent(mapinfo["hint"]);
+        "&hinttext=" + encodeURIComponent(mapinfo["hint"])
+        + "&stage=" + String(Number(localStorage.getItem("storyStage")) - 1);
     }
   } else {
     document.getElementById("backToTop").remove();
+    document.getElementById("failedRetire").onclick = () => {
+      location.href = "freeStageSelect.html";
+    }
     document.getElementById("retry").addEventListener("click", () => {
       progBoad.save();
       location.reload();
@@ -522,16 +526,14 @@ window.onload = async () => {
   const mapinfo = localStorage.getItem("gameEnabled") === "free" ?
     JSON.parse(
       await fetchJSON('api/stage/select', {
-        'name': localStorage.getItem("selectedStage")
+        "name": localStorage.getItem("selectedStage"),
       })
     ) : JSON.parse(
       await fetchJSON('api/story/select', {
-        "userid": localStorage.getItem("userid")
+        "userid": localStorage.getItem("userid"),
+        "stageNo": localStorage.getItem("storyStage")
       })
     );
-  if (!(Object.keys(mapinfo).length)) {
-    window.location.href = "betaEnd.html";
-  }
   const settings = JSON.parse(await fetchJSON("api/user/settings/read", {
     "userid": localStorage.getItem("userid"),
   }))[0];
@@ -601,8 +603,9 @@ window.onload = async () => {
     } else {
       setInterval(() => {
         window.location.href = "./story/game.php?" +
-          "clear=yes&userid=" + localStorage.getItem("userid") +
-          "&hinttext=none";
+          "clear=yes&userid=" + localStorage.getItem("userid")
+          + "&hinttext=none"
+          + "&stage=" + String(Number(localStorage.getItem("storyStage")) - 1);
       }, 1000);
     }
   });
@@ -662,9 +665,5 @@ window.onload = async () => {
   helpmodal.onclick = () => {
     helpmodal.style.zIndex = -810;
     helpmodal.style.opacity = 0;
-  }
-
-  document.getElementById("failedRetire").onclick = () => {
-    location.href = "freeStageSelect.html";
   }
 }

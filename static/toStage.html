@@ -7,10 +7,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
-<script>
-  window.onload = () => {
-    localStorage.setItem("gameEnabled", "story");
-    window.location.href = "gameBody.html";
+<script type="module">
+  import { fetchJSON } from './js/fetchP.js';
+  window.onload = async () => {
+    const progress = Number(
+      (await fetchJSON("api/story/getProgress", {
+        "userid": localStorage.getItem("userid")
+      })).split("\"")[1]
+    );
+    if(progress >= 3){
+      window.location.href = "storyStageSelect.html";
+    }else{
+      localStorage.setItem("gameEnabled", "story");
+      localStorage.setItem("storyStage", progress + 1);
+      window.location.href = "gameBody.html";
+    }
   }
 </script>
 

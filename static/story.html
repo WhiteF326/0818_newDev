@@ -16,9 +16,11 @@
     if (localStorage.getItem("userid") === "") {
       window.location.href = "accountError.html";
     }
-    const progress = await fetchJSON("api/story/getProgress", {
-      "userid": localStorage.getItem("userid")
-    });
+    const progress = Number(
+      (await fetchJSON("api/story/getProgress", {
+        "userid": localStorage.getItem("userid")
+      })).split("\"")[1]
+    );
 
     const silen = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/silen.mp3");
     silen.volume = 1;
@@ -55,7 +57,7 @@
       silen.currentTime = 0;
     });
 
-    if (progress == "0") {
+    if (progress == 0) {
       document.getElementById("select1").src = "img/begin.png";
       document.getElementById("ref0").onclick = () => {
         window.location.href = "./story/opening.php";
@@ -67,11 +69,14 @@
     } else {
       document.getElementById("select1").src = "img/continued.png";
       const cont = async () => {
-        await fetchJSON("api/story/abort", {
-          "userid": localStorage.getItem("userid")
-        });
-        window.location.href = "./story/game.php?" +
-          "&clear=continue&userid=" + localStorage.getItem("userid");
+        if (progress >= 3) {
+          // if tutorial finished (p >= 3)
+          window.location.href = "./storyStageSelect.html";
+        } else {
+          window.location.href = "./story/game.php?" +
+            "&clear=continue&userid=" + localStorage.getItem("userid")
+            + "&stage=" + progress;
+        }
       }
       document.getElementById("ref0").onclick = async () => await cont();
       document.getElementById("select1").onclick = async () => await cont();
@@ -137,6 +142,7 @@
     transition: 0.1s;
     width: 240px;
   }
+
   .modeSelector:hover {
     width: 320px;
   }
