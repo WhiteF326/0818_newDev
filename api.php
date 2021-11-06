@@ -20,6 +20,9 @@ $pdo = new PDO($dsn, $username, $password);
 // パス取得
 $path = $prm["path"];
 
+// 時刻設定
+date_default_timezone_set("Asia/Tokyo");
+
 switch(explode("/", $path)[1]){
   case "":{
     break;
@@ -170,18 +173,44 @@ switch(explode("/", $path)[1]){
         $uid = $prm["userid"];
         $uname = $prm["username"];
         $upass = utf8_encode($prm["password"]);
+        $umail = $prm["email"];
         for($i = 0; $i < 100; $i++) {
           $upass = hash("sha512", $upass);
         }
 
+        // メールアドレス 鍵の生成
+        $method = "AES-256-CBC";
+        $ivLength = openssl_cipher_iv_length($method);
+        $iv = openssl_random_pseudo_bytes($ivLength);
+        function concat($carry, $item){
+          return $carry. $item;
+        }
+        $keyStr = array_reduce(
+          array_fill(0, 16, base_convert(bin2hex(openssl_random_pseudo_bytes(16)), 16, 36)),
+          "concat", ""
+        );
+        $key = substr($keyStr, 0, 256);
+        $encrypted = openssl_encrypt($umail, $method, $key, 0, $iv);
+        $saveObject = array(
+          "email" => $encrypted,
+          "key" => $key,
+          "iv" => base64_encode($iv)
+        );
+        $saveClearText = json_encode($saveObject);
+        $timeStamp = time();
+        $civ = substr(date("Y-m-d H:i:s"), 0, $ivLength);
+        $saveEncrypted = openssl_encrypt($saveClearText, $method, $key, 0, $civ);
+
         $sql = "insert into users values(
           :id, :name, :pass, 0, current_timestamp(),
-          50, 50, 3
+          50, 50, 3, :mail, :key
         )";
         $stm = $pdo->prepare($sql);
         $stm->bindValue(":id", $uid);
         $stm->bindValue(":name", $uname);
         $stm->bindValue(":pass", $upass);
+        $stm->bindValue(":mail", $saveEncrypted);
+        $stm->bindValue(":key", $key);
         $stm->execute();
         $result = $stm->fetchAll(PDO::FETCH_ASSOC);
         var_dump($result);
