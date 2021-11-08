@@ -34,7 +34,43 @@
     body {
       background-color: #eafcfa;
     }
+
+    .modalback {
+    transition: 0.5s;
+    position: fixed;
+    top: 0%;
+    transform: translateY(-500px);
+    display: block;
+    z-index: 9998;
+    background-color: rgba(234, 234, 234, 0.78);
+    height: 0%;
+    margin: 0 auto;
+  }
+
+  .modal {
+    position: relative;
+    display: flexbox;
+    z-index: 9999;
+    width: inherit;
+    height: fit-content;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+  }
+
+  button {
+    margin-left: 50px;
+    font-size: 0.5em;
+  }
   </style>
+  <script src="./js/Const.js"></script>
+  <script src="./block_module/blockly_compressed.js"></script>
+  <script src="./block_module/blocks_compressed.js"></script>
+  <script src="./block_module/javascript_compressed.js"></script>
+  <script src="./block_module/msg/js/ja.js"></script>
+
+  <script src="./block_module/myblock.js"></script>
 </head>
 
 <script type="module">
@@ -61,11 +97,9 @@
     }
 
     // 最高スコアの表示
-
     document.getElementById("maxScore").innerText += Math.max(...scores);
 
     // 区間として用意する範囲を計算する
-
     const low = Math.floor(Math.min(...scores) / 100) * 100;
     const high = Math.ceil(Math.max(...scores) / 100) * 100;
     
@@ -97,8 +131,7 @@
           backgroundColor: "rgba(122, 221, 210, 0.9)"
         }],
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
+          responsive: false,
           scales: {
             yAxes: [
               {
@@ -114,7 +147,33 @@
         }
       }
     });
-    document.getElementById("graph").setAttribute("height", "150");
+
+    // プログラムを表示
+    const bestProgramButton = document.createElement("button");
+    bestProgramButton.innerText = "プログラムを見る";
+    const modal = document.getElementsByClassName("modalback")[0];
+
+    bestProgramButton.onclick = () => {
+      modal.style.transition = "1s";
+      modal.style.transform = "translateY(0)";
+      modal.style.height = "100%";
+      modal.style.width = document.body.clientWidth + "px";
+    }
+    modal.onclick = () => {
+      modal.style.transform = "translateY(-500px)";
+      modal.style.height = "0%";
+    }
+
+    allBlocks.forEach(r => {
+      const block = document.createElement("block");
+      block.setAttribute("type", r);
+      document.getElementById("toolbox").appendChild(block);
+    });
+    const toolbox = document.getElementById("toolbox")
+    const workspace = Blockly.inject("blocklyDiv",
+      { toolbox: toolbox });
+
+    document.getElementById("maxScore").appendChild(bestProgramButton);
   }
 </script>
 
@@ -127,6 +186,12 @@
     このステージをまだ誰もクリアしていません。
   </span>
   <canvas id="graph" height="150"></canvas>
+  <div class="modalback">
+    <div class="modal">
+      <div id="blocklyDiv"></div>
+      <xml id="toolbox"></xml>
+    </div>
+  </div>
 </body>
 
 </html>
