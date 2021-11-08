@@ -54,6 +54,12 @@
       })
     ).map(r => Number(r.score));
 
+    if(scores.length === 0){
+      document.getElementById("maxScore").innerText += "0";
+      document.getElementById("uncleared").style.display = "block";
+      return;
+    }
+
     // 最高スコアの表示
 
     document.getElementById("maxScore").innerText += Math.max(...scores);
@@ -117,6 +123,9 @@
   <hr>
   <h2 id="stageName">1-1</h2>
   <h2 id="maxScore">最高スコア：</h2>
+  <span id="uncleared" style="display: none;">
+    このステージをまだ誰もクリアしていません。
+  </span>
   <canvas id="graph" height="150"></canvas>
 </body>
 
