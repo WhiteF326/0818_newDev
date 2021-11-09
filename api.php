@@ -1,12 +1,17 @@
 <?php
+session_start();
+
+if(!isset($_SESSION["tokens"])){
+  $_SESSION["tokens"] = [];
+}
+
 ini_set( 'display_errors', 1 );
 
 require_once("./settings/env.php");
 
 $prm = json_decode(file_get_contents("php://input"), true);
 
-// var_dump($prm);
-
+// レスポンス header を定義
 header("Content-type: text/plain; charset=UTF-8");
 
 // db に繋ぐ
@@ -359,6 +364,97 @@ switch(explode("/", $path)[1]){
         break;
       }
     break;
+    }
+  }
+
+  case "recovery": {
+    switch (explode("/", $path)[2]) {
+      // 多分この処理遅い ごめんなさい
+      case "search": {
+        $queryValue = $prm["value"];
+        $users = $pdo->query(
+          "select id, update_time, mail_address, mail_key from users"
+        )->fetchAll(PDO::FETCH_ASSOC);
+        $method = "AES-256-CBC";
+        $ivLength = openssl_cipher_iv_length($method);
+        $hitEmail = false;
+        forEach($users as $user){
+          $decrypted = json_decode(
+            openssl_decrypt(
+              $user["mail_address"],
+              $method,
+              $user["mail_key"],
+              0,
+              substr($user["update_time"], 0, 16)
+            ), true
+          );
+          $reDecrypted = openssl_decrypt(
+            $decrypted["email"],
+            $method,
+            $decrypted["key"],
+            0,
+            base64_decode($decrypted["iv"])
+          );
+          if($reDecrypted == $queryValue){
+            $hitEmail = $reDecrypted;
+          }
+          if($user["id"] == $queryValue){
+            $hitEmail = $reDecrypted;
+          }
+        }
+        if($hitEmail){
+          // メールを送る、トークンを生成する
+          $tokenLength = 32;
+          $token = bin2hex(random_bytes($tokenLength));
+          // token, expiration, email
+          $expireDate = strtotime("+1 hour");
+          array_push($_SESSION["tokens"], array(
+            "token" => $token,
+            "expire" => $expireDate,
+            "email" => $hitEmail
+          ));
+          mb_send_mail(
+            $hitEmail,
+            "ぶろっくるん(Blockln) アカウントリカバリ",
+            <<< EOD
+            以下のリンクにアクセスして、アカウントのメールアドレスを再設定してください。
+            {$env["urlPrefix"]}/static/recoveryAction.html?token=$token
+            EOD,
+            "From:noreply@fkiohr-blockln.main.jp"
+          );
+          echo $token;
+        }else{
+          echo "Not Found";
+        }
+        break;
+      }
+
+      case "tokenRefresh": {
+        while(count($_SESSION["tokens"])){
+          if($_SESSION["tokens"][0]["expire"] < time()){
+            array_shift($_SESSION["tokens"]);
+          }
+        }
+        break;
+      }
+
+      case "searchToken": {
+        $token = $prm["token"];
+        echo $_SESSION["tokens"][
+          array_search($token, $_SESSION["tokens"])
+        ]["email"];
+        break;
+      }
+
+      case "removeToken": {
+        //
+        break;
+      }
+
+      case "getTokenList": {
+        var_dump($_SESSION["tokens"]);
+        break;
+      }
     }
   }
 }

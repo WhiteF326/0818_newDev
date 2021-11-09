@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+</head>
+
+<script>
+  // 2. 以下の onload メソッドを body より前に script タグを用意したうえでコピペする
+  window.onload = async () => {
+    // データを取得 今はphpから直接取れるがよしなに変更すること
+    const rawGraphData = JSON.parse(
+      await (await fetch("http://localhost/ZazenGraph/test.php")).text()
+    );
+    // 時間を軸データへ変換
+    // h * 3600 + m * 60 + s + ms * 0.001 として数値化する
+    const rawLabels = rawGraphData.map(r => {
+      const rawValues = r[0].replace(".", ":").split(":").map(v => Number(v));
+      return rawValues[0] * 60 * 60 + rawValues[1] * 60
+        + rawValues[2] + rawValues[3] * 0.001;
+    });
+    // 誤差が出やすいので誤差と見做すレベルを設定する
+    const eps = 0.0001;
+    const revEps = 10000;
+    // 誤差を捨てるメソッド
+    const selfFloor = (value = 0) => {
+      return Number(String(Math.floor(value * revEps) * eps).substr(0, 10));
+    }
+    // 左から 0 埋めするメソッド
+    const zeroPadding = (value = 0, digit = 0) => {
+      return (
+        (new Array(digit).fill("0").reduce((c, i) => c + i)) + String(value)
+      ).slice(-digit);
+    }
+    // 規準時刻
+    const firstValue = rawLabels[0];
+    const endValue = rawLabels[rawLabels.length - 1];
+    const labels = rawLabels.map(r => {
+      // 日付を跨ぐ場合を考慮する
+      const labelValue = selfFloor(
+        r - firstValue + ((r - firstValue < 0) * 3600)
+      );
+      const hour = zeroPadding(Math.floor(labelValue / 3600), 2);
+      const minute = zeroPadding(Math.floor(labelValue / 60) % 60, 2);
+      const second = zeroPadding(Math.floor(labelValue) % 60, 2);
+      const miliSecond = zeroPadding(
+        (Number(String(labelValue).split(".")[1]) || 0), 3
+      );
+      // h:mm:ss.ms を生成する
+      return hour + ":" + minute + ":" + second + "." + miliSecond;
+    });
+    // 実データの配列を作成
+    const datasets = rawGraphData.map(r => Number(r[2]));
+    // 0.001 単位に精度を落として上下限を取る
+    const low = Math.min(...rawGraphData.map(r => r[2] * 100)) / 100.0;
+    const high = Math.ceil(
+      Math.max(...rawGraphData.map(r => r[2] * 100))
+    ) / 100.0;
+    // データの最終整形
+    const graphData
+      = new Array(rawGraphData.length).fill(0).map((_, i) => {
+        return {
+          "x": labels[i],
+          "y": datasets[i]
+        }
+      });
+    // グラフの描画
+    const xCalculate = (value) => {
+      return value * 300 / (endValue - firstValue);
+    }
+    const yCalculate = (value) => {
+      return (value - low) / (high - low);
+    }
+    const ctx = document.getElementById("rotateGraph").getContext("2d");
+    let test = [];
+    for(let i = 0; i < graphData.length - 1; i++){
+      ctx.beginPath();
+      ctx.moveTo(xCalculate(rawLabels[i] - firstValue), yCalculate(datasets[i]) * 200);
+      ctx.lineTo(
+        xCalculate(rawLabels[i + 1] - firstValue), yCalculate(datasets[i + 1]) * 200
+      );
+      ctx.stroke();
+      test.push(xCalculate(rawLabels[i] + 1));
+    }
+    console.log(Math.min(...rawLabels));
+  }
+</script>
+
+<body>
+  <!-- 3. 以下の canvas タグをコピペする -->
+  <canvas width="300" height="200" id="rotateGraph"></canvas>
+</body>
+
+</html>

@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>新規登録</title>
+  <title>アカウントリカバリ</title>
   <link rel="stylesheet" href="css/sakura.css" type="text/css">
 </head>
 
@@ -21,13 +21,33 @@
   }
 </style>
 
+<script type="module">
+  import { fetchJSON } from './js/fetchP.js';
+  window.onload = async () => {
+    document.getElementById("submit").onclick = async () => {
+      const value = document.getElementById("value").value;
+      if(value){
+        const result = await fetchJSON("api/recovery/search", {
+          "value": value
+        });
+        if(result === "Not Found"){
+          window.location.href = "recoverNotFound.html";
+        }else{
+          window.location.href = "recoverNotify.html?token=" + result;
+        }
+      }
+    }
+  }
+</script>
+
 <body>
   <h3>アカウントのリカバリ</h3>
   メールアドレスまたはユーザーIDを入力して「送信」をクリックしてください。
-  <form>
-    <input type="text" placeholder="メールアドレスまたはユーザーID"><br>
-    <input type="submit">
+  <form target="dummy">
+    <input type="text" placeholder="メールアドレスまたはユーザーID" id="value"><br>
+    <input type="submit" id="submit">
   </form>
+  <iframe name="dummy" style="display: none;"></iframe>
 </body>
 
 </html>
