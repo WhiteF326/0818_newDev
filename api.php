@@ -1,12 +1,17 @@
 <?php
+session_start();
+
+if(!isset($_SESSION["tokens"])){
+  $_SESSION["tokens"] = [];
+}
+
 ini_set( 'display_errors', 1 );
 
 require_once("./settings/env.php");
 
 $prm = json_decode(file_get_contents("php://input"), true);
 
-// var_dump($prm);
-
+// レスポンス header を定義
 header("Content-type: text/plain; charset=UTF-8");
 
 // db に繋ぐ
@@ -19,6 +24,9 @@ $pdo = new PDO($dsn, $username, $password);
 
 // パス取得
 $path = $prm["path"];
+
+// 時刻設定
+date_default_timezone_set("Asia/Tokyo");
 
 switch(explode("/", $path)[1]){
   case "":{
@@ -170,21 +178,47 @@ switch(explode("/", $path)[1]){
         $uid = $prm["userid"];
         $uname = $prm["username"];
         $upass = utf8_encode($prm["password"]);
+        $umail = $prm["email"];
         for($i = 0; $i < 100; $i++) {
           $upass = hash("sha512", $upass);
         }
 
+        // メールアドレス 鍵の生成
+        $method = "AES-256-CBC";
+        $ivLength = openssl_cipher_iv_length($method);
+        $iv = openssl_random_pseudo_bytes($ivLength);
+        function concat($carry, $item){
+          return $carry. $item;
+        }
+        $keyStr = array_reduce(
+          array_fill(0, 16, base_convert(bin2hex(openssl_random_pseudo_bytes(16)), 16, 36)),
+          "concat", ""
+        );
+        $key = substr($keyStr, 0, 256);
+        $encrypted = openssl_encrypt($umail, $method, $key, 0, $iv);
+        $saveObject = array(
+          "email" => $encrypted,
+          "key" => $key,
+          "iv" => base64_encode($iv)
+        );
+        $saveClearText = json_encode($saveObject);
+        $timeStamp = time();
+        $civ = substr(date("Y-m-d H:i:s"), 0, $ivLength);
+        $saveEncrypted = openssl_encrypt($saveClearText, $method, $key, 0, $civ);
+
         $sql = "insert into users values(
           :id, :name, :pass, 0, current_timestamp(),
-          50, 50, 3
+          50, 50, 3, :mail, :key
         )";
         $stm = $pdo->prepare($sql);
         $stm->bindValue(":id", $uid);
         $stm->bindValue(":name", $uname);
         $stm->bindValue(":pass", $upass);
+        $stm->bindValue(":mail", $saveEncrypted);
+        $stm->bindValue(":key", $key);
         $stm->execute();
         $result = $stm->fetchAll(PDO::FETCH_ASSOC);
-        var_dump($result);
+        echo null;
         break;
       }
 
@@ -330,6 +364,107 @@ switch(explode("/", $path)[1]){
         break;
       }
     break;
+    }
+  }
+
+  case "recovery": {
+    switch (explode("/", $path)[2]) {
+      // 多分この処理遅い ごめんなさい
+      case "search": {
+        $queryValue = $prm["value"];
+        $users = $pdo->query(
+          "select id, update_time, mail_address, mail_key from users"
+        )->fetchAll(PDO::FETCH_ASSOC);
+        $method = "AES-256-CBC";
+        $ivLength = openssl_cipher_iv_length($method);
+        $hitEmail = false;
+        $hitUser = false;
+        forEach($users as $user){
+          $decrypted = json_decode(
+            openssl_decrypt(
+              $user["mail_address"],
+              $method,
+              $user["mail_key"],
+              0,
+              substr($user["update_time"], 0, 16)
+            ), true
+          );
+          $reDecrypted = openssl_decrypt(
+            $decrypted["email"],
+            $method,
+            $decrypted["key"],
+            0,
+            base64_decode($decrypted["iv"])
+          );
+          if($reDecrypted == $queryValue){
+            $hitEmail = $reDecrypted;
+            $hitUser = $user["id"];
+          }
+          if($user["id"] == $queryValue){
+            $hitEmail = $reDecrypted;
+            $hitUser = $user["id"];
+          }
+        }
+        if($hitEmail){
+          // メールを送る、トークンを生成する
+          $tokenLength = 32;
+          $token = bin2hex(random_bytes($tokenLength));
+          // token, expiration, email
+          $expireDate = strtotime("+1 hour");
+          array_push($_SESSION["tokens"], array(
+            "token" => $token,
+            "expire" => $expireDate,
+            "email" => $hitEmail,
+            "id" => $hitUser
+          ));
+          echo $token;
+        }else{
+          echo "Not Found";
+        }
+        break;
+      }
+
+      case "tokenRefresh": {
+        while(count($_SESSION["tokens"])){
+          if($_SESSION["tokens"][0]["expire"] < time()){
+            array_shift($_SESSION["tokens"]);
+          }
+        }
+        var_dump($_SESSION["tokens"]);
+        break;
+      }
+
+      case "searchToken": {
+        $token = $prm["token"];
+        echo $_SESSION["tokens"][
+          array_search($token, $_SESSION["tokens"])
+        ]["email"];
+        break;
+      }
+
+      case "resetPassword": {
+        $token = $prm["token"];
+        $upass = utf8_encode($prm["password"]);
+        for($i = 0; $i < 100; $i++) {
+          $upass = hash("sha512", $upass);
+        }
+        $id = $_SESSION["tokens"][
+          array_search($token, $_SESSION["tokens"])
+        ]["id"];
+        $sql = "update users set pass = :pass where id = :id";
+        $stm = $pdo->prepare($sql);
+        $stm->bindValue(":pass", $upass);
+        $stm->bindValue(":id", $id);
+        $stm->execute();
+        
+        echo $id;
+        break;
+      }
+
+      case "getTokenList": {
+        var_dump($_SESSION["tokens"]);
+        break;
+      }
     }
   }
 }
