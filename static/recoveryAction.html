@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>アカウントリカバリ</title>
+  <link rel="stylesheet" href="css/sakura.css" type="text/css">
+</head>
+<style>
+  body {
+    background-color: #eafcfa;
+    height: 10%;
+    width: fit-content;
+  }
+
+  input[type="text"] {
+    width: 300px;
+  }
+
+  progress {
+    width: 100px;
+  }
+</style>
+
+<script type="text/javascript" src="js/zxcvbn.js"></script>
+
+<script type="module">
+  import { fetchJSON } from './js/fetchP.js';
+  window.onload = async () => {
+    console.log(await fetchJSON("api/recovery/getTokenList", {}));
+    const elm = (id) => document.getElementById(id);
+    let errors = "";
+    const inRegex = /[\w]+/;
+
+    const colors = [
+      "#AB0C0D",
+      "#ff3538",
+      "#e9bc01",
+      "#69cc00",
+      "#0188FE"
+    ];
+    const strengthString = [
+      "危険",
+      "脆弱",
+      "弱",
+      "中",
+      "強",
+    ];
+
+    const evaluatePassword = () => {
+      const passResult = zxcvbn(elm("upass").value);
+      elm("strengthBar").style.color = colors[passResult.score];
+      elm("strengthBar").value = passResult.score;
+      elm("strength").style.color = colors[passResult.score];
+      elm("strength").innerText = strengthString[passResult.score];
+    }
+    const comparePassword = () => {
+      if (elm("upass").value !== elm("repass").value) {
+        elm("isSame").innerText = "同じパスワードが入力されていません。";
+      } else {
+        elm("isSame").innerText = "同じパスワードが入力されています。";
+      }
+    }
+
+    window.onload = () => {
+      evaluatePassword();
+    }
+    elm("upass").oninput = () => {
+      evaluatePassword();
+      comparePassword();
+    };
+    elm("repass").oninput = () => {
+      comparePassword();
+    }
+
+    elm("rsubmit").onclick = async () => {
+      const upass = elm("upass").value;
+      if (!upass) {
+        errors += "パスワードが空です。入力してください。\n";
+      } else {
+        const upassCheck = upass.match(inRegex);
+        if (!upassCheck || upassCheck[0] !== upass) {
+          errors += "パスワードに半角英数字、アンダースコア以外の文字列が含まれています。再入力してください。\n";
+        }
+        if (upass.length < 6) {
+          errors += "パスワードは 6 文字以上で入力してください。\n"
+        }
+        if (upass !== elm("repass").value) {
+          errors += "パスワードが一致していません。入力し直してください。\n";
+        }
+      }
+      elm("errors").innerText = errors;
+      const token = new URL(window.location.href).searchParams.get("token");
+      
+      if(!errors){
+        await fetchJSON("api/recovery/resetPassword", {
+          "token": token,
+          "password": upass
+        });
+        window.location.href = "recoveryDone.html";
+      }
+    }
+  }
+</script>
+
+<body>
+  <h3>パスワードの再登録</h3>
+  <form target="dummy">
+    <input type="password" placeholder="パスワード" id="upass">
+    <span>
+      パスワードの強度：
+      <progress id="strengthBar" value="0" max="4"></progress>
+      <span id="strength"></span>
+    </span>
+    <br>
+    <input type="password" placeholder="パスワード(再)" id="repass">
+    <span>
+      <span id="isSame">同じパスワードが入力されています。</span>
+    </span><br>
+    <input type="submit" value="登録" id="rsubmit">
+  </form>
+  <span id="errors"></span>
+  <iframe name="dummy" style="display: none;"></iframe>
+</body>
+
+</html>

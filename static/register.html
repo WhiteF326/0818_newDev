@@ -26,14 +26,16 @@
     "弱",
     "中",
     "強",
-  ]
+  ];
 
   elm("rsubmit").onclick = async () => {
     const uid = elm("uid").value;
     const uname = elm("uname").value;
     const upass = elm("upass").value;
+    const umail = elm("umail").value;
     let errors = "";
     const inRegex = /[\w]+/;
+    const mailRegex = /[\w\-._]+@[\w\-._]+\.[A-Za-z]+/;
 
     if (!uid) {
       errors += "ユーザーIDが空です。入力してください。\n";
@@ -64,6 +66,17 @@
         errors += "パスワードが一致していません。入力し直してください。\n";
       }
     }
+    if (!umail) {
+      errors += "メールアドレスが空です。入力してください。"
+    } else {
+      const umailCheck = umail.match(mailRegex);
+      if (!umailCheck || umailCheck[0] !== umail) {
+        errors += "メールアドレスの形式が間違っています。確認の上再入力してください。";
+      }
+      if (umail !== elm("remail").value) {
+        errors += "メールアドレスが一致していません。入力し直してください。";
+      }
+    }
     if (!errors) {
       // ユーザー ID が重複していないか問い合わせる
       const queryExisting = await fetchJSON("api/user/search", {
@@ -78,11 +91,11 @@
       const registerTry = await fetchJSON("api/user/register", {
         "userid": uid,
         "username": uname,
-        "password": upass
+        "password": upass,
+        "email": umail
       });
       localStorage.setItem("userid", uid);
       localStorage.setItem("username", uname);
-      localStorage.setItem("pass", upass);
       elm("succeed").style.display = "block";
       elm("rsubmit").disabled = true;
     }
@@ -103,6 +116,13 @@
       elm("isSame").innerText = "同じパスワードが入力されています。";
     }
   }
+  const compareEmail = () => {
+    if (elm("umail").value !== elm("remail").value) {
+      elm("isSameMail").innerText = "同じメールアドレスが入力されていません。";
+    } else {
+      elm("isSameMail").innerText = "同じメールアドレスが入力されています。";
+    }
+  }
 
   window.onload = () => {
     evaluatePassword();
@@ -114,20 +134,11 @@
   elm("repass").oninput = () => {
     comparePassword();
   }
-  elm("upass").onpaste = e => {
-    e.preventDefault();
-    elm("disPaste").classList.toggle("display");
-    setTimeout(() => {
-      elm("disPaste").classList.toggle("display");
-    }, 2000);
-  }
-  elm("repass").onpaste = e => {
-    e.preventDefault();
-    elm("disPasteRe").classList.toggle("display");
-    setTimeout(() => {
-      elm("disPasteRe").classList.toggle("display");
-    }, 2000);
-  }
+  ["umail", "remail"].forEach(r => {
+    elm(r).oninput = () => {
+      compareEmail();
+    }
+  });
 </script>
 <style>
   body {
@@ -171,6 +182,11 @@
     <input type="password" placeholder="パスワード(再)" id="repass">
     <span>
       <span id="isSame">同じパスワードが入力されています。</span>
+    </span><br>
+    <input type="text" placeholder="メールアドレス" id="umail"><br>
+    <input type="text" placeholder="メールアドレス(再)" id="remail">
+    <span>
+      <span id="isSameMail">同じメールアドレスが入力されています。</span>
     </span><br>
     <button id="rsubmit">登録</button>
   </form><br>

@@ -14,7 +14,8 @@
       history.back();
     }
     document.getElementById("logoutYes").onclick = () => {
-      localStorage.setItem("userid", "");
+      localStorage.removeItem("userid");
+      localStorage.removeItem("username");
       window.location.href = "index.html";
     }
   }

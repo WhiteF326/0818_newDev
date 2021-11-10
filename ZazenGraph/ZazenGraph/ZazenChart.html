@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+  <!-- 1. この script タグをコピペする -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js" integrity="sha512-GMGzUEevhWh8Tc/njS0bDpwgxdCJLQBWG3Z2Ct+JGOpVnEmjvNx6ts4v6A2XJf1HOrtOsfhv3hBKpK9kE5z8AQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<script>
+  // 2. 以下の onload メソッドを body より前に script タグを用意したうえでコピペする
+  window.onload = async () => {
+    // データを取得 今はphpから直接取れるがよしなに変更すること
+    const graphData = JSON.parse(
+      await (await fetch("http://localhost/test.php")).text()
+    );
+    // 時間を軸データへ変換
+    // h * 3600 + m * 60 + s + ms * 0.001 として数値化する
+    const rawLabels = graphData.map(r => {
+      const rawValues = r[0].replace(".", ":").split(":").map(v => Number(v));
+      return rawValues[0] * 60 * 60 + rawValues[1] * 60
+        + rawValues[2] + rawValues[3] * 0.001;
+    });
+    // 誤差が出やすいので誤差と見做すレベルを設定する
+    const eps = 0.0001;
+    const revEps = 10000;
+    // 誤差を捨てるメソッド
+    const selfFloor = (value = 0) => {
+      return Number(String(Math.floor(value * revEps) * eps).substr(0, 10));
+    }
+    // 左から 0 埋めするメソッド
+    const zeroPadding = (value = 0, digit = 0) => {
+      return (
+        (new Array(digit).fill("0").reduce((c, i) => c + i)) + String(value)
+      ).slice(-digit);
+    }
+    // 規準時刻
+    const firstValue = rawLabels[0];
+    const labels = rawLabels.map(r => {
+      // 日付を跨ぐ場合を考慮する
+      const labelValue = selfFloor(
+        r - firstValue + ((r - firstValue < 0) * 3600)
+      );
+      const hour = zeroPadding(Math.floor(labelValue / 3600), 1);
+      const minute = zeroPadding(Math.floor(labelValue / 60) % 60, 2);
+      const second = zeroPadding(Math.floor(labelValue) % 60, 2);
+      const miliSecond = zeroPadding(
+        (Number(String(labelValue).split(".")[1]) || 0), 3
+      );
+      // h:mm:ss.ms を生成する
+      return hour + ":" + minute + ":" + second;
+    });
+    // 渡すダミーのx軸データ
+    const dummyLabels = new Array(graphData.length).fill(0);
+    // 実データの配列を作成
+    const datasets = graphData.map(r => Number(r[2]));
+    // 0.001 単位に精度を落として上下限を取る
+    const low = Math.min(...graphData.map(r => r * 100)) / 100.0;
+    const high = Math.ceil(Math.max(...graphData.map(r => r * 100)) / 100.0);
+    // グラフの描画
+    const graphCanvas = document.getElementById("rotateGraph");
+    const rotateChart = new Chart(
+      graphCanvas, {
+        // 折れ線
+        type: "line",
+        // 描画するデータの定義
+        data: {
+          "labels": labels,
+          "datasets": [{
+            "data": datasets,
+            // 4. 色指定 気に入らなければ変更してください
+            "borderColor": "#a7d99d"
+          }],
+        },
+        //
+        "options": {
+          "scales": {
+            "y": {
+              // 単位のない数字なので数値表記ごと消す
+              "ticks": {
+                "display": false,
+              }
+            },
+            "x": {
+              // 渡したダミーから実値を引く lambda method
+              "ticks": {
+                "callback": (v, i) => labels[v]
+              }
+            }
+          },
+          // y軸の上下限を指定
+          "y": {
+            "min": low,
+            "max": high,
+          },
+          // リサイズ非対応にする
+          "responsive": false,
+          // 反例を非表示にする
+          "plugins": {
+            "legend": {
+              "display": false
+            }
+          },
+          // ホバー時の値表示機能がとても重いので無効化
+          "events": [],
+          // データポイントは非表示にして線だけで描画する
+          "elements": {
+            "point": {
+              "radius": 0
+            }
+          },
+          // ゼロから盛り上がってくるアニメーションも重いので消す
+          "animation": false
+        }
+      }
+    );
+  }
+</script>
+
+<body>
+  <!-- 3. 以下の canvas タグをコピペする -->
+  <canvas width="300" height="200" id="rotateGraph"></canvas>
+</body>
+
+</html>

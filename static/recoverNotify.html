@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>アカウントリカバリ</title>
+  <link rel="stylesheet" href="css/sakura.css" type="text/css">
+</head>
+
+<style>
+  body {
+    background-color: #eafcfa;
+    height: 10%;
+    width: fit-content;
+  }
+
+  input[type="text"] {
+    width: 300px;
+  }
+</style>
+
+<script type="module">
+  import { fetchJSON } from './js/fetchP.js';
+  window.onload = async () => {
+    const token = new URL(window.location.href).searchParams.get("token");
+    const link = document.createElement("a");
+    link.href = "./recoveryAction.html?token=" + token;
+    link.innerText = "こちら";
+    document.getElementById("recoveryAction").appendChild(link);
+    document.getElementById("recoveryAction").appendChild(
+      document.createTextNode("にアクセスしてパスワードをリセットしてください。")
+    );
+  }
+</script>
+
+<body>
+  <h3>アカウントのリカバリ</h3>
+  送信された情報に一致するアカウントが見つかりました。<br>
+  <span id="recoveryAction"></span>
+  <form action="./recover.html">
+    <input type="submit" value="戻る">
+  </form>
+</body>
+
+</html>

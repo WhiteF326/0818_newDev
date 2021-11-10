@@ -10,10 +10,10 @@
   <link rel="stylesheet" href="css/sakura.css" type="text/css">
 </head>
 <style>
-  body{
+  body {
     background-color: #eafcfa;
-      height: 10%;
-      width: 30%;
+    height: 10%;
+    width: 30%;
   }
 
   form input {
@@ -23,6 +23,11 @@
 
   #errors {
     color: #B00001;
+  }
+
+  .recover {
+    position: fixed;
+    transform: translateY(500px);
   }
 </style>
 <script type="module">
@@ -47,7 +52,6 @@
       if (loginResult) {
         localStorage.setItem("userid", uid);
         localStorage.setItem("username", loginResult);
-        localStorage.setItem("pass", upass);
         document.getElementById("succeed").style.display = "block";
         document.getElementById("usubmit").disabled = true;
       } else {
@@ -87,6 +91,9 @@
   </span>
   <span id="errors"></span>
   <iframe name="dummy" style="display: none;"></iframe>
+  <span class="recover">
+    <a href="./recover.html">パスワードを忘れた方はこちら</a><br>
+  </span>
 </body>
 
 </html>
