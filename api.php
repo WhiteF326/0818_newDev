@@ -218,7 +218,7 @@ switch(explode("/", $path)[1]){
         $stm->bindValue(":key", $key);
         $stm->execute();
         $result = $stm->fetchAll(PDO::FETCH_ASSOC);
-        var_dump($result);
+        echo null;
         break;
       }
 
@@ -378,6 +378,7 @@ switch(explode("/", $path)[1]){
         $method = "AES-256-CBC";
         $ivLength = openssl_cipher_iv_length($method);
         $hitEmail = false;
+        $hitUser = false;
         forEach($users as $user){
           $decrypted = json_decode(
             openssl_decrypt(
@@ -397,9 +398,11 @@ switch(explode("/", $path)[1]){
           );
           if($reDecrypted == $queryValue){
             $hitEmail = $reDecrypted;
+            $hitUser = $user["id"];
           }
           if($user["id"] == $queryValue){
             $hitEmail = $reDecrypted;
+            $hitUser = $user["id"];
           }
         }
         if($hitEmail){
@@ -411,17 +414,9 @@ switch(explode("/", $path)[1]){
           array_push($_SESSION["tokens"], array(
             "token" => $token,
             "expire" => $expireDate,
-            "email" => $hitEmail
+            "email" => $hitEmail,
+            "id" => $hitUser
           ));
-          mb_send_mail(
-            $hitEmail,
-            "ぶろっくるん(Blockln) アカウントリカバリ",
-            <<< EOD
-            以下のリンクにアクセスして、アカウントのメールアドレスを再設定してください。
-            {$env["urlPrefix"]}/static/recoveryAction.html?token=$token
-            EOD,
-            "From:noreply@fkiohr-blockln.main.jp"
-          );
           echo $token;
         }else{
           echo "Not Found";
@@ -435,6 +430,7 @@ switch(explode("/", $path)[1]){
             array_shift($_SESSION["tokens"]);
           }
         }
+        var_dump($_SESSION["tokens"]);
         break;
       }
 
@@ -446,8 +442,22 @@ switch(explode("/", $path)[1]){
         break;
       }
 
-      case "removeToken": {
-        //
+      case "resetPassword": {
+        $token = $prm["token"];
+        $upass = utf8_encode($prm["password"]);
+        for($i = 0; $i < 100; $i++) {
+          $upass = hash("sha512", $upass);
+        }
+        $id = $_SESSION["tokens"][
+          array_search($token, $_SESSION["tokens"])
+        ]["id"];
+        $sql = "update users set pass = :pass where id = :id";
+        $stm = $pdo->prepare($sql);
+        $stm->bindValue(":pass", $upass);
+        $stm->bindValue(":id", $id);
+        $stm->execute();
+        
+        echo $id;
         break;
       }
 

@@ -24,11 +24,14 @@
 <script type="module">
   import { fetchJSON } from './js/fetchP.js';
   window.onload = async () => {
-    const email = await fetchJSON("api/recovery/searchToken", {
-      "token": new URL(window.location.href).searchParams.get("token")
-    });
-    document.getElementById("recoveryAction").innerText
-      = email + " 宛にメールを送信しました。確認をお願い致します。";
+    const token = new URL(window.location.href).searchParams.get("token");
+    const link = document.createElement("a");
+    link.href = "./recoveryAction.html?token=" + token;
+    link.innerText = "こちら";
+    document.getElementById("recoveryAction").appendChild(link);
+    document.getElementById("recoveryAction").appendChild(
+      document.createTextNode("にアクセスしてパスワードをリセットしてください。")
+    );
   }
 </script>
 
