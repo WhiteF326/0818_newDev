@@ -147,9 +147,10 @@
       "freeStageSelect.html",
       "story.html",
       "ranking.html",
+      "howToPlay.html",
       "settings.html",
     ];
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 7; i++) {
       document.getElementById("ref" + i).onclick = () => {
         window.location.href = moveToList[i];
       }
@@ -165,7 +166,7 @@
       endPoint = 3;
     } else {
       // 未ログイン時の処理
-      for (let i = 2; i <= 5; i++) {
+      for (let i = 2; i <= 6; i++) {
         document.getElementById("ref" + i).remove();
       }
     }
@@ -205,6 +206,11 @@
         </tr>
         <tr>
           <td id="ref5">
+            <img src="https://cdn.wikiwiki.jp/to/w/boudai/%E9%9F%B3%E5%89%B2%E3%82%8C%E3%83%9D%E3%83%83%E3%82%BF%E3%83%BCBB/::ref/20180410_242737.png?rev=27cfc0d48468b1adbfafe34ae95f0e95&t=20180410002758">
+          </td>
+        </tr>
+        <tr>
+          <td id="ref6">
             <img src="img/config.png">
           </td>
         </tr>

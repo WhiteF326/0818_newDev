@@ -5,7 +5,7 @@ class ProgBoad {
     this.endFlg = false;
     const workdiv = document.getElementById("blocklyDiv");
     workdiv.setAttribute("style",
-      "height: " + String(floor(window.innerHeight / 2) - 2) + "px; " +
+      "height: " + String(floor(window.innerHeight / 2) - 8) + "px; " +
       "width: " + document.getElementById("stages").innerWidth + "px;");
     // 解禁済みブロックの適用
     if (gameBody.mapinfo['unlocked']) {
