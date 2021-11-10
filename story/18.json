@@ -1,17 +1,17 @@
 {
   "stage": [
-    [0, 0, 0, 0],
-    [0, 1, 1, 0],
-    [0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 1, 4, 4, 4, 4, 1, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   ],
   "param": [
-    [0, 0, 0, 0],
-    [0, 0, 0, 0],
-    [0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   ],
   "start": [1, 1, "right"],
-  "goal": [1, 2],
-  "controll": [1, 5],
+  "goal": [1, 8],
+  "controll": [0, 0],
   "costList": {
     "move": 3,
     "destroy": 5,
@@ -19,13 +19,22 @@
     "loop": 1,
     "if": 1
   },
-  "maxCost": 10,
-  "maxStep": 10,
+  "maxCost": 30,
+  "maxStep": 24,
   "unlocked": [
     "move",
-    "destroy"
+    "destroy",
+    "create",
+    "repair",
+    "loop",
+    "if",
+    "sensor_loop",
+    "sensor_foot_dest",
+    "sensor_foot_stab",
+    "sensor_foot_floor",
+    "sensor_foot_colp"
   ],
-  "message": "岩をこわしてみよう",
-  "hint": "左側にあるブロックを一度右側のスペースに置いて、動きを確かめてみよう！",
-  "level": 3
+  "message":"こわれるゆかを修復しよう",
+  "hint": "連続で修復してみよう",
+  "level": 18
 }
