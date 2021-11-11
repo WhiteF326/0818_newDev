@@ -138,6 +138,9 @@
   window.onload = () => {
     // ごめんなさい
     localStorage.removeItem("pass");
+
+    // よくバグるのでここでも消す
+    localStorage.setItem("gameEnabled", "false");
     
     let diff = 0;
     let endPoint = 2;
