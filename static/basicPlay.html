@@ -23,6 +23,10 @@
   .bitsmall {
     font-size: .8em;
   }
+
+  .bottomLess {
+    margin-bottom: 0;
+  }
 </style>
 
 <body>
@@ -35,6 +39,7 @@
   <button onclick='window.location.href="basicPlay.html#screen"'>画面のつくり</button>
   <button onclick='window.location.href="basicPlay.html#mapItems"'>マップ上にあるもの</button>
   <button onclick='window.location.href="basicPlay.html#gameFlow"'>ゲームの流れ</button>
+  <button onclick='window.location.href="basicPlay.html#score"'>スコアの基準</button>
   <hr>
   <h5 id="screen">画面のつくり</h5>
   <img src="help/body1.png">
@@ -111,7 +116,7 @@
         <td><img src="help/cursor.png"></td>
         <td class="bitsmall">
           行く先が木でも床でも、移動できます。<br>
-          プログラム次第で、岩(花)をこわすことなどもできます。
+          プログラム次第で、岩をこわすことなどもできます。
         </td>
       </tr>
       <tr>
@@ -137,8 +142,8 @@
         </td>
       </tr>
       <tr>
-        <td class="bitsmall">岩(花)</td>
-        <td><img src="img/map03.png"><img src="img/flower_harm.png"></td>
+        <td class="bitsmall">岩</td>
+        <td><img src="img/map03.png"></td>
         <td class="bitsmall">
           キャラクターはこのマスに入れません。<br>
           カーソルのプログラム次第で、こわすこともできます。
@@ -162,6 +167,7 @@
       </tr>
     </tbody>
   </table>
+  他にもなんかいろいろあります<br>
   <button onclick='window.location.href="basicPlay.html#headList"'>目次に戻る</button>
   <hr>
   <h5 id="gameFlow">ゲームの流れ</h5>
@@ -229,7 +235,60 @@
       </li>
     </ol>
   </p>
-  明日 もうちょっとがんばる
+  キャラクターの動きを予測して、カーソルを操作しましょう。
+  <img src="help/path.png"><br>
+  <button onclick='window.location.href="basicPlay.html#headList"'>目次に戻る</button>
+  <hr>
+  <h5 id="score">スコアの基準</h5>
+  <img src="help/scoresample.png">
+  セレクトモードでは、ステージクリア時にプログラムの効率のよさを数値化したスコアが表示されます。<br>
+  <ul>
+    <li>
+      基本スコア<br>
+      <span class="bitsmall">
+        クリア時に、プログラムの最大コスト－現在コストを「残りコスト」とします。<br>
+        クリア時のキャラクターの残り歩数と、プログラムの残りコストを掛け算したものが基本スコアです。<br>
+        この画像の例では、残りコストは (54 - 9) × 24 = 1080 です。<img src="help/prog3stat.png">
+      </span>
+    </li>
+    <li>
+      減点<br>
+      以下の数を合計した数が減点になります。
+      <span class="bitsmall">
+        <ul>
+          <li>使ったプログラムブロックの数を 15 倍した数</li>
+          <li>
+            黄色、緑色のプログラムブロックの数を 12 倍した数<br>
+            ただし、黄色、緑色のプログラムブロックとは、
+            <ul class="bottomLess">
+              <li>足元の岩をこわす</li>
+              <li>足元に岩を置く</li>
+              <li>こわれるゆかを修復する + 1</li>
+            </ul>の3種類のプログラムブロックのことをいいます。
+          </li>
+          <li>
+            ループ回数の合計を 2 倍した数<br>
+            〇回繰り返すブロックの〇に入っている数字が「ループ回数」です。
+          </li>
+        </ul>
+        この画像の例では、プログラムブロックが 3 個、うち 1 個が「足元に岩を置く」ブロックです。<br>
+        また、繰り返しが使われていて、回数は 2 です。よって、<br>
+        減点は (3 × 15) + (1 × 12) + (2 × 2) = 61 点です。<br>
+        <img src="help/sampleprog3.png">
+      </span>
+    </li>
+    <li>
+      最終スコア<br>
+      <span class="bitsmall">
+        基本スコアから減点スコアを引いた数が最終的なスコアです。<br>
+        ※ただし計算結果が 0 より小さい数になる場合は、最終スコアは 0 点になります。
+      </span>
+    </li>
+  </ul>
+  <span class="bitsmall">
+    なお、ストーリーモードでは、スコアは計算されません。<br>
+  </span>
+  <button onclick='window.location.href="basicPlay.html#headList"'>目次に戻る</button>
 </body>
 
 </html>

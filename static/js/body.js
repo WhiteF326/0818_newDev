@@ -347,7 +347,7 @@ class Body {
 
     if (moving) {
       document.getElementById("step").innerText =
-        "残り歩数 : " + (this.lastStep - 1);
+        "残り歩数 : " + (this.lastStep - 2);
       const power = moveWay[this.currentVector]['power'];
       const dy = this.currentY + power[0];
       const dx = this.currentX + power[1];
