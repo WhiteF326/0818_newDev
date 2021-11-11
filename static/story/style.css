@@ -1,3 +1,9 @@
+.disparea {
+    position: relative;
+    width: 45%;
+    margin:0 auto;
+ }
+
 #serifarea {
     background-color: rgb(80, 80, 80);
     width: 850px;
@@ -27,12 +33,17 @@ button {
 
 .Btn_1 {
     position: absolute;
-    right: 230px;
+    right: 220px;
 }
 
 .Btn_2 {
     position: absolute;
-    right: 10px;
+    right: 0px;
+}
+
+.hbtn {
+    position: absolute;
+    left: 120px;
 }
 
 .backBtn {
@@ -46,8 +57,4 @@ button {
     border-bottom: solid 4px #627295;
     border-radius: 3px;
     margin-top: 10px;
-}
-
-body{
-    background-color: #eafcfa;
 }
