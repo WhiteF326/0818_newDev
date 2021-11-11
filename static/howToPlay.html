@@ -30,6 +30,22 @@
   }
 </style>
 
+<script>
+  window.onload = () => {
+    const moves = {
+      "mode": "indexHelp.html",
+      "basic": "basicPlay.html",
+      "select": "selectHelp.html",
+      "story": "storyHelp.html"
+    }
+    Object.keys(moves).forEach(r => {
+      document.getElementById(r).onclick = () => {
+        document.getElementsByName("helpBody")[0].setAttribute("src", moves[r]);
+      }
+    });
+  }
+</script>
+
 <body>
   <form action="./index.html">
     <input type="submit" value="トップに戻る">

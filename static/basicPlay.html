@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>チュートリアル</title>
+  <link rel="stylesheet" href="css/sakura.css" type="text/css">
+</head>
+
+<style>
+  body {
+    background-color: #eafcfa;
+    height: 10%;
+    width: fit-content;
+  }
+
+  input[type="text"] {
+    width: 300px;
+  }
+
+  .bitsmall {
+    font-size: .8em;
+  }
+</style>
+
+<body>
+  <h4>基本の遊び方</h4>
+  「ぶろっくるん」では、あなたはキャラクターには直接関わることができません。<br>
+  <b>キャラクターがゴールに行けるように、画面上のカーソルをうまく操ってステージを書き換える</b>
+  真新しいルールのゲームです。
+  <hr>
+  <h5 id="headList">目次</h5>
+  <button onclick='window.location.href="basicPlay.html#screen"'>画面のつくり</button>
+  <button onclick='window.location.href="basicPlay.html#mapItems"'>マップ上にあるもの</button>
+  <button onclick='window.location.href="basicPlay.html#gameFlow"'>ゲームの流れ</button>
+  <hr>
+  <h5 id="screen">画面のつくり</h5>
+  <img src="help/body1.png">
+  <ol>
+    <li>
+      <a href="#mapItems">ステージマップ</a><br>
+      <span class="bitsmall">
+        問題のぶたいとなるステージの全体図です。<br>
+        青とオレンジ色の「カーソル」や、水色の「キャラクター」がいます。<br>
+        このキャラクターをゴールへたどり着かせるのが、このゲームの目的です。ゴールは、水色のハタの場所です。
+      </span>
+    </li>
+    <li id="costlist">
+      コスト表<br>
+      <span class="bitsmall">
+        あなたが置くブロックに設定されている「コスト」の表です。<br>
+      </span>
+    </li>
+    <li id="currentcost">
+      現在のコスト<br>
+      <span class="bitsmall">
+        プログラム (8.) の、今のコストを表示しています。<br>
+        プログラムブロックを置いたり消すと、それに応じて計算し直されます。
+      </span>
+    </li>
+    <li id="laststep">
+      残り歩数<br>
+      <span class="bitsmall">
+        キャラクターが移動できる残りの回数です。<br>
+        キャラクターが動き始めると、一歩ごとに1減っていきます。<br>
+        0になるまでにキャラクターがゴールにたどり着けないと、ゲームオーバーになってしまいます。
+      </span>
+    </li>
+    <li id="startbutton">
+      開始ボタン<br>
+      <span class="bitsmall">
+        カーソルが動き始めます。<br>
+        カーソルの動きが止まると、キャラクターが自動で動き始めます。<br>
+        詳しくは<a href="#gameFlow">こちら</a>
+      </span>
+    </li>
+    <li id="restartbutton">
+      やり直しボタン<br>
+      <span class="bitsmall">
+        カーソルやキャラクターが動いている間に押すと、まだ動いていないときの状態まで戻ります。
+      </span>
+    </li>
+    <li id="proglist">
+      プログラムブロックのリスト<br>
+      <span class="bitsmall">
+        このステージで使えるプログラムブロックのリストです。<br>
+      </span>
+    </li>
+    <li id="progarea">
+      プログラム作成エリア<br>
+      <span class="bitsmall">
+        ここでプログラムを作ります。<br>
+        このゲームでは、あなたは<b>キャラクターではなく、カーソルの動きをプログラムします。</b>
+      </span>
+    </li>
+  </ol>
+  <button onclick='window.location.href="basicPlay.html#headList"'>目次に戻る</button>
+  <hr>
+  <h5 id="mapItems">マップ上にあるもの</h5>
+  <table>
+    <tbody>
+      <tr>
+        <th>名称</th>
+        <th>見た目</th>
+        <th>とくちょう</th>
+      </tr>
+      <tr>
+        <td class="bitsmall">カーソル</td>
+        <td><img src="help/cursor.png"></td>
+        <td class="bitsmall">
+          行く先が木でも床でも、移動できます。<br>
+          プログラム次第で、岩(花)をこわすことなどもできます。
+        </td>
+      </tr>
+      <tr>
+        <td class="bitsmall">キャラクター</td>
+        <td><img src="help/chara.png"></td>
+        <td class="bitsmall">
+          一定の決まりにしたがって歩き続けます。<br>
+        </td>
+      </tr>
+      <tr>
+        <td class="bitsmall">床</td>
+        <td><img src="img/map02.png"></td>
+        <td class="bitsmall">
+          キャラクターもこのマスに入れます。<br>
+        </td>
+      </tr>
+      <tr>
+        <td class="bitsmall">木</td>
+        <td><img src="img/map01.png"></td>
+        <td class="bitsmall">
+          キャラクターはこのマスに入れません。<br>
+          カーソルのプログラムでも壊せません。
+        </td>
+      </tr>
+      <tr>
+        <td class="bitsmall">岩(花)</td>
+        <td><img src="img/map03.png"><img src="img/flower_harm.png"></td>
+        <td class="bitsmall">
+          キャラクターはこのマスに入れません。<br>
+          カーソルのプログラム次第で、こわすこともできます。
+        </td>
+      </tr>
+      <tr>
+        <td class="bitsmall">ゴール</td>
+        <td><img src="img/goal.png"></td>
+        <td class="bitsmall">
+          ステージのゴールです。<br>
+          キャラクターをここに向かわせましょう。
+        </td>
+      </tr>
+      <tr>
+        <td class="bitsmall">バネ</td>
+        <td><img src="img/spring.png"></td>
+        <td class="bitsmall">
+          このマスを踏んだキャラクターは、<br>木や岩でも1マスなら飛びこせます。<br>
+          カーソルはバネを踏みません<br>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <button onclick='window.location.href="basicPlay.html#headList"'>目次に戻る</button>
+  <hr>
+  <h5 id="gameFlow">ゲームの流れ</h5>
+  <h6>全体の流れ</h6>
+  <ol>
+    <li>プログラムを作成する</li>
+    <li>開始ボタンを押す</li>
+    <li>カーソルがプログラムに従って動く</li>
+    <li>キャラクターが動き始める</li>
+  </ol>
+  <h6>1.プログラムを作成する</h6>
+  <p>
+    <a href="#progarea">プログラム作成エリア</a>を見てみましょう。<br>
+    以前に選んだことのないステージでは、真っ白なキャンバスが表示されます。<br>
+    左側の<a href="#proglist">プログラムブロックのリスト</a>から、ブロックをひとつ置いてみましょう。<br>
+    ブロックをクリックしたまま、<img src="help/body2.png">
+    右側にカーソルを移動してマウスボタンを離します。<img src="help/body3.png">
+    これによって、ブロックを1つ置けました。<br>
+    <a href="#costlist">コスト表</a>を見てみましょう。「進む」に対応する数は3です。<img src="help/costtable.png"><br>
+    じっさいに、<a href="#currentcost">現在のコスト</a>が0から3になりました。<br><img src="help/costmodified.png"><br>
+    現在のコストが最大のコストを超えない限り、ブロックをいくつでも置くことができます。<br>
+    また、ブロックを置くとき、すでにあるブロックの前後につなげて置くことができます。
+  </p>
+  <h6>2.開始ボタンを押す</h6>
+  <p>
+    自分がつくったプログラムでカーソルを動かすには、<a href="#startbutton">開始ボタン</a>を押してください。<br>
+    <ul class="bitsmall">
+      <li>プログラムの「現在コスト」が「最大コスト」をこえて、赤色で表示されている</li>
+      <li>繰り返しの回数が合計で50以上になっている</li>
+      <li>プログラムブロック「判定する条件」の右上に、条件のプログラムブロックがついていないものがある</li>
+    </ul>
+    上のどれかひとつでも当てはまる場合、プログラムを作り直してください、と表示されます。
+  </p>
+  <h6>3.カーソルがプログラムに従って動く</h6>
+  <p>
+    無事プログラムが動き始めました。<br>
+    カーソルはプログラムブロックを、プログラム作成エリアの一番上にあるものから順番に読み取ります。<br>
+    たとえば、このプログラムは「左に進む」「足元の岩をこわす」の順に読み取られます。<br><img src="help/sampleprog1.png"><br>
+    また、このプログラムは「上に進んで、足元の岩をこわす」ことを3回繰り返して、次に「右に進む」「足元の岩をこわす」の順に読み取られます。<br><img src="help/sampleprog2.png">
+  </p>
+  <p>
+    カーソルは、プログラムから読み取った指示をそのまま行動に移します。<br>
+    あなたは、カーソルの動きを見ている途中で、作ったプログラムの間違いに気づくかもしれません。<br>
+    <a href="#restartbutton">やり直しボタン</a>を押すと、カーソルが動き出す前までまき戻ってプログラムを作り直すことが出来ます。
+  </p>
+  <h6>4.キャラクターが動き始める</h6>
+  <p>
+    カーソルがプログラムに従って動いて、全てのプログラムブロックを読み取り終わると、キャラクターが動き始めます。<br>
+  </p>
+  <p>
+    キャラクターは、向いている方向に一歩ずつ進みます。この間、<a href="#laststep">残り歩数</a>が1ずつ減っていきます。<br>
+    また、向いている方向に木や岩があって、その方向に進めないことがあります。その場合、このように方向転換します。<br>
+    <ol>
+      <li>
+        右に曲がって進めるなら、右に曲がります。<br>
+        <img src="help/help1.png">
+      </li>
+      <li>
+        右には進めず、左に進めるなら、左に曲がります。<br>
+        <img src="help/help2.png">
+      </li>
+      <li>
+        右にも左にも進めないなら、真反対を向きます。<br>
+        <img src="help/help3.png">
+      </li>
+    </ol>
+  </p>
+  明日 もうちょっとがんばる
+</body>
+
+</html>
