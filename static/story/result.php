@@ -10,6 +10,7 @@ $userid = $_SESSION["userid"];
 //$questionflg = false;
 
 $questionNo = strval(intval($_SESSION["questionNo"]) + 1);
+
 //データベースに接続
 $serif = [];
 //サーバーからセリフファイルを呼び出してstory.jsに送る
@@ -33,8 +34,12 @@ try {
   } else {
     //不正解のとき
     //sql文作成
+    $exchange = [
+      1, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5,
+      6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8
+    ];
     $sql = "SELECT file,back_img FROM false_serif
-            WHERE $questionNo = question_no";
+            WHERE $exchange[$questionNo] = question_no";
     //sql実行
     $stmt = $pdo->query($sql);
 
@@ -95,6 +100,7 @@ $js_array = json_encode($serif);
   <div id="serifarea"></div>
   <div id="buttonarea"></div>
   <script>
+    localStorage.setItem("gameEnabled", "false");
     let mutedFlg = true;
     document.body.innerHTML += '<button id="toggleBGM">BGM を ON にする</button>';
     const tgl = document.getElementById("toggleBGM");
@@ -267,6 +273,9 @@ $js_array = json_encode($serif);
   <?php } else {
 
   ?>
+  <script>
+    localStorage.setItem("gameEnabled", "story");
+  </script>
     <form action="./../toStage.html" method="post" class="formBtn">
       <input type="submit" value="問題に戻る" class="backBtn">
       <input type="hidden" name="questionNo" value="<?php echo $questionNo; ?>">

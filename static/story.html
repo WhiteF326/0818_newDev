@@ -12,10 +12,11 @@
 <script type="module">
   import { fetchJSON } from './js/fetchP.js';
   window.onload = async () => {
-    // 本来ならば進捗を読み込む
+    localStorage.setItem("gameEnabled", "false");
     if (localStorage.getItem("userid") === "") {
       window.location.href = "accountError.html";
     }
+    
     const progress = Number(
       (await fetchJSON("api/story/getProgress", {
         "userid": localStorage.getItem("userid")
@@ -60,10 +61,10 @@
     if (progress == 0) {
       document.getElementById("select1").src = "img/begin.png";
       document.getElementById("ref0").onclick = () => {
-        window.location.href = "./story/opening.php";
+        window.location.href = "./story/opening.php?scenarioNo=1";
       }
       document.getElementById("select1").onclick = () => {
-        window.location.href = "./story/opening.php";
+        window.location.href = "./story/opening.php?scenarioNo=1";
       }
       document.getElementById("ref1").remove();
     } else {

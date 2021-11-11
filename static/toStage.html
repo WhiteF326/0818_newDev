@@ -16,7 +16,11 @@
       })).split("\"")[1]
     );
     if(progress >= 3){
-      window.location.href = "storyStageSelect.html";
+      if(localStorage.getItem("gameEnabled") === "story"){
+        window.location.href = "gameBody.html";
+      }else{
+        window.location.href = "storyStageSelect.html";
+      }
     }else{
       localStorage.setItem("gameEnabled", "story");
       localStorage.setItem("storyStage", progress + 1);

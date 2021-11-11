@@ -53,6 +53,9 @@
           (a, b, j) => a + (j <= i ? b : 0)
         )
       ).map(v => (1 << v) - 2);
+    const callStory = Math.max(...(stageRange.map(
+      (v, i) => (v + 1 == progress) ? i + 2 : 0))
+    );
     const reachedStage = lowerBound(stageRange, progress);
     const stageTitles = [
       "1.",
@@ -95,7 +98,12 @@
           tile.onclick = () => {
             localStorage.setItem("storyStage", String(moveTo));
             localStorage.setItem("gameEnabled", "story");
-            window.location.href = "gameBody.html";
+            if(callStory){
+              window.location.href
+                = "./story/opening.php?scenarioNo=" + callStory;
+            }else{
+              window.location.href = "gameBody.html";
+            }
           }
         }
         // 文字の処理
