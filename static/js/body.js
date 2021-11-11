@@ -288,7 +288,6 @@ class Body {
     if (this.currentY === this.goal[0] && this.currentX === this.goal[1] &&
       this.charaAuto.isWaitFor() && moving) {
       moving = false;
-      return;
       this.goaled = true;
       const modal = document.getElementsByClassName("modalback")[0];
       modal.style.transition = "1s";
