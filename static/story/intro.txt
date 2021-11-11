@@ -1,0 +1,11 @@
+opening.php
+
+html部分のbodyタグのあとに<div class = "disparea">を追加
+
+result.php
+
+html部分のbodyタグのあとに<div class = "disparea">を追加
+
+108行目あたりのヒントボタンを作る部分でhbtn.innerHTML = "ヒントを見る";の後にhbtn.classList.add("hbtn");を追加
+
+最後のformタグにclass = "disparea"を追加
