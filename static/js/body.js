@@ -288,6 +288,7 @@ class Body {
     if (this.currentY === this.goal[0] && this.currentX === this.goal[1] &&
       this.charaAuto.isWaitFor() && moving) {
       moving = false;
+      return;
       this.goaled = true;
       const modal = document.getElementsByClassName("modalback")[0];
       modal.style.transition = "1s";
@@ -347,7 +348,7 @@ class Body {
 
     if (moving) {
       document.getElementById("step").innerText =
-        "残り歩数 : " + (this.lastStep - 1);
+        "残り歩数 : " + (this.lastStep - 2);
       const power = moveWay[this.currentVector]['power'];
       const dy = this.currentY + power[0];
       const dx = this.currentX + power[1];
