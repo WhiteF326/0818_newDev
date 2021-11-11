@@ -88,196 +88,194 @@ $js_array = json_encode($serif);
   }
 </style>
 
-<body onload="message()">
-  <div class = "disparea">
-    <div id="area">
-      <canvas id="can" width="850" height="530"></canvas>
-    </div>
-    <div id="serifarea"></div>
-    <div id="buttonarea"></div>
-    <script>
-      let mutedFlg = true;
-      document.body.innerHTML += '<button id="toggleBGM">BGM を ON にする</button>';
-      const tgl = document.getElementById("toggleBGM");
-      const bgm = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/forest_ver2.mp3")
-      bgm.volume = 0.166;
-      tgl.onclick = () => {
-        mutedFlg = !mutedFlg;
-        tgl.innerText = mutedFlg ? "BGM を ON にする" : "BGM を OFF にする"
-        if(!mutedFlg){
-          bgm.play();
-        }else{
-          bgm.pause();
-        }
+<body onload="message()" class="disparea">
+  <div id="area">
+    <canvas id="can" width="850" height="530"></canvas>
+  </div>
+  <div id="serifarea"></div>
+  <div id="buttonarea"></div>
+  <script>
+    let mutedFlg = true;
+    document.body.innerHTML += '<button id="toggleBGM">BGM を ON にする</button>';
+    const tgl = document.getElementById("toggleBGM");
+    const bgm = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/forest_ver2.mp3")
+    bgm.volume = 0.166;
+    tgl.onclick = () => {
+      mutedFlg = !mutedFlg;
+      tgl.innerText = mutedFlg ? "BGM を ON にする" : "BGM を OFF にする"
+      if (!mutedFlg) {
+        bgm.play();
+      } else {
+        bgm.pause();
       }
-      
-      //キャンバスの作成
-      let canvas = document.getElementById("can");
-      let ctx = canvas.getContext("2d");
+    }
 
-      //画像の取得
-      let backImg = new Image();
-      let youseiImg = new Image();
-      let robotImg = new Image();
-      let path = "<?php echo $imgPath; ?>";
+    //キャンバスの作成
+    let canvas = document.getElementById("can");
+    let ctx = canvas.getContext("2d");
 
-      //パス設定
-      youseiImg.src = "image/yousei.png";
-      robotImg.src = "image/robo.png";
+    //画像の取得
+    let backImg = new Image();
+    let youseiImg = new Image();
+    let robotImg = new Image();
+    let path = "<?php echo $imgPath; ?>";
+
+    //パス設定
+    youseiImg.src = "image/yousei.png";
+    robotImg.src = "image/robo.png";
 
 
-      //画像を読み込む前に描画しないようにloadイベントを行う
-      /*backImg.onload = function() {
-          //画像の描画
-          ctx.drawImage(backImg, 0, 0, 850, 530);
-          ctx.drawImage(robotImg, 0, 200, 450, 600);
+    //画像を読み込む前に描画しないようにloadイベントを行う
+    /*backImg.onload = function() {
+        //画像の描画
+        ctx.drawImage(backImg, 0, 0, 850, 530);
+        ctx.drawImage(robotImg, 0, 200, 450, 600);
+        ctx.drawImage(youseiImg, 400, 200, 450, 600);
+
+    }*/
+
+    //phpから正誤判定のフラグ受け取り
+    let js_flg = "<?php var_export((bool)$questionflg); ?>";
+
+    const btnDiv = document.getElementById("buttonarea");
+    if (js_flg == "true") { //正解のとき
+      backImg.src = path;
+      youseiImg.src = "image/nikkoriyousei.png";
+      ctx.drawImage(youseiImg, 400, 200, 450, 600);
+
+      //次へ進むボタン
+      /*const btn = document.createElement("button");
+      btn.innerHTML = "次へ進む";
+      btn.onclick = function() {
+          //
+          location = "geme.php";
+      };
+      btnDiv.appendChild(btn);*/
+
+    } else { //不正解のとき
+      //表情変える
+      backImg.src = path;
+      youseiImg.src = "image/gakkusiyousei.png";
+      ctx.drawImage(youseiImg, 400, 200, 450, 600);
+
+
+      //ヒントボタンを作る
+      const hbtn = document.createElement("button");
+      hbtn.innerHTML = "ヒントを見る";
+      hbtn.classList.add("hbtn");
+      hbtn.onclick = function() {
+        document.getElementById("modal").style.opacity = "1";
+        document.getElementById("modal").style.zIndex = "1000";
+
+        document.getElementById("hintText").innerText = <?= '"' . $_SESSION["hinttext"] . '"' ?>;
+
+        document.getElementById("modal").onclick = () => {
+          document.getElementById("modal").style.opacity = "0";
+          document.getElementById("modal").style.zIndex = "-1";
+        }
+      };
+      btnDiv.appendChild(hbtn);
+    }
+
+    //phpからセリフの配列受け取り
+    let array = <?php echo $js_array; ?>;
+    let speed = 100; //ミリ秒単位
+    let string, char;
+    let req;
+    let i = 0;
+
+    function message() {
+      //セリフ配列から一つ目のセリフを取り出す
+      string = array[0].slice(0, 1).toString();
+      array[0] = array[0].slice(1);
+
+      message_char();
+
+    }
+
+    function message_char() {
+      //console.log(i);
+      //char = string.slice(0, i);
+      //console.log(char);
+      let serif = document.getElementById("serifarea");
+
+      if (string.indexOf("妖精", 0) != -1) { //妖精が喋っているとき
+        //全体のcanvasを削除
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //再描画（背景）
+        ctx.drawImage(backImg, 0, 0, 850, 530);
+
+        if (js_flg == "true") { //正解のとき 
+          //表情を変えて再描画
+          youseiImg.src = "image/nikkoriyousei.png";
           ctx.drawImage(youseiImg, 400, 200, 450, 600);
 
-      }*/
-
-      //phpから正誤判定のフラグ受け取り
-      let js_flg = "<?php var_export((bool)$questionflg); ?>";
-
-      const btnDiv = document.getElementById("buttonarea");
-      if (js_flg == "true") { //正解のとき
-        backImg.src = path;
-        youseiImg.src = "image/nikkoriyousei.png";
-        ctx.drawImage(youseiImg, 400, 200, 450, 600);
-
-        //次へ進むボタン
-        /*const btn = document.createElement("button");
-        btn.innerHTML = "次へ進む";
-        btn.onclick = function() {
-            //
-            location = "geme.php";
-        };
-        btnDiv.appendChild(btn);*/
-
-      } else { //不正解のとき
-        //表情変える
-        backImg.src = path;
-        youseiImg.src = "image/gakkusiyousei.png";
-        ctx.drawImage(youseiImg, 400, 200, 450, 600);
-
-
-        //ヒントボタンを作る
-        const hbtn = document.createElement("button");
-        hbtn.innerHTML = "ヒントを見る";
-        hbtn.classList.add("hbtn");
-        hbtn.onclick = function() {
-          document.getElementById("modal").style.opacity = "1";
-          document.getElementById("modal").style.zIndex = "1000";
-
-          document.getElementById("hintText").innerText = <?= '"' . $_SESSION["hinttext"] . '"' ?>;
-
-          document.getElementById("modal").onclick = () => {
-            document.getElementById("modal").style.opacity = "0";
-            document.getElementById("modal").style.zIndex = "-1";
-          }
-        };
-        btnDiv.appendChild(hbtn);
-      }
-
-      //phpからセリフの配列受け取り
-      let array = <?php echo $js_array; ?>;
-      let speed = 100; //ミリ秒単位
-      let string, char;
-      let req;
-      let i = 0;
-
-      function message() {
-        //セリフ配列から一つ目のセリフを取り出す
-        string = array[0].slice(0, 1).toString();
-        array[0] = array[0].slice(1);
-
-        message_char();
-
-      }
-
-      function message_char() {
-        //console.log(i);
-        //char = string.slice(0, i);
-        //console.log(char);
-        let serif = document.getElementById("serifarea");
-
-        if (string.indexOf("妖精", 0) != -1) { //妖精が喋っているとき
-          //全体のcanvasを削除
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          //再描画（背景）
-          ctx.drawImage(backImg, 0, 0, 850, 530);
-
-          if (js_flg == "true") { //正解のとき 
-            //表情を変えて再描画
-            youseiImg.src = "image/nikkoriyousei.png";
-            ctx.drawImage(youseiImg, 400, 200, 450, 600);
-
-          } else { //不正解のとき
-            //表情を変えて再描画
-            youseiImg.src = "image/gakkusiyousei.png";
-            ctx.drawImage(youseiImg, 400, 200, 450, 600);
-          }
-
-        } else if (string.indexOf("アンドロイド", 0) != -1) { //アンドロイドが喋っているとき
-          //全体のcanvasを削除
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          //再描画
-          ctx.drawImage(backImg, 0, 0, 850, 530);
-
-          if (js_flg == "true") { //正解のとき 
-            //表情を変えて再描画
-            robotImg.src = "image/nikkorirobo.png";
-            ctx.drawImage(robotImg, 0, 200, 450, 600);
-          }
-
-        } else {
-          //それ以外
-          ctx.drawImage(backImg, 0, 0, 850, 530);
+        } else { //不正解のとき
+          //表情を変えて再描画
+          youseiImg.src = "image/gakkusiyousei.png";
+          ctx.drawImage(youseiImg, 400, 200, 450, 600);
         }
 
+      } else if (string.indexOf("アンドロイド", 0) != -1) { //アンドロイドが喋っているとき
+        //全体のcanvasを削除
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //再描画
+        ctx.drawImage(backImg, 0, 0, 850, 530);
 
-        //セリフ表示
-        serif.innerHTML = string;
-        //}
-
-        if (i <= string.length) {
-          i++;
-          Timer();
-        } else {
-          if (array[0].length == 0) {
-            return;
-
-          }
-          clearTimeout(req);
-          i = 1;
-          message();
+        if (js_flg == "true") { //正解のとき 
+          //表情を変えて再描画
+          robotImg.src = "image/nikkorirobo.png";
+          ctx.drawImage(robotImg, 0, 200, 450, 600);
         }
+
+      } else {
+        //それ以外
+        ctx.drawImage(backImg, 0, 0, 850, 530);
       }
 
-      function Timer() {
-        req = setTimeout("message_char()", speed);
+
+      //セリフ表示
+      serif.innerHTML = string;
+      //}
+
+      if (i <= string.length) {
+        i++;
+        Timer();
+      } else {
+        if (array[0].length == 0) {
+          return;
+
+        }
+        clearTimeout(req);
+        i = 1;
+        message();
       }
-    </script>
-    <?php
-    if ($questionflg == true) {
+    }
 
-    ?>
-      <form action="./../toStage.html" method="post">
-        <input type="submit" value="次の問題へ" class="backBtn">
-        <input type="hidden" name="questionNo" value="<?php echo $questionNo; ?>">
-      </form>
-    <?php } else {
+    function Timer() {
+      req = setTimeout("message_char()", speed);
+    }
+  </script>
+  <?php
+  if ($questionflg == true) {
 
-    ?>
-      <form action="./../toStage.html" method="post" class="formBtn disparea">
-        <input type="submit" value="問題に戻る" class="backBtn">
-        <input type="hidden" name="questionNo" value="<?php echo $questionNo; ?>">
-      </form>
-    <?php } ?>
-    <div class="modal" id="modal">
-      <span class="center">ヒント：</span><br><br>
-      <span class="center hintbody" id="hintText"></span><br><br><br>
-      <span class="center">(画面をクリックすると閉じます)</span>
-    </div>
+  ?>
+    <form action="./../toStage.html" method="post">
+      <input type="submit" value="次の問題へ" class="backBtn">
+      <input type="hidden" name="questionNo" value="<?php echo $questionNo; ?>">
+    </form>
+  <?php } else {
+
+  ?>
+    <form action="./../toStage.html" method="post" class="formBtn">
+      <input type="submit" value="問題に戻る" class="backBtn">
+      <input type="hidden" name="questionNo" value="<?php echo $questionNo; ?>">
+    </form>
+  <?php } ?>
+  <div class="modal" id="modal">
+    <span class="center">ヒント：</span><br><br>
+    <span class="center hintbody" id="hintText"></span><br><br><br>
+    <span class="center">(画面をクリックすると閉じます)</span>
   </div>
 </body>
 

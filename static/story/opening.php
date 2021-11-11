@@ -1,7 +1,7 @@
 <?php
 require_once("./../../settings/env.php");
 $serif = []; //セリフ入れる配列
-$serifId = $_POST["scenarioNo"]; //セリフ番号
+$serifId = $_GET["scenarioNo"]; //セリフ番号
 $faceNum = []; //表情数値
 
 //データベースからセリフファイルを呼び出してstory.jsに送る

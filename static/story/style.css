@@ -1,8 +1,9 @@
 .disparea {
     position: relative;
-    width: 45%;
-    margin:0 auto;
- }
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
 
 #serifarea {
     background-color: rgb(80, 80, 80);
