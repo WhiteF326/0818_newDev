@@ -335,8 +335,10 @@ switch(explode("/", $path)[1]){
               select max(score) from freemode_results
               where userid = :id and stagename = :stagename
               and date >= \"2021/10/29 11:04:00\"
+              and deleted = 0
             )
           and date >= \"2021/10/29 11:04:00\"
+          and deleted = 0
           order by cost asc, date desc
           ";
         $stm = $pdo->prepare($sql);
