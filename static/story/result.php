@@ -101,20 +101,6 @@ $js_array = json_encode($serif);
   <div id="buttonarea"></div>
   <script>
     localStorage.setItem("gameEnabled", "false");
-    let mutedFlg = true;
-    document.body.innerHTML += '<button id="toggleBGM">BGM を ON にする</button>';
-    const tgl = document.getElementById("toggleBGM");
-    const bgm = new Audio("https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/forest_ver2.mp3")
-    bgm.volume = 0.166;
-    tgl.onclick = () => {
-      mutedFlg = !mutedFlg;
-      tgl.innerText = mutedFlg ? "BGM を ON にする" : "BGM を OFF にする"
-      if (!mutedFlg) {
-        bgm.play();
-      } else {
-        bgm.pause();
-      }
-    }
 
     //キャンバスの作成
     let canvas = document.getElementById("can");
@@ -129,7 +115,6 @@ $js_array = json_encode($serif);
     //パス設定
     youseiImg.src = "image/yousei.png";
     robotImg.src = "image/robo.png";
-
 
     //画像を読み込む前に描画しないようにloadイベントを行う
     /*backImg.onload = function() {
