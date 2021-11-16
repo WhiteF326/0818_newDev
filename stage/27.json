@@ -38,7 +38,9 @@
     "create",
     "loop",
     "if",
+    "sensor_loop",
     "sensor_foot_dest",
+    "sensor_foot_stab",
     "sensor_foot_floor"
   ],
   "message":"チャレンジ問題 その1 ③"
