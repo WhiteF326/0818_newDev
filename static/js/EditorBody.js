@@ -12,7 +12,21 @@ class EditorBody {
     this.previewStage.width = this.previewSize;
     this.previewStage.height = this.previewSize;
 
-    this.chipList = new ChipList();
+    this.chipList = new ChipList(
+      [
+        ["map01.png"],
+        ["map02.png"],
+        ["map03.png"],
+        ["spring.png"],
+        ["board0.png", "board1.png", "board2.png", "board3.png"],
+        ["switch1.png", "switch2.png", "switch3.png", "switch4.png", "switch5.png"],
+        ["door_off1.png", "door_off2.png", "door_off3.png", "door_off4.png", "door_off5.png"],
+        ["pushed1.png", "pushed2.png", "pushed3.png", "pushed4.png", "pushed5.png"],
+        ["door_on1.png", "door_on2.png", "door_on3.png", "door_on4.png", "door_on5.png"],
+        ["avoidCreate.png"],
+        ["map02.png"]
+      ]
+    );
 
     this.charaAuto = new CharaAuto(problem["start"][2], this.tileSize);
     this.maptileGoal = new Chip('./img/goal.png');
@@ -20,7 +34,7 @@ class EditorBody {
 
     this.selected = [0, 0];
 
-    this.#render();
+    this.render();
 
     // キー操作実装
     document.body.addEventListener("keypress", e => {
@@ -69,6 +83,7 @@ class EditorBody {
             = Number(e.key);
         }
       }
+      this.render();
     });
 
     this.previewStage.addEventListener("click", e => {
@@ -166,7 +181,7 @@ class EditorBody {
       = this.problem["message"];
   }
 
-  #render() {
+  render() {
     // 背景描画
     this.prevCtx.fillStyle = "black";
     this.prevCtx.fillRect(0, 0, this.previewSize, this.previewSize);
@@ -251,9 +266,7 @@ class EditorBody {
 
     // 選択ブロックの表示
     document.getElementById("selected").innerText =
-      "選択しているブロック：" + this.selected[0] + "," + this.selected[1]
-
-    requestAnimationFrame(this.#render.bind(this));
+      "選択しているブロック：" + this.selected[0] + "," + this.selected[1];
   }
 
   #changeMapSize(cx, cy) {

@@ -469,4 +469,39 @@ switch(explode("/", $path)[1]){
       }
     }
   }
+
+  case "create": {
+    switch (explode("/", $path)[2]) {
+      case "list": {
+        $uid = $prm["userid"];
+        $result = $pdo->query(
+          "select * from create_stages where userid = \"". $uid. "\""
+        )->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($result);
+        break;
+      }
+
+      case "create": {
+        $uid = $prm["userid"];
+        $stagetext = $prm["stagetext"];
+        $sql = "insert into create_stages values(:sid, :uid, 0, :stx)";
+        $stm = $pdo->prepare($sql);
+        $stm->bindValue(":sid", PDO::PARAM_NULL);
+        $stm->bindValue(":uid", $uid);
+        $stm->bindValue(":stx", $stagetext);
+        $stm->execute();
+        echo null;
+        break;
+      }
+
+      case "delete": {
+        $stageid = $prm["stageid"];
+        $pdo->query(
+          "delete from create_stages where stageid = \"". $stageid . "\""
+        );
+        echo null;
+        break;
+      }
+    }
+  }
 }
