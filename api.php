@@ -483,7 +483,11 @@ switch(explode("/", $path)[1]){
 
       case "create": {
         $uid = $prm["userid"];
-        $stagetext = $prm["stagetext"];
+        if(isset($prm["stagetext"])){
+          $stagetext = $prm["stagetext"];
+        }else{
+          $stagetext = file_get_contents("defaults/default.json");
+        }
         $sql = "insert into create_stages values(:sid, :uid, 0, :stx)";
         $stm = $pdo->prepare($sql);
         $stm->bindValue(":sid", PDO::PARAM_NULL);

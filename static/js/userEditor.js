@@ -39,10 +39,10 @@ class MapInfo {
     this.#jsondata["param"].forEach(row => row.pop());
   }
 
-  putChip = (x, y, type) = () => {
+  putChip = (x, y, type) => {
     this.#jsondata["stage"][x][y] = type;
   }
-  putParam = (x, y, param) = () => {
+  putParam = (x, y, param) => {
     this.#jsondata["param"][x][y] = param;
   }
 }
@@ -69,5 +69,5 @@ class MapRenderer {
 window.onload = () => {
   const ctx = document.getElementById("map").getContext("2d");
   const stageid = (new URL(window.location.href)).searchParams.get("stageid");
-  
+
 }

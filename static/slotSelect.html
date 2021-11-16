@@ -106,7 +106,7 @@
     });
     slotList.forEach(r => {
       const row = document.createElement("tr");
-      
+
       const titleCell = document.createElement("td");
       titleCell.innerText = r["stagetext"]["title"];
       row.appendChild(titleCell);
@@ -195,6 +195,13 @@
       cmodal.style.transform = "translateY(-500px)";
       cmodal.style.height = "0%";
     });
+
+    document.getElementById("newStage").onclick = async () => {
+      await fetchJSON("api/create/create", {
+        "userid": localStorage.getItem("userid")
+      });
+      window.location.reload();
+    }
   }
 </script>
 
@@ -206,7 +213,7 @@
   <table>
     <tbody id="selectBody">
       <tr>
-        <td>
+        <td colspan="4">
           <button id="newStage">新しいステージをつくる</button>
         </td>
       </tr>
