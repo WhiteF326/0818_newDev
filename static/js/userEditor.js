@@ -7,7 +7,7 @@ class GameInfo {
     this.#chipInfoList = chipInfoList;
   }
 
-  getChipInfoList = () => this.#chipInfoList;
+  getChipInfo = (type) => this.#chipInfoList[type];
 }
 
 class MapInfo {
@@ -18,7 +18,11 @@ class MapInfo {
     this.#jsondata = jsondata;
   }
 
+  // return map info object
+
   getMapObject = () => this.#jsondata;
+
+  // edit map size
 
   addRow = () => {
     const columnWidth = this.#jsondata[0].length;
@@ -26,8 +30,10 @@ class MapInfo {
     this.#jsondata["param"].append(Array(columnWidth).fill(0));
   }
   removeRow = () => {
-    this.#jsondata["stage"].pop();
-    this.#jsondata["param"].pop();
+    if(this.#jsondata["stage"].length > 3){
+      this.#jsondata["stage"].pop();
+      this.#jsondata["param"].pop();
+    }
   }
 
   addColumn = () => {
@@ -35,9 +41,13 @@ class MapInfo {
     this.#jsondata["param"].forEach(row => row.push(0));
   }
   removeColumn = () => {
-    this.#jsondata["stage"].forEach(row => row.pop());
-    this.#jsondata["param"].forEach(row => row.pop());
+    if(this.#jsondata["stage"][0].length > 3){
+      this.#jsondata["stage"].forEach(row => row.pop());
+      this.#jsondata["param"].forEach(row => row.pop());
+    }
   }
+
+  // edit map chip
 
   putChip = (x, y, type) => {
     this.#jsondata["stage"][x][y] = type;
