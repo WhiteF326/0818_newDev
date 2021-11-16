@@ -19,8 +19,8 @@
       "loop": 1,
       "if": 1
     },
-    "maxCost": 17,
-    "maxStep": 10,
+    "maxCost": 30,
+    "maxStep": 36,
     "unlocked": [
       "move",
       "destroy",
