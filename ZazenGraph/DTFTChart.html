@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js"
+    integrity="sha512-GMGzUEevhWh8Tc/njS0bDpwgxdCJLQBWG3Z2Ct+JGOpVnEmjvNx6ts4v6A2XJf1HOrtOsfhv3hBKpK9kE5z8AQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<script>
+  // 2. 以下の onload メソッドを body より前に script タグを用意したうえでコピペする
+  window.onload = async () => {
+    // データを取得 今はphpから直接取れるがよしなに変更すること
+    const rawGraphData = JSON.parse(
+      await (await fetch("http://localhost/ZazenGraph/test.php")).text()
+    ).filter(r => r[0] >= 0.03);
+    let graphData = [];
+    const areaLength = 10;
+    let total = 0;
+    for(let i = 0; i < areaLength - 1; i++){
+      total += rawGraphData[i][1];
+    }
+    for(let i = 0; i < rawGraphData.length - areaLength; i++){
+      total += rawGraphData[i + areaLength - 1][1];
+      graphData.push(
+        [rawGraphData[i][0], total / areaLength]
+      );
+      total -= rawGraphData[i][1];
+    }
+    console.log(graphData);
+    const labels = graphData.map(r => 120 * r[0]);
+    const datas = graphData.map(r => r[1]);
+
+    new Chart(document.getElementById("rotateGraph"), {
+      type: "line",
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "dtft",
+          data: datas
+        }]
+      },
+      "options": {
+        "scales": {
+          "y": {
+            // 単位のない数字なので数値表記ごと消す
+            "ticks": {
+              "display": false,
+            }
+          },
+        },
+        // ホバー時の値表示機能がとても重いので無効化
+        "events": [],
+      }
+    })
+  }
+</script>
+
+<body>
+  <!-- 3. 以下の canvas タグをコピペする -->
+  <canvas width="300" height="200" id="rotateGraph"></canvas>
+</body>
+
+</html>
