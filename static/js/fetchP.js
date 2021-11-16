@@ -12,7 +12,7 @@ const fetchJSON = async (path, prm) => {
   const res = await fetch("http://localhost/api.php", req);
 
   const ret = await res.text();
-  console.log(ret)
+  console.log(path);
   return ret;
 }
 
