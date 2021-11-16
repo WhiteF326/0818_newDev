@@ -30,7 +30,7 @@ const min = Math.min
 const max = Math.max
 
 const makeCostText = (current, target) => {
-  return "現在コスト：" + current + "\n最大コスト：" + target;
+  return "残りコスト：" + (target - current);
 }
 
 // 足音

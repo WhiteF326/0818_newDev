@@ -44,6 +44,7 @@
     border-block-color: rgb(255, 255, 255);
     border-inline-color: rgba(255, 255, 255, 0.63);
     filter: brightness(90%);
+    transform: translateY(40px);
   }
 
   img[src$="img/costtable.png"] {
@@ -307,6 +308,11 @@
     opacity: 0;
     z-index: -10000;
   }
+
+  #blocklyDiv,
+  #infos{
+    transform: translateY(40px);
+  }
 </style>
 
 <script>
@@ -327,7 +333,7 @@
   </form>
   <div id="stages">
     <canvas id="canvas"></canvas>
-    <div style="display: inline-block;">
+    <div style="display: inline-block;" id="infos">
       <table class="costTable">
         <caption><img src="img/costtable.png"></caption>
         <tbody id="costList">
