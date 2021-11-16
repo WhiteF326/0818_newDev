@@ -1,0 +1,36 @@
+{
+  "stage": [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 1, 1, 3, 4, 2, 1, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  ],
+  "param": [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  ],
+  "start": [1, 1, "right"],
+  "goal": [1, 8],
+  "controll": [0, 0],
+  "costList": {
+    "move": 3,
+    "destroy": 5,
+    "create": 5,
+    "loop": 1,
+    "if": 1
+  },
+  "maxCost": 30,
+  "maxStep": 24,
+  "unlocked": [
+    "move",
+    "destroy",
+    "create",
+    "loop",
+    "if",
+    "sensor_loop",
+    "sensor_foot_dest",
+    "sensor_foot_stab",
+    "sensor_foot_floor"
+  ],
+  "message":"バネは、こわれるゆかをふまずに進めるよ！"
+}
