@@ -148,6 +148,22 @@ class MapInfo {
   selectionRange = () => {
     return [this.#jsondata["stage"][0].length, this.#jsondata["stage"].length];
   }
+
+  // verify stage
+  verify = () => {
+    let errors = "";
+    // 不正なマップチップ
+    if(
+      this.#jsondata["stage"].map(r => {
+        r.map(v => (v === 7 || v === 8) ? 1 : 0).reduce((a, b) => (a | b))
+      })
+    ){
+      // マップ内に 7, 8 がある
+      errors += "マップ内に押されたスイッチや開かれたドアがあります。<br>";
+    }
+    // 外周が木ではない
+    
+  }
 }
 
 class MapRenderer {
@@ -707,11 +723,12 @@ window.onload = async () => {
   
   // 保存機能の実装
   document.getElementById("save").onclick = async () => {
-    console.log(await fetchJSON("api/create/update", {
+
+    await fetchJSON("api/create/update", {
       userid: localStorage.getItem("userid"),
       stageid: stageid,
       stagetext: JSON.stringify(mapInfo.getMapObject())
-    }));
+    });
   }
 
   await mapRenderer.render(mapInfo.getMapObject(), canvas);
