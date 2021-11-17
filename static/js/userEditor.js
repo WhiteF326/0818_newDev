@@ -100,6 +100,11 @@ class MapInfo {
   putParam = (x, y, param) => {
     this.#jsondata["param"][y][x] = param;
   }
+
+  // selection varidator
+  selectionRange = () => {
+    return [this.#jsondata["stage"][0].length, this.#jsondata["stage"].length];
+  }
 }
 
 class MapRenderer {
@@ -209,9 +214,13 @@ class MapRenderer {
       = mapInfo["param"][this.#selecty][this.#selectx];
   }
 
-  select = (x, y) => {
-    this.#selectx = Math.floor(x / this.#tileSize);
-    this.#selecty = Math.floor(y / this.#tileSize);
+  select = (x, y, range) => {
+    const tox = Math.floor(x / this.#tileSize);
+    const toy = Math.floor(y / this.#tileSize);
+    if(tox < range[0] && toy < range[1]){
+      this.#selectx = tox;
+      this.#selecty = toy;
+    }
     console.log(this.#selectx, this.#selecty)
   }
 
@@ -283,9 +292,13 @@ window.onload = async () => {
     const x = clickX - positionX;
     const y = clickY - positionY;
 
-    mapRenderer.select(x, y);
+    mapRenderer.select(x, y, mapInfo.selectionRange());
 
     await mapRenderer.render(mapInfo.getMapObject(), canvas);
+  }
+
+  document.getElementById("map").oncontextmenu = e => {
+    e.preventDefault();
   }
 
   // paramEditor の変動イベント
