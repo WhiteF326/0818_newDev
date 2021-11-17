@@ -22,6 +22,29 @@
 
   .full {
     height: 100%;
+    display: table;
+    border-collapse: separate;
+    border-spacing: 50px 0;
+  }
+
+  .controller {
+    display: table-cell;
+    vertical-align: top;
+    border-spacing: 4px 0;
+  }
+
+  .controller tr, .controller td{
+    padding: 0;
+    margin: 0;
+    text-align: center;
+  }
+
+  .horizontal_controll td{
+    padding: 0.5em 4px;
+  }
+  
+  .horizontal_controll td+td{
+    border-left: 1px solid #f1f1f1;
   }
 </style>
 
@@ -34,7 +57,35 @@
   </div>
   <br>
   <div class="full">
-    <canvas id="map"></canvas>
+    <canvas id="map" style="display: table-cell;"></canvas>
+    <div class="controller">
+      <table>
+        <tbody>
+          <tr>
+            <td colspan="2">
+              <button id="verticalDecrement">縦に 1 行減らす</button>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <button id="verticalIncrement">縦に 1 行増やす</button>
+            </td>
+          </tr>
+          <tr class="horizontal_controll">
+            <td rowspan="2">
+              <button id="horizontalDecrement">横に 1 列減らす</button>
+            </td>
+            <td rowspan="2">
+              <button id="horizontalIncrement">横に 1 列増やす</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <span id="selectedTitle"></span><br>
+      <span id="selectedExplain"></span><br>
+      <span id="selectedParamRange"></span><br>
+      <input type="number" min="0" max="50" value="0" id="paramEditor">
+    </div>
   </div>
 </body>
 

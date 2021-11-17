@@ -72,9 +72,9 @@ class MapInfo {
 
   // edit map size
   addRow = () => {
-    const columnWidth = this.#jsondata[0].length;
-    this.#jsondata["stage"].append(Array(columnWidth).fill(0));
-    this.#jsondata["param"].append(Array(columnWidth).fill(0));
+    const columnWidth = this.#jsondata["stage"][0].length;
+    this.#jsondata["stage"].push(Array(columnWidth).fill(0));
+    this.#jsondata["param"].push(Array(columnWidth).fill(0));
   }
   removeRow = () => {
     if (this.#jsondata["stage"].length > 3) {
@@ -105,6 +105,8 @@ class MapInfo {
 class MapRenderer {
   #selectx;
   #selecty;
+  #cursorImage;
+  #tileSize;
 
   // チップ情報の作成
   #chipInfoList = new Array(10).fill(null);
@@ -115,6 +117,9 @@ class MapRenderer {
   constructor() {
     this.#selectx = 0;
     this.#selecty = 0;
+
+    this.#cursorImage = new Image();
+    this.#cursorImage.src = "./img/cursor.png";
 
     this.#chipInfoList[0] = new ChipInfo(
       ["map01.png"], 0, 1, () => 0, "木", "キャラクターは通過できません。"
@@ -159,7 +164,7 @@ class MapRenderer {
   }
 
   render = async (mapInfo, canvas = new HTMLCanvasElement()) => {
-    const tileSize = Math.floor(
+    this.#tileSize = Math.floor(
       Math.min(canvas.clientHeight, canvas.clientWidth)
       / Math.max(mapInfo["stage"].length, mapInfo["stage"][0].length)
     );
@@ -174,15 +179,38 @@ class MapRenderer {
         ctx.drawImage(
           chipImage,
           0, 0, chipImage.width, chipImage.height,
-          tileSize * x, tileSize * y, tileSize, tileSize
+          this.#tileSize * x, this.#tileSize * y, this.#tileSize, this.#tileSize
         );
       }
     }
+
+    // カーソルを描画
+    ctx.drawImage(
+      this.#cursorImage,
+      0, 0, this.#cursorImage.width, this.#cursorImage.height,
+      this.#tileSize * this.#selectx, this.#tileSize * this.#selecty,
+      this.#tileSize, this.#tileSize
+    )
+
+    const selectInfo
+      = this.#gameInfo.getChipInfo(
+        mapInfo["stage"][this.#selecty][this.#selectx]
+      );
+    document.getElementById("selectedTitle").innerText
+      = selectInfo.getExplainTitle();
+    document.getElementById("selectedExplain").innerText
+      = selectInfo.getExplainBody();
+    document.getElementById("selectedParamRange").innerText
+      = "パラメータのはんい：" + selectInfo.getParameterLow()
+      + "～" + (selectInfo.getParameterHigh() - 1);
+    document.getElementById("paramEditor").max
+      = String(selectInfo.getParameterHigh() - 1);
   }
 
   select = (x, y) => {
-    this.#selectx = x;
-    this.#selecty = y;
+    this.#selectx = Math.floor(x / this.#tileSize);
+    this.#selecty = Math.floor(y / this.#tileSize);
+    console.log(this.#selectx, this.#selecty)
   }
 }
 
@@ -191,11 +219,14 @@ window.onload = async () => {
   const stageid = (new URL(window.location.href)).searchParams.get("stageid");
 
   // キャンバスサイズの調整
-  document.getElementById("map").setAttribute("height", String(
-    Math.round(
-      window.innerHeight - document.getElementById("head").clientHeight) / 2.2
-  )
-  )
+  document.getElementById("map").setAttribute("height",
+    String(
+      Math.round(
+        (window.innerHeight - document.getElementById("head").clientHeight)
+        / 2.2
+      )
+    )
+  );
   document.getElementById("map").setAttribute(
     "width", String(Math.round(document.body.clientWidth / 2.2))
   );
@@ -215,6 +246,41 @@ window.onload = async () => {
 
   // マップ描画オブジェクト
   const mapRenderer = new MapRenderer();
+
+  // マップサイズの変更ボタン
+  document.getElementById("verticalDecrement").onclick = async () => {
+    mapInfo.removeRow();
+    await mapRenderer.render(mapInfo.getMapObject(), canvas);
+  }
+  document.getElementById("verticalIncrement").onclick = async () => {
+    mapInfo.addRow();
+    await mapRenderer.render(mapInfo.getMapObject(), canvas);
+  }
+  document.getElementById("horizontalDecrement").onclick = async () => {
+    mapInfo.removeColumn();
+    await mapRenderer.render(mapInfo.getMapObject(), canvas);
+  }
+  document.getElementById("horizontalIncrement").onclick = async () => {
+    mapInfo.addColumn();
+    await mapRenderer.render(mapInfo.getMapObject(), canvas);
+  }
+
+  // マップ上でのクリックイベント
+  document.getElementById("map").onclick = async e => {
+    const clickX = e.pageX;
+    const clickY = e.pageY;
+
+    const clientRect = document.getElementById("map").getBoundingClientRect();
+    const positionX = clientRect.left + window.scrollX;
+    const positionY = clientRect.top + window.scrollY;
+
+    const x = clickX - positionX;
+    const y = clickY - positionY;
+
+    mapRenderer.select(x, y);
+
+    await mapRenderer.render(mapInfo.getMapObject(), canvas);
+  }
 
   await mapRenderer.render(mapInfo.getMapObject(), canvas);
 }
