@@ -1,0 +1,42 @@
+{
+  "stage": [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 1, 1, 1, 2, 5, 0, 0],
+    [0, 0, 1, 5, 1, 1, 1, 0, 0],
+    [0, 0, 1, 1, 1, 1, 6, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0]
+  ],
+  "param": [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0]
+  ],
+  "start": [1, 1, "right"],
+  "goal": [3, 7],
+  "controll": [0, 5],
+  "costList": {
+    "move": 3,
+    "destroy": 5,
+    "create": 5,
+    "loop": 1,
+    "if": 1
+  },
+  "maxCost": 45,
+  "maxStep": 36,
+  "unlocked": [
+    "move",
+    "destroy",
+    "create",
+    "repair",
+    "loop",
+    "if",
+    "sensor_loop",
+    "sensor_foot_dest",
+    "sensor_foot_stab",
+    "sensor_foot_floor",
+    "sensor_foot_colp"
+  ],
+  "message":"全てのスイッチをおすことで、とびらが開くよ"
+}
