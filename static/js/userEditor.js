@@ -95,10 +95,10 @@ class MapInfo {
 
   // edit map chip
   putChip = (x, y, type) => {
-    this.#jsondata["stage"][x][y] = type;
+    this.#jsondata["stage"][y][x] = type;
   }
   putParam = (x, y, param) => {
-    this.#jsondata["param"][x][y] = param;
+    this.#jsondata["param"][y][x] = param;
   }
 }
 
@@ -137,7 +137,7 @@ class MapRenderer {
     );
     this.#chipInfoList[4] = new ChipInfo(
       ["board0.png", "board1.png", "board2.png", "board3.png"],
-      0, 51, prm => Math.max(prm, 3),
+      0, 51, prm => Math.min(prm, 3),
       "こわれる床", "キャラクターが通過すると耐久値が減ります。"
     );
     this.#chipInfoList[5] = new ChipInfo(
@@ -205,12 +205,18 @@ class MapRenderer {
       + "～" + (selectInfo.getParameterHigh() - 1);
     document.getElementById("paramEditor").max
       = String(selectInfo.getParameterHigh() - 1);
+    document.getElementById("paramEditor").value
+      = mapInfo["param"][this.#selecty][this.#selectx];
   }
 
   select = (x, y) => {
     this.#selectx = Math.floor(x / this.#tileSize);
     this.#selecty = Math.floor(y / this.#tileSize);
     console.log(this.#selectx, this.#selecty)
+  }
+
+  getSelection = () => {
+    return [this.#selectx, this.#selecty];
   }
 }
 
@@ -278,6 +284,16 @@ window.onload = async () => {
     const y = clickY - positionY;
 
     mapRenderer.select(x, y);
+
+    await mapRenderer.render(mapInfo.getMapObject(), canvas);
+  }
+
+  // paramEditor の変動イベント
+  document.getElementById("paramEditor").onchange = async () => {
+    mapInfo.putParam(
+      ...mapRenderer.getSelection(),
+      Number(document.getElementById("paramEditor").value)
+    );
 
     await mapRenderer.render(mapInfo.getMapObject(), canvas);
   }
