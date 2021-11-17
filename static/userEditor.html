@@ -19,22 +19,23 @@
     background-color: #eafcfa;
     width: 100%;
   }
+
+  .full {
+    height: 100%;
+  }
 </style>
 
-<script type="module">
-  import { fetchJSON } from './js/fetchP.js';
-  window.onload = () => {
-    //
-  }
-</script>
-
 <body>
-  <h3 style="display: inline-block;">エディタ</h3>
-  <form action="slotSelect.html" style="display: inline;">
-    <input type="submit" value="スロット選択に戻る">
-  </form>
+  <div id="head">
+    <h3 style="display: inline-block;">エディタ</h3>
+    <form action="slotSelect.html" style="display: inline;">
+      <input type="submit" value="スロット選択に戻る">
+    </form>
+  </div>
   <br>
-  <canvas id="map"></canvas>
+  <div class="full">
+    <canvas id="map"></canvas>
+  </div>
 </body>
 
 </html>

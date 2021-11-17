@@ -481,6 +481,18 @@ switch(explode("/", $path)[1]){
         break;
       }
 
+      case "search": {
+        $stageid = $prm["stageid"];
+        $uid = $prm["userid"];
+        $result = $pdo->query(
+          "select stagetext from create_stages
+          where stageid = \"". $stageid. "\"
+          and userid =\"". $uid. "\""
+        )->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($result[0]["stagetext"]);
+        break;
+      }
+
       case "create": {
         $uid = $prm["userid"];
         if(isset($prm["stagetext"])){
