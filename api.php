@@ -493,6 +493,21 @@ switch(explode("/", $path)[1]){
         break;
       }
 
+      case "update": {
+        $stageid = $prm["stageid"];
+        $stagetext = $prm["stagetext"];
+        $uid = $prm["userid"];
+        $sql = "update create_stages set stagetext = :stagetext
+          where stageid = :stageid and userid = :userid";
+        $stm = $pdo->prepare($sql);
+        $stm->bindValue(":stagetext", $stagetext);
+        $stm->bindValue(":stageid", $stageid, PDO::PARAM_INT);
+        $stm->bindValue(":userid", $uid);
+        $stm->execute();
+        echo null;
+        break;
+      }
+
       case "create": {
         $uid = $prm["userid"];
         if(isset($prm["stagetext"])){

@@ -704,6 +704,15 @@ window.onload = async () => {
     unlockManager.render();
   }
   unlockManager.render();
+  
+  // 保存機能の実装
+  document.getElementById("save").onclick = async () => {
+    console.log(await fetchJSON("api/create/update", {
+      userid: localStorage.getItem("userid"),
+      stageid: stageid,
+      stagetext: JSON.stringify(mapInfo.getMapObject())
+    }));
+  }
 
   await mapRenderer.render(mapInfo.getMapObject(), canvas);
 }
