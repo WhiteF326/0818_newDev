@@ -65,6 +65,7 @@ class MapInfo {
   // give a parsed info
   constructor(jsondata) {
     this.#jsondata = jsondata;
+    console.log(jsondata)
   }
 
   // return map info object
@@ -101,6 +102,48 @@ class MapInfo {
     this.#jsondata["param"][y][x] = param;
   }
 
+  // edit icon positions
+  setCharaPosition = (x, y) => {
+    // 行き先が床であるか、ゴールと重ならないか確認する
+    if (this.#jsondata["stage"][y][x] === 1
+      && (this.#jsondata["goal"][0] !== y || this.#jsondata["goal"][1] !== x)) {
+      this.#jsondata["start"][0] = y;
+      this.#jsondata["start"][1] = x;
+    }
+  }
+  setCursorPosition = (x, y) => {
+    this.#jsondata["controll"][0] = y;
+    this.#jsondata["controll"][1] = x;
+  }
+  setGoalPosition = (x, y) => {
+    // キャラと重ならないか確認する
+    if (this.#jsondata["start"][0] !== y || this.#jsondata["start"][1] !== x) {
+      this.#jsondata["goal"][0] = y;
+      this.#jsondata["goal"][1] = x;
+    }
+  }
+
+  // cost, walk edit
+  setCost = cost => {
+    this.#jsondata["maxCost"] = cost;
+  }
+  setWalk = walk => {
+    this.#jsondata["maxStep"] = walk;
+  }
+
+  // title, message edit
+  setTitle = title => {
+    this.#jsondata["title"] = title;
+  }
+  setMessage = message => {
+    this.#jsondata["message"] = message;
+  }
+
+  // set unlock status
+  setUnlockStatus = ary => {
+    this.#jsondata["unlocked"] = ary;
+  }
+
   // selection varidator
   selectionRange = () => {
     return [this.#jsondata["stage"][0].length, this.#jsondata["stage"].length];
@@ -110,8 +153,11 @@ class MapInfo {
 class MapRenderer {
   #selectx;
   #selecty;
-  #cursorImage;
+  #selectionImage;
   #tileSize;
+  #charaImage;
+  #cursorImage;
+  #goalImage;
 
   // チップ情報の作成
   #chipInfoList = new Array(10).fill(null);
@@ -120,17 +166,29 @@ class MapRenderer {
   #gameInfo = null;
 
   constructor() {
+    // 選択中のマス番号
     this.#selectx = 0;
     this.#selecty = 0;
 
-    this.#cursorImage = new Image();
-    this.#cursorImage.src = "./img/cursor.png";
+    // 画像の定義
+    this.#selectionImage = new Image();
+    this.#selectionImage.src = "./img/cursor.png";
 
+    this.#charaImage = new Image();
+    this.#charaImage.src = "./img/charaAuto.png";
+
+    this.#cursorImage = new Image();
+    this.#cursorImage.src = "./img/charaHand.png";
+
+    this.#goalImage = new Image();
+    this.#goalImage.src = "./img/goal.png";
+
+    // マップチップの定義
     this.#chipInfoList[0] = new ChipInfo(
-      ["map01.png"], 0, 1, () => 0, "木", "キャラクターは通過できません。"
+      ["map01.png"], 0, 1, () => 0, "木", "キャラクターは通過できません。カーソルで破壊もできません。"
     );
     this.#chipInfoList[1] = new ChipInfo(
-      ["map02.png"], 0, 1, () => 0, "床", "キャラクターも通過できます。"
+      ["map02.png"], 0, 1, () => 0, "床", "キャラクターも通過できます。カーソルで岩を置けます。"
     );
     this.#chipInfoList[2] = new ChipInfo(
       ["map03.png"], 0, 1, () => 0,
@@ -163,16 +221,19 @@ class MapRenderer {
     );
     this.#chipInfoList[9] = new ChipInfo(
       ["avoidCreate.png"], 0, 1, () => 0,
-      "岩の配置禁止マス", "キャラクターは通過できます。カーソルはこのマスに岩を置けません"
+      "岩の配置禁止マス", "カーソルで岩を置くことはできません。"
     );
     this.#gameInfo = new GameInfo(this.#chipInfoList);
   }
 
-  render = async (mapInfo, canvas = new HTMLCanvasElement()) => {
+  // 描画関数
+  render = async (mapInfo, canvas) => {
+    // タイルサイズの再計算
     this.#tileSize = Math.floor(
       Math.min(canvas.clientHeight, canvas.clientWidth)
       / Math.max(mapInfo["stage"].length, mapInfo["stage"][0].length)
     );
+    // 描画開始
     const ctx = canvas.getContext("2d");
     ctx.fillRect(0, 0, canvas.clientHeight, canvas.clientWidth);
     for (let y = 0; y < mapInfo["stage"].length; y++) {
@@ -191,12 +252,47 @@ class MapRenderer {
 
     // カーソルを描画
     ctx.drawImage(
-      this.#cursorImage,
-      0, 0, this.#cursorImage.width, this.#cursorImage.height,
+      this.#selectionImage,
+      0, 0, this.#selectionImage.width, this.#selectionImage.height,
       this.#tileSize * this.#selectx, this.#tileSize * this.#selecty,
       this.#tileSize, this.#tileSize
-    )
+    );
+    // キャラを描画
+    const ratio = 0.75;
+    const vectorList = {
+      "front": 0,
+      "left": 1,
+      "right": 2,
+      "back": 3
+    };
+    ctx.drawImage(
+      this.#charaImage,
+      0, this.#charaImage.height * vectorList[mapInfo["start"][2]] / 4,
+      this.#charaImage.width / 6, this.#charaImage.height / 4,
+      this.#tileSize * mapInfo["start"][1] + this.#tileSize * (1 - ratio) / 2,
+      this.#tileSize * mapInfo["start"][0],
+      this.#tileSize * ratio, this.#tileSize
+    );
+    // カーソルを描画する
+    ctx.drawImage(
+      this.#cursorImage,
+      0, 0, this.#cursorImage.width / 6, this.#cursorImage.height / 4,
+      this.#tileSize * mapInfo["controll"][1]
+      + this.#tileSize * (1 - ratio) / 2,
+      this.#tileSize * mapInfo["controll"][0],
+      this.#tileSize * ratio, this.#tileSize
+    );
+    // ゴールを描画する
+    ctx.drawImage(
+      this.#goalImage,
+      0, 0, this.#goalImage.width, this.#goalImage.height,
+      this.#tileSize * mapInfo["goal"][1]
+      + this.#tileSize * (1 - ratio) / 2,
+      this.#tileSize * mapInfo["goal"][0],
+      this.#tileSize * ratio, this.#tileSize
+    );
 
+    // 選択マスの情報を表示する
     const selectInfo
       = this.#gameInfo.getChipInfo(
         mapInfo["stage"][this.#selecty][this.#selectx]
@@ -214,18 +310,200 @@ class MapRenderer {
       = mapInfo["param"][this.#selecty][this.#selectx];
   }
 
+  // x, y を選択する
   select = (x, y, range) => {
     const tox = Math.floor(x / this.#tileSize);
     const toy = Math.floor(y / this.#tileSize);
-    if(tox < range[0] && toy < range[1]){
+    if (tox < range[0] && toy < range[1]) {
       this.#selectx = tox;
       this.#selecty = toy;
     }
-    console.log(this.#selectx, this.#selecty)
   }
 
+  // 実座標をマス数に治す
+  exchangeToStep = (x, y) => {
+    return [Math.floor(x / this.#tileSize), Math.floor(y / this.#tileSize)];
+  }
+
+  // 選択されている座標を返す
   getSelection = () => {
     return [this.#selectx, this.#selecty];
+  }
+}
+
+class Palette {
+  static #enabledChips = [0, 1, 2, 3, 4, 5, 6, 9, 10, 11];
+
+  #selectedChipType;
+  #selectedMode;
+  #ctx;
+  #paletteWidth;
+  #icons;
+  #choosenImage;
+
+  constructor(canvas, icons) {
+    this.#selectedChipType = 0;
+    this.#selectedMode = "select";
+    this.#ctx = canvas.getContext("2d");
+    this.#paletteWidth = canvas.clientWidth;
+    this.#icons = icons;
+    this.#choosenImage = new Image();
+    this.#choosenImage.src = "./img/choosen.png";
+
+    // パレットクリック時の処理
+    canvas.onclick = e => {
+      const clickX = e.pageX;
+
+      const clientRect = canvas.getBoundingClientRect();
+      const positionX = clientRect.left + window.scrollX;
+
+      const x = clickX - positionX;
+
+      const xsel = Math.floor(x / (this.#paletteWidth / 10));
+      if (xsel < 8) {
+        this.chooseChip(Palette.#enabledChips[xsel]);
+      } else {
+        if (xsel === 8) this.choosePaintMode();
+        else this.chooseSelectMode();
+      }
+
+      this.render();
+    }
+  }
+
+  choosePaintMode = () => {
+    this.#selectedMode = "paint";
+  }
+  chooseSelectMode = () => {
+    this.#selectedMode = "select";
+  }
+
+  chooseChip = type => {
+    this.#selectedChipType = type;
+  }
+
+  getSelectedChipType = () => {
+    return this.#selectedChipType;
+  }
+  getMode = () => {
+    return this.#selectedMode;
+  }
+
+  render = () => {
+    const cellSize = Math.min(32, this.#paletteWidth / 10);
+
+    this.#ctx.fillStyle = "white";
+    this.#ctx.fillRect(0, 0, this.#paletteWidth, 32);
+
+    // 描画
+    Palette.#enabledChips.forEach((v, i) => {
+      this.#ctx.drawImage(
+        this.#icons[v],
+        0, 0, this.#icons[v].naturalHeight, this.#icons[v].naturalWidth,
+        this.#paletteWidth * i / 10 + (this.#paletteWidth / 10 - cellSize) / 2,
+        0,
+        cellSize, cellSize
+      );
+      if (this.getSelectedChipType() === v) {
+        this.#ctx.drawImage(
+          this.#choosenImage,
+          0, 0, 32, 32,
+          this.#paletteWidth * i / 10
+          + (this.#paletteWidth / 10 - cellSize) / 2,
+          0,
+          cellSize, cellSize
+        );
+      }
+      if (
+        {
+          "paint": 10,
+          "select": 11
+        }[this.getMode()] === v
+      ) {
+        this.#ctx.drawImage(
+          this.#choosenImage,
+          0, 0, 32, 32,
+          this.#paletteWidth * i / 10
+          + (this.#paletteWidth / 10 - cellSize) / 2,
+          0,
+          cellSize, cellSize
+        );
+      }
+    });
+  }
+}
+
+class UnlockManager {
+  #canvas;
+  #unlockArray = [];
+  #choosenImage;
+  
+  static #allBlocks = [
+    "move",
+    "destroy",
+    "create",
+    "repair",
+    "loop",
+    "if",
+    "sensor_loop",
+    "sensor_foot_dest",
+    "sensor_foot_stab",
+    "sensor_foot_floor",
+    "sensor_foot_colp"
+  ];
+  static #allNames = [
+    "進む",
+    "足元の岩をこわす",
+    "足元に岩を置く",
+    "こわれるゆかを修復する + 1",
+    "くりかえし実行",
+    "条件分岐",
+    "くりかえし〇回目～",
+    "足元が岩である",
+    "足元が木である",
+    "足元がゆかである",
+    "足元がこわれるゆかである"
+  ];
+
+  constructor(canvas, unlockArray) {
+    this.#canvas = canvas;
+    this.#unlockArray = unlockArray;
+    this.#choosenImage = new Image();
+    this.#choosenImage.src = "./img/choosen.png";
+  }
+
+  toggle = typeNumber => {
+    const type = UnlockManager.#allBlocks[typeNumber];
+    if(UnlockManager.#allBlocks.findIndex(r => r === type) !== -1){
+      if(this.#unlockArray.findIndex(r => r === type) !== -1){
+        this.#unlockArray = this.#unlockArray.filter(r => r !== type);
+      }else{
+        this.#unlockArray.push(type);
+      }
+    }
+  }
+  
+  render = () => {
+    const ctx = this.#canvas.getContext("2d");
+    ctx.clearRect(0, 0, this.#canvas.clientWidth, this.#canvas.clientHeight);
+    ctx.font = "27px serif";
+    for(let i = 0; i < 11; i++){
+      if(this.#unlockArray.find(r => r === UnlockManager.#allBlocks[i])){
+        ctx.drawImage(
+          this.#choosenImage,
+          0, 0, 32, 32,
+          0, 27 * i, 27, 27
+        );
+      }
+      ctx.fillText(
+        UnlockManager.#allNames[i],
+        27, 27 * (i + 1), 273
+      );
+    }
+  }
+
+  getUnlockList = () => {
+    return this.#unlockArray;
   }
 }
 
@@ -280,23 +558,76 @@ window.onload = async () => {
     await mapRenderer.render(mapInfo.getMapObject(), canvas);
   }
 
-  // マップ上でのクリックイベント
+  // パレット
+  document.getElementById("palette").width
+    = document.getElementById("map").width;
+  document.getElementById("palette").height = "32";
+  const iconNames = [
+    "map01.png", "map02.png", "map03.png", "spring.png", "board0.png",
+    "switch1.png", "door_off1.png", "pushed1.png", "door_on1.png",
+    "avoidCreate.png", "brush.png", "choose.png"
+  ];
+  const icons = iconNames.map(r => {
+    const ret = new Image();
+    ret.src = "./img/" + r;
+    return ret;
+  });
+  const palette = new Palette(document.getElementById("palette"), icons);
+  palette.render();
+
+  // 選択モード時の、マップ上でのクリックイベント
   document.getElementById("map").onclick = async e => {
-    const clickX = e.pageX;
-    const clickY = e.pageY;
+    if (palette.getMode() === "select") {
+      const clickX = e.pageX;
+      const clickY = e.pageY;
 
-    const clientRect = document.getElementById("map").getBoundingClientRect();
-    const positionX = clientRect.left + window.scrollX;
-    const positionY = clientRect.top + window.scrollY;
+      const clientRect = document.getElementById("map").getBoundingClientRect();
+      const positionX = clientRect.left + window.scrollX;
+      const positionY = clientRect.top + window.scrollY;
 
-    const x = clickX - positionX;
-    const y = clickY - positionY;
+      const x = clickX - positionX;
+      const y = clickY - positionY;
 
-    mapRenderer.select(x, y, mapInfo.selectionRange());
+      mapRenderer.select(x, y, mapInfo.selectionRange());
 
-    await mapRenderer.render(mapInfo.getMapObject(), canvas);
+      await mapRenderer.render(mapInfo.getMapObject(), canvas);
+    }
   }
 
+  // ペイントモード時のマップ上でのクリックイベント
+  let painting = false;
+  const paintOut = async e => {
+    if (palette.getMode() === "paint") {
+      const clickX = e.pageX;
+      const clickY = e.pageY;
+
+      const clientRect
+        = document.getElementById("map").getBoundingClientRect();
+      const positionX = clientRect.left + window.scrollX;
+      const positionY = clientRect.top + window.scrollY;
+
+      const x = clickX - positionX;
+      const y = clickY - positionY;
+
+      const points = mapRenderer.exchangeToStep(x, y);
+      mapInfo.putChip(points[0], points[1], palette.getSelectedChipType());
+
+      await mapRenderer.render(mapInfo.getMapObject(), canvas);
+    }
+  }
+  document.getElementById("map").onmousedown = async e => {
+    await paintOut(e);
+    painting = true;
+  }
+  document.getElementById("map").onmousemove = async e => {
+    if (painting) await paintOut(e);
+  }
+  document.getElementById("map").onmouseup = async e => {
+    await paintOut(e);
+    painting = false;
+  }
+
+  // 右クリックの禁止
   document.getElementById("map").oncontextmenu = e => {
     e.preventDefault();
   }
@@ -310,6 +641,69 @@ window.onload = async () => {
 
     await mapRenderer.render(mapInfo.getMapObject(), canvas);
   }
+
+  // キャラ配置ボタン
+  document.getElementById("putChara").onclick = async () => {
+    mapInfo.setCharaPosition(...mapRenderer.getSelection());
+    await mapRenderer.render(mapInfo.getMapObject(), canvas);
+  }
+  document.getElementById("putCursor").onclick = async () => {
+    mapInfo.setCursorPosition(...mapRenderer.getSelection());
+    await mapRenderer.render(mapInfo.getMapObject(), canvas);
+  }
+  document.getElementById("putGoal").onclick = async () => {
+    mapInfo.setGoalPosition(...mapRenderer.getSelection());
+    await mapRenderer.render(mapInfo.getMapObject(), canvas);
+  }
+
+  // コストと歩数の設定
+  document.getElementById("cost").value
+    = mapInfo.getMapObject()["maxCost"];
+  document.getElementById("cost").onchange = () => {
+    mapInfo.setCost(Number(document.getElementById("cost").value));
+  }
+  document.getElementById("step").value
+    = mapInfo.getMapObject()["maxStep"];
+  document.getElementById("step").onchange = () => {
+    mapInfo.setWalk(Number(document.getElementById("step").value));
+  }
+
+  // タイトル、開始メッセージの設定
+  document.getElementById("title").value
+    = mapInfo.getMapObject()["title"];
+  document.getElementById("title").onchange = () => {
+    mapInfo.setTitle(document.getElementById("title").value)
+  }
+  document.getElementById("message").innerText
+    = mapInfo.getMapObject()["message"];
+  document.getElementById("message").onchange = () => {
+    mapInfo.setMessage(document.getElementById("message").innerText);
+  }
+
+  // ブロック解放状態の管理
+  const unlockManager = new UnlockManager(
+    document.getElementById("unlocker"),
+    mapInfo.getMapObject()["unlocked"]
+  );
+  document.getElementById("unlocker").onclick = e => {
+    const clickY = e.pageY;
+
+    const clientRect
+      = document.getElementById("unlocker").getBoundingClientRect();
+    const positionY = clientRect.left + window.scrollY;
+
+    const y = clickY - positionY;
+
+    const ysel = Math.floor(
+      y / (document.getElementById("unlocker").clientHeight / 11)
+    );
+    unlockManager.toggle(ysel - 1);
+
+    mapInfo.setUnlockStatus(unlockManager.getUnlockList());
+
+    unlockManager.render();
+  }
+  unlockManager.render();
 
   await mapRenderer.render(mapInfo.getMapObject(), canvas);
 }
