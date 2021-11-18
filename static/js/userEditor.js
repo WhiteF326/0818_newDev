@@ -626,6 +626,9 @@ class UnlockManager {
 }
 
 window.onload = async () => {
+  // 未保存フラグ
+  let unsaved = false;
+
   // ステージ id を url から取得
   const stageid = (new URL(window.location.href)).searchParams.get("stageid");
 
@@ -662,18 +665,22 @@ window.onload = async () => {
   document.getElementById("verticalDecrement").onclick = async () => {
     mapInfo.removeRow();
     await mapRenderer.render(mapInfo.getMapObject(), canvas);
+    unsaved = true;
   }
   document.getElementById("verticalIncrement").onclick = async () => {
     mapInfo.addRow();
     await mapRenderer.render(mapInfo.getMapObject(), canvas);
+    unsaved = true;
   }
   document.getElementById("horizontalDecrement").onclick = async () => {
     mapInfo.removeColumn();
     await mapRenderer.render(mapInfo.getMapObject(), canvas);
+    unsaved = true;
   }
   document.getElementById("horizontalIncrement").onclick = async () => {
     mapInfo.addColumn();
     await mapRenderer.render(mapInfo.getMapObject(), canvas);
+    unsaved = true;
   }
 
   // パレット
@@ -731,6 +738,7 @@ window.onload = async () => {
       mapInfo.putChip(points[0], points[1], palette.getSelectedChipType());
 
       await mapRenderer.render(mapInfo.getMapObject(), canvas);
+      unsaved = true;
     }
   }
   document.getElementById("map").onmousedown = async e => {
@@ -758,20 +766,24 @@ window.onload = async () => {
     );
 
     await mapRenderer.render(mapInfo.getMapObject(), canvas);
+    unsaved = true;
   }
 
   // キャラ配置ボタン
   document.getElementById("putChara").onclick = async () => {
     mapInfo.setCharaPosition(...mapRenderer.getSelection());
     await mapRenderer.render(mapInfo.getMapObject(), canvas);
+    unsaved = true;
   }
   document.getElementById("putCursor").onclick = async () => {
     mapInfo.setCursorPosition(...mapRenderer.getSelection());
     await mapRenderer.render(mapInfo.getMapObject(), canvas);
+    unsaved = true;
   }
   document.getElementById("putGoal").onclick = async () => {
     mapInfo.setGoalPosition(...mapRenderer.getSelection());
     await mapRenderer.render(mapInfo.getMapObject(), canvas);
+    unsaved = true;
   }
 
   // コストと歩数の設定
@@ -779,23 +791,27 @@ window.onload = async () => {
     = mapInfo.getMapObject()["maxCost"];
   document.getElementById("cost").onchange = () => {
     mapInfo.setCost(Number(document.getElementById("cost").value));
+    unsaved = true;
   }
   document.getElementById("step").value
     = mapInfo.getMapObject()["maxStep"];
   document.getElementById("step").onchange = () => {
     mapInfo.setWalk(Number(document.getElementById("step").value));
+    unsaved = true;
   }
 
   // タイトル、開始メッセージの設定
   document.getElementById("title").value
     = mapInfo.getMapObject()["title"];
   document.getElementById("title").onchange = () => {
-    mapInfo.setTitle(document.getElementById("title").value)
+    mapInfo.setTitle(document.getElementById("title").value);
+    unsaved = true;
   }
   document.getElementById("message").innerText
     = mapInfo.getMapObject()["message"];
   document.getElementById("message").onchange = () => {
     mapInfo.setMessage(document.getElementById("message").innerText);
+    unsaved = true;
   }
 
   // ブロック解放状態の管理
@@ -820,6 +836,7 @@ window.onload = async () => {
     mapInfo.setUnlockStatus(unlockManager.getUnlockList());
 
     unlockManager.render();
+    unsaved = true;
   }
   unlockManager.render();
 
@@ -835,8 +852,11 @@ window.onload = async () => {
         stageid: stageid,
         stagetext: JSON.stringify(mapInfo.getMapObject())
       });
+      unsaved = false;
     }
   }
+
+  // テストプレイの実装
 
   await mapRenderer.render(mapInfo.getMapObject(), canvas);
 }
