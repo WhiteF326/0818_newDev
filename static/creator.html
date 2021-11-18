@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ストーリーモード</title>
+  <link rel="stylesheet" href="css/destyle.css" type="text/css">
+  <link rel="stylesheet" href="css/sakura.css" type="text/css">
+</head>
+<script type="text/javascript">
+  window.onload = () => {
+    document.getElementById("select1").onclick = () => {
+      window.location.href = "comunitySelect.html";
+    }
+    document.getElementById("select2").onclick = () => {
+      window.location.href = "slotSelect.html";
+    }
+  }
+</script>
+<style>
+  img[src$="img/storymode_icon.png"] {
+    height: 60%;
+    width: 60%;
+    margin: 0;
+  }
+
+  body {
+    background-color: #eafcfa;
+    height: 10%;
+    width: fit-content;
+    text-align: center;
+    left: 50%;
+  }
+
+  table {
+    left: 50%;
+    text-align: center;
+  }
+
+  .modeSelector {
+    transition: 0.1s;
+    width: 240px;
+  }
+
+  .modeSelector:hover {
+    width: 320px;
+  }
+</style>
+
+<body>
+  <form action="index.html">
+    <input type="submit" value="トップに戻る">
+  </form>
+  <h1><img src="https://cdn.wikiwiki.jp/to/w/boudai/%E9%9F%B3%E5%89%B2%E3%82%8C%E3%83%9D%E3%83%83%E3%82%BF%E3%83%BCBB/::ref/20180410_242737.png?rev=27cfc0d48468b1adbfafe34ae95f0e95&t=20180410002758"></h1>
+  <table>
+    <tbody>
+      <tr>
+        <td id="ref0">
+          <img src="https://cdn.wikiwiki.jp/to/w/boudai/%E9%9F%B3%E5%89%B2%E3%82%8C%E3%83%9D%E3%83%83%E3%82%BF%E3%83%BCBB/::ref/20180410_242737.png?rev=27cfc0d48468b1adbfafe34ae95f0e95&t=20180410002758" id="select1" class="modeSelector">
+        </td>
+      </tr>
+      <tr>
+        <td id="ref1">
+          <img src="https://cdn.wikiwiki.jp/to/w/boudai/%E9%9F%B3%E5%89%B2%E3%82%8C%E3%83%9D%E3%83%83%E3%82%BF%E3%83%BCBB/::ref/20180410_242737.png?rev=27cfc0d48468b1adbfafe34ae95f0e95&t=20180410002758" id="select2" class="modeSelector">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+
+</html>
