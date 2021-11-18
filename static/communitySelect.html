@@ -23,10 +23,255 @@
     left: 50%;
     text-align: center;
   }
+
+  img[src$="img/stageselect.png"] {
+    height: 60%;
+    width: 60%;
+    margin: 0;
+  }
+
+  h1 {
+    margin: 0;
+  }
+
+  #stages {
+    overflow-y: scroll;
+  }
+
+  .lock {
+    position: sticky;
+    top: 0;
+    color: #ffffff;
+    background: #333333;
+  }
+
+  .lock:before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #ccc;
+  }
 </style>
 
+<script type="module">
+  import { fetchJSON } from "./js/fetchP.js";
+  window.onload = async () => {
+    let stageList = JSON.parse(
+      await fetchJSON("api/create/all", {
+        "userid": localStorage.getItem("userid"),
+      })
+    );
+    document.getElementById("sorttype").onchange = () => {
+      localStorage.setItem(
+        "sorttype", document.getElementById("sorttype").value
+      );
+      window.location.reload();
+    }
+    document.getElementById("sorttype").value
+      = localStorage.getItem("sorttype");
+    const sorttype = localStorage.getItem("sorttype") || "title_asc";
+    const favorites = JSON.parse(await fetchJSON("api/create/allfavorite", {}));
+
+    switch (sorttype) {
+      case "title_asc": {
+        stageList.sort((a, b) => {
+          const ltitle = JSON.parse(a["stagetext"])["title"];
+          const rtitle = JSON.parse(b["stagetext"])["title"];
+          if (ltitle > rtitle) {
+            return 1;
+          } else if (ltitle < rtitle) {
+            return -1;
+          } else {
+            return 0;
+          }
+        });
+        break;
+      }
+
+      case "title_desc": {
+        stageList.sort((a, b) => {
+          const ltitle = JSON.parse(a["stagetext"])["title"];
+          const rtitle = JSON.parse(b["stagetext"])["title"];
+          if (ltitle > rtitle) {
+            return -1;
+          } else if (ltitle < rtitle) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+        break;
+      }
+
+      case "creator_asc": {
+        stageList.sort((a, b) => {
+          const lcreator = a["userid"];
+          const rcreator = b["userid"];
+          if (lcreator > rcreator) {
+            return -1;
+          } else if (lcreator < rcreator) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+      }
+
+      case "creator_desc": {
+        stageList.sort((a, b) => {
+          const lcreator = a["userid"];
+          const rcreator = b["userid"];
+          if (lcreator > rcreator) {
+            return 1;
+          } else if (lcreator < rcreator) {
+            return -1;
+          } else {
+            return 0;
+          }
+        });
+      }
+
+      case "fav_desc": {
+        stageList.sort((a, b) => {
+          const lfav
+            = (favorites.find(r => r["stageid"] === a["stageid"])
+              || { "cnt": 0 })["cnt"];
+          const rfav
+            = (favorites.find(r => r["stageid"] === b["stageid"])
+              || { "cnt": 0 })["cnt"];
+          if (lfav > rfav) {
+            return -1;
+          } else if (lfav < rfav) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+        break;
+      }
+    }
+    stageList.forEach(async r => {
+      const row = document.createElement("tr");
+
+      // プレイ
+      const playButtonCell = document.createElement("td");
+      const playButton = document.createElement("button");
+      playButton.innerText = "プレイ";
+      playButton.onclick = () => {
+        localStorage.setItem("gameEnabled", "userstage");
+        localStorage.setItem("userstageid", r["stageid"]);
+        window.location.href = "userStage.html";
+      }
+      playButtonCell.appendChild(playButton);
+      row.appendChild(playButtonCell);
+
+      // タイトル
+      const titleCell = document.createElement("td");
+      titleCell.innerText = JSON.parse(r["stagetext"])["title"];
+      row.appendChild(titleCell);
+
+      // 制作者
+      const creatorCell = document.createElement("td");
+      creatorCell.innerText = r["userid"];
+      row.appendChild(creatorCell);
+
+      // fav 数
+      const favoriteCell = document.createElement("td");
+      favoriteCell.innerText = JSON.parse(
+        await fetchJSON("api/create/favoritecount", {
+          "stageid": r["stageid"]
+        })
+      );
+      row.appendChild(favoriteCell);
+
+      // fav ボタン
+      const buttonCell = document.createElement("td");
+      const clearcheck = JSON.parse(
+        await fetchJSON("api/create/clearcheck", {
+          "userid": localStorage.getItem("userid"),
+          "stageid": r["stageid"]
+        })
+      );
+      if (clearcheck) {
+        const favoritecheck = JSON.parse(
+          await fetchJSON("api/create/favoritecheck", {
+            "userid": localStorage.getItem("userid"),
+            "stageid": r["stageid"]
+          })
+        );
+
+        const favoriteButton = document.createElement("button");
+
+        if (favoritecheck) {
+          favoriteButton.innerText = "お気に入りを解除";
+        } else {
+          favoriteButton.innerText = "お気に入りにする";
+        }
+
+        favoriteButton.onclick = async () => {
+          await fetchJSON("api/create/favorite", {
+            "userid": localStorage.getItem("userid"),
+            "stageid": r["stageid"]
+          });
+          window.location.reload();
+        }
+
+        buttonCell.appendChild(favoriteButton);
+      } else {
+        buttonCell.innerText = "未クリア";
+      }
+
+      row.appendChild(buttonCell);
+
+      if (sorttype === "fav_only") {
+        const favoritecheck = JSON.parse(
+          await fetchJSON("api/create/favoritecheck", {
+            "userid": localStorage.getItem("userid"),
+            "stageid": r["stageid"]
+          })
+        );
+        if (favoritecheck) {
+          document.getElementById("stages").appendChild(row);
+        }
+      } else {
+        document.getElementById("stages").appendChild(row);
+      }
+    });
+  }
+</script>
+
 <body>
-  //
+  <form action="index.html">
+    <input type="submit" value="トップに戻る">
+  </form>
+  <h1><img src="img/stageselect.png"></h1>
+  <table>
+    <caption id="sort"></caption>
+    <tbody id="stages">
+      <tr>
+        <th>
+          <select id="sorttype">
+            <option value="title_asc">タイトルの昇順</option>
+            <option value="title_desc">タイトルの降順</option>
+            <option value="creator_asc">制作者名の昇順</option>
+            <option value="creator_desc">制作者名の降順</option>
+            <option value="fav_desc">お気に入り数の多い順</option>
+            <option value="fav_only">お気に入りだけ表示</option>
+          </select>
+        </th>
+        <th>タイトル</th>
+        <th>制作者</th>
+        <th>「お気に入り」数</th>
+        <th>
+          <input type="text" style="width: 70%" placeholder="タイトルを検索">
+          <button id="search" style="width: 25%">検索</button>
+        </th>
+      </tr>
+    </tbody>
+  </table>
 </body>
 
 </html>

@@ -468,6 +468,7 @@ switch(explode("/", $path)[1]){
         break;
       }
     }
+    break;
   }
 
   case "create": {
@@ -476,6 +477,20 @@ switch(explode("/", $path)[1]){
         $uid = $prm["userid"];
         $result = $pdo->query(
           "select * from create_stages where userid = \"". $uid. "\""
+        )->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($result);
+        break;
+      }
+
+      case "all": {
+        $uid = $prm["userid"];
+        // $result = $pdo->query(
+        //   "select * from create_stages
+        //   where not userid = \"". $uid. "\"
+        //   and is_public = 1"
+        // )->fetchAll(PDO::FETCH_ASSOC);
+        $result = $pdo->query(
+          "select * from create_stages"
         )->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($result);
         break;
@@ -490,6 +505,32 @@ switch(explode("/", $path)[1]){
           and userid =\"". $uid. "\""
         )->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($result[0]["stagetext"]);
+        break;
+      }
+
+      case "play": {
+        $stageid = $prm["stageid"];
+        $result = $pdo->query(
+          "select stagetext from create_stages
+          where stageid = \"". $stageid. "\""
+        )->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($result[0]["stagetext"]);
+        break;
+      }
+
+      case "clear": {
+        $stageid = $prm["stageid"];
+        $uid = $prm["userid"];
+        $score = $prm["score"];
+        $xml = $prm["program"];
+        $sql = "insert into create_clear
+        values(:userid, :stageid, :score, :program)";
+        $stm = $pdo->prepare($sql);
+        $stm->bindValue(":userid", $uid);
+        $stm->bindValue(":stageid", $stageid);
+        $stm->bindValue(":score", $score);
+        $stm->bindValue(":program", $xml);
+        $stm->execute();
         break;
       }
 
@@ -577,6 +618,71 @@ switch(explode("/", $path)[1]){
           and stageid = \"". $stageid. "\""
         );
         echo null;
+        break;
+      }
+
+      case "favoritecount": {
+        $stageid = $prm["stageid"];
+        echo $pdo->query(
+          "select count(*) as cnt from create_favorite
+          where stageid = \"". $stageid. "\""
+        )->fetchAll(PDO::FETCH_ASSOC)[0]["cnt"];
+        break;
+      }
+
+      case "clearcheck": {
+        $uid = $prm["userid"];
+        $stageid = $prm["stageid"];
+        echo $pdo->query(
+          "select count(*) as cnt from create_clear
+          where stageid = \"". $stageid. "\"
+          and userid = \"". $uid. "\""
+        )->fetchAll(PDO::FETCH_ASSOC)[0]["cnt"];
+        break;
+      }
+
+      case "favoritecheck": {
+        $uid = $prm["userid"];
+        $stageid = $prm["stageid"];
+        echo $pdo->query(
+          "select count(*) as cnt from create_favorite
+          where stageid = \"". $stageid. "\"
+          and userid = \"". $uid. "\""
+        )->fetchAll(PDO::FETCH_ASSOC)[0]["cnt"];
+        break;
+      }
+
+      case "favorite": {
+        $uid = $prm["userid"];
+        $stageid = $prm["stageid"];
+        $result = $pdo->query(
+          "select count(*) as cnt from create_favorite
+          where stageid = \"". $stageid. "\"
+          and userid = \"". $uid. "\""
+        )->fetchAll(PDO::FETCH_ASSOC)[0]["cnt"];
+
+        if($result){
+          $pdo->query(
+            "delete from create_favorite
+            where stageid = \"". $stageid. "\"
+            and userid = \"". $uid. "\""
+          );
+        }else{
+          $pdo->query(
+            "insert into create_favorite
+            values(\"". $uid. "\", \"". $stageid. "\")"
+          );
+        }
+        break;
+      }
+
+      case "allfavorite": {
+        echo json_encode(
+          $pdo->query(
+            "select stageid, count(*) as cnt from create_favorite
+            group by stageid"
+          )->fetchAll(PDO::FETCH_ASSOC)
+        );
         break;
       }
     }
