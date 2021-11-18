@@ -534,6 +534,23 @@ switch(explode("/", $path)[1]){
         break;
       }
 
+      case "register": {
+        $stageid = $prm["stageid"];
+        $userid = $prm["userid"];
+        $stagetext = $pdo->query(
+          "select stagetext from create_stages
+          where stageid = \"". $stageid. "\"
+          and userid = \"". $userid. "\""
+        )->fetchAll(PDO::FETCH_ASSOC)[0]["stagetext"];
+        $hashedtext = hash("sha512", $stagetext, false);
+        $pdo->query(
+          "insert into create_testlist
+          values(\"". $userid. "\", \"". $hashedtext. "\")"
+        );
+        echo null;
+        break;
+      }
+
       case "hashing": {
         $stagetext = $prm["stagetext"];
         echo hash("sha512", $stagetext, false);

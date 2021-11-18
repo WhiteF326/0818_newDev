@@ -546,13 +546,10 @@ window.onload = async () => {
     document.getElementsByClassName("scoreTable")[0].style.fontSize = "0px";
     document.getElementsByClassName("scoreTable")[0].style.opacity = "0%";
     document.getElementById("yj").style.width = "0";
-    // await fetchJSON("api/stage/clear", {
-    //   "userid": localStorage.getItem("userid"),
-    //   "stagename": localStorage.getItem("selectedStage"),
-    //   "cost": progBoad.costCalculate(),
-    //   "score": gameBody.score,
-    //   "program": progBoad.getXML()
-    // });
+    await fetchJSON("api/create/register", {
+      "userid": localStorage.getItem("userid"),
+      "stageid": localStorage.getItem("testplayId")
+    });
     setInterval(() => {
       window.location.href
         = "./userEditor.html?stageid=" + localStorage.getItem("testplayId");
