@@ -1,5 +1,9 @@
 import { fetchJSON } from './fetchP.js';
 
+const isInRange = (val, l, r) => {
+  return (l <= val && val < r);
+}
+
 class ChipInfo {
   // paths are str array
   #imgPaths = [];
@@ -117,7 +121,8 @@ class MapInfo {
   }
   setGoalPosition = (x, y) => {
     // キャラと重ならないか確認する
-    if (this.#jsondata["start"][0] !== y || this.#jsondata["start"][1] !== x) {
+    if (this.#jsondata["stage"][y][x] === 1
+      && this.#jsondata["start"][0] !== y || this.#jsondata["start"][1] !== x) {
       this.#jsondata["goal"][0] = y;
       this.#jsondata["goal"][1] = x;
     }
@@ -153,16 +158,113 @@ class MapInfo {
   verify = () => {
     let errors = "";
     // 不正なマップチップ
-    if(
+    if (
       this.#jsondata["stage"].map(r => {
         r.map(v => (v === 7 || v === 8) ? 1 : 0).reduce((a, b) => (a | b))
-      })
-    ){
+      }).reduce((a, b) => (a | b))
+    ) {
       // マップ内に 7, 8 がある
       errors += "マップ内に押されたスイッチや開かれたドアがあります。<br>";
     }
     // 外周が木ではない
-    
+    if (
+      this.#jsondata["stage"][0].map(r => r !== 0).reduce((a, b) => (a | b))
+      || this.#jsondata["stage"][
+        this.#jsondata["stage"].length - 1
+      ].map(r => r !== 0).reduce((a, b) => (a | b))
+      || this.jsondata["stage"].map(r => {
+        r.map((v, i) => {
+          if ((i === 0 || i === r.length - 1) && v !== 0) {
+            return 1;
+          } else {
+            return 0;
+          }
+        }).reduce((a, b) => (a | b))
+      })
+    ) {
+      errors += "マップの最も上の行、下の行、左の列、右の列のいずれかに木でないマスがあります。<br>";
+    }
+    // パラメータ異常
+    for (let y = 0; y < this.#jsondata["stage"].length; y++) {
+      for (let x = 0; x < this.#jsondata["stage"][y].length; x++) {
+        switch (this.#jsondata["stage"][y][x]) {
+          case 0:
+          case 1:
+          case 2:
+          case 3:
+          case 9:
+            if (this.#jsondata["param"][y][x] !== 0) {
+              errors += "上から" + y + "行目、左から" + x + "列目のマスのパラメータが範囲外です。";
+            }
+            break;
+
+          case 5:
+          case 6:
+            if (this.#jsondata["param"][y][x] < 0
+              || this.#jsondata["param"][y][x] >= 5) {
+              errors += "上から" + y + "行目、左から" + x + "列目のマスのパラメータが範囲外です。";
+            }
+            break;
+
+          case 4:
+            if (this.#jsondata["param"][y][x] < 0
+              || this.#jsondata["param"][y][x] > 50) {
+              errors += "上から" + y + "行目、左から" + x + "列目のマスのパラメータが範囲外です。";
+            }
+            break;
+        }
+      }
+    }
+    // キャラクターの開始位置
+    if (this.#jsondata["start"][0] >= this.#jsondata["stage"][0].length
+      || this.#jsondata["start"][1] >= this.#jsondata["stage"].length) {
+      errors += "キャラクターの開始位置が不正です。<br>";
+    } else {
+      if (
+        this.#jsondata["stage"]
+        [this.#jsondata["start"][1]][this.#jsondata["start"][0]]
+        !== 0
+      ) {
+        errors += "キャラクターの開始位置が床ではありません。<br>";
+      }
+    }
+    // ゴールの位置
+    if (this.#jsondata["goal"][0] >= this.#jsondata["stage"][0].length
+      || this.#jsondata["goal"][1] >= this.#jsondata["stage"].length) {
+      errors += "ゴールの開始位置が不正です。<br>";
+    } else {
+      if (
+        this.#jsondata["stage"]
+        [this.#jsondata["goal"][1]][this.#jsondata["goal"][0]]
+        !== 0
+      ) {
+        errors += "ゴールの開始位置が床ではありません。<br>";
+      }
+    }
+    // カーソルの位置
+    if (this.#jsondata["controll"][0] >= this.#jsondata["stage"][0].length
+      || this.#jsondata["controll"][1] >= this.#jsondata["stage"].length) {
+      errors += "カーソルの開始位置が不正です。<br>";
+    }
+    // コストの範囲
+    if(!isInRange(this.#jsondata["maxCost"], -1, 1001)){
+      errors += "残りコストが 0 未満であるか、1000 より大きく設定されています。<br>";
+    }
+    // 歩数の範囲
+    if(!isInRange(this.#jsondata["maxStep"], -1, 1001)){
+      errors += "残り歩数が 0 未満であるか、1000 より大きく設定されています。<br>";
+    }
+    // タイトル
+    if(!this.#jsondata["title"]){
+      errors += "タイトルが空です。入力して下さい。<br>";
+    }
+    // 開始メッセージ
+    if(!this.#jsondata["message"]){
+      errors += "開始メッセージが空です。入力して下さい。<br>";
+    }
+
+    // エラーを返す
+    return errors;
   }
 }
 
@@ -453,7 +555,7 @@ class UnlockManager {
   #canvas;
   #unlockArray = [];
   #choosenImage;
-  
+
   static #allBlocks = [
     "move",
     "destroy",
@@ -490,21 +592,21 @@ class UnlockManager {
 
   toggle = typeNumber => {
     const type = UnlockManager.#allBlocks[typeNumber];
-    if(UnlockManager.#allBlocks.findIndex(r => r === type) !== -1){
-      if(this.#unlockArray.findIndex(r => r === type) !== -1){
+    if (UnlockManager.#allBlocks.findIndex(r => r === type) !== -1) {
+      if (this.#unlockArray.findIndex(r => r === type) !== -1) {
         this.#unlockArray = this.#unlockArray.filter(r => r !== type);
-      }else{
+      } else {
         this.#unlockArray.push(type);
       }
     }
   }
-  
+
   render = () => {
     const ctx = this.#canvas.getContext("2d");
     ctx.clearRect(0, 0, this.#canvas.clientWidth, this.#canvas.clientHeight);
     ctx.font = "27px serif";
-    for(let i = 0; i < 11; i++){
-      if(this.#unlockArray.find(r => r === UnlockManager.#allBlocks[i])){
+    for (let i = 0; i < 11; i++) {
+      if (this.#unlockArray.find(r => r === UnlockManager.#allBlocks[i])) {
         ctx.drawImage(
           this.#choosenImage,
           0, 0, 32, 32,
@@ -720,7 +822,7 @@ window.onload = async () => {
     unlockManager.render();
   }
   unlockManager.render();
-  
+
   // 保存機能の実装
   document.getElementById("save").onclick = async () => {
 
