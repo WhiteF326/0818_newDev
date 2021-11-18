@@ -88,7 +88,7 @@ class ProgBoad {
         document.getElementById("help").disabled = true;
         if(localStorage.getItem("gameEnabled") === "free"){
           document.getElementById("backToSelect").disabled = true;
-        }else{
+        }else if(localStorage.getItem("gameEnabled") === "story"){
           document.getElementById("backToTop").disabled = true;
         }
         document.getElementById("blocklyDiv").disabled = true;

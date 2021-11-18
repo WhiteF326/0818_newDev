@@ -335,14 +335,12 @@ class Body {
       if (this.score < 0) this.score = 0;
       // スコア計算式を表示
       document.getElementById("scoreFormula").innerText = "";
-      if (localStorage.getItem("gameEnabled") === "free") {
-        const formula = document.getElementById("scoreFormula");
-        formula.appendChild(
-          ResultScoreText(
-            lastStep, lastCost, blockCnt, dcrCnt, repeatSum, this.scoreTable
-          )
-        );
-      }
+      const formula = document.getElementById("scoreFormula");
+      formula.appendChild(
+        ResultScoreText(
+          lastStep, lastCost, blockCnt, dcrCnt, repeatSum, this.scoreTable
+        )
+      );
     }
 
     if (moving) {
@@ -509,6 +507,10 @@ window.onload = async () => {
     )
   );
   console.log(mapinfo)
+  document.getElementById("retry").addEventListener("click", () => {
+    progBoad.save();
+    location.reload();
+  });
 
   const settings = JSON.parse(await fetchJSON("api/user/settings/read", {
     "userid": localStorage.getItem("userid"),
@@ -541,33 +543,24 @@ window.onload = async () => {
   modal.addEventListener("click", async () => {
     modal.setAttribute("style", "width: 0%");
     modal.style.fontSize = "0px";
-    if (localStorage.getItem("gameEnabled") === "free") {
-      document.getElementsByClassName("scoreTable")[0].style.fontSize = "0px";
-      document.getElementsByClassName("scoreTable")[0].style.opacity = "0%";
-      document.getElementById("yj").style.width = "0";
-      await fetchJSON("api/stage/clear", {
-        "userid": localStorage.getItem("userid"),
-        "stagename": localStorage.getItem("selectedStage"),
-        "cost": progBoad.costCalculate(),
-        "score": gameBody.score,
-        "program": progBoad.getXML()
-      });
-      setInterval(() => {
-        window.location.href = "freeStageSelect.html";
-      }, 1000);
-    } else {
-      setInterval(() => {
-        window.location.href = "./story/game.php?" +
-          "clear=yes&userid=" + localStorage.getItem("userid")
-          + "&hinttext=none"
-          + "&stage=" + String(Number(localStorage.getItem("storyStage")) - 1);
-      }, 1000);
-    }
+    document.getElementsByClassName("scoreTable")[0].style.fontSize = "0px";
+    document.getElementsByClassName("scoreTable")[0].style.opacity = "0%";
+    document.getElementById("yj").style.width = "0";
+    // await fetchJSON("api/stage/clear", {
+    //   "userid": localStorage.getItem("userid"),
+    //   "stagename": localStorage.getItem("selectedStage"),
+    //   "cost": progBoad.costCalculate(),
+    //   "score": gameBody.score,
+    //   "program": progBoad.getXML()
+    // });
+    setInterval(() => {
+      window.location.href
+        = "./userEditor.html?stageid=" + localStorage.getItem("testplayId");
+    }, 1000);
   });
 
   const smodal = document.getElementsByClassName("smodal")[0];
   const smodalback = document.getElementsByClassName("smodalback")[0];
-  const stageNo = Number(localStorage.getItem("selectedStage"));
   const titleText = document.createElement("h2");
   titleText.innerText = mapinfo["title"];
   smodal.appendChild(titleText);
