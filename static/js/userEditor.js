@@ -708,7 +708,6 @@ window.onload = async () => {
     );
     return ret;
   });
-  console.log(icons);
   const palette = new Palette(document.getElementById("palette"), icons);
   palette.render();
 
