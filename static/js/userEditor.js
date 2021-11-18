@@ -862,25 +862,73 @@ window.onload = async () => {
   // 保存機能の実装
   document.getElementById("save").onclick = async () => {
     const errors = mapInfo.verify();
+    const modal = document.getElementsByClassName("modalback")[0];
+    const modalbody = document.getElementById("modalbody");
+    
     if (errors) {
-      // エラー
-      console.log(errors);
+      modalbody.innerHTML += errors;
     } else {
+      modalbody.innerHTML += "保存されました。";
       await fetchJSON("api/create/update", {
         userid: localStorage.getItem("userid"),
         stageid: stageid,
         stagetext: JSON.stringify(mapInfo.getMapObject())
       });
-      unsaved = false;
     }
+
+    modalbody.appendChild(document.createElement("br"));
+    const ok = document.createElement("button");
+    ok.innerText = "はい";
+    ok.onclick = async () => {
+      modal.style.transform = "translateY(-500px)";
+      modal.style.height = "0%";
+      Array.from(document.getElementById("modalbody").childNodes)
+        .forEach(r => {
+          r.remove();
+        }
+      );
+    }
+    modalbody.appendChild(ok);
+
+    modal.style.transition = "1s";
+    modal.style.transform = "translateY(0)";
+    modal.style.height = "100%";
+    modal.style.width = document.body.clientWidth + "px";
   }
 
   // テストプレイの実装
   document.getElementById("test").onclick = () => {
     // TODO 未保存のときに確認する
-    localStorage.setItem("gameEnabled", "testplay");
-    localStorage.setItem("testplayId", stageid);
-    window.location.href = "testPlayer.html";
+    if(unsaved){
+      const modal = document.getElementsByClassName("modalback")[0];
+      const modalbody = document.getElementById("modalbody");
+      modalbody.appendChild(document.createTextNode(
+        "このマップは変更されています。テストを開始する前に、変更を保存してください。"
+      ));
+      modalbody.appendChild(document.createElement("br"));
+      const ok = document.createElement("button");
+      ok.innerText = "はい";
+      ok.onclick = async () => {
+        modal.style.transform = "translateY(-500px)";
+        modal.style.height = "0%";
+        Array.from(document.getElementById("modalbody").childNodes)
+          .forEach(r => {
+            r.remove();
+          }
+        );
+      }
+      modalbody.appendChild(ok);
+
+      modal.style.transition = "1s";
+      modal.style.transform = "translateY(0)";
+      modal.style.height = "100%";
+      modal.style.width = document.body.clientWidth + "px";
+    }else{
+      localStorage.setItem("gameEnabled", "testplay");
+      localStorage.setItem("testplayId", stageid);
+      window.location.href = "testPlayer.html";
+    }
+    
   }
 
   // 公開処理の実装
