@@ -879,6 +879,7 @@ window.onload = async () => {
         stageid: stageid,
         stagetext: JSON.stringify(mapInfo.getMapObject())
       });
+      unsaved = false;
     }
 
     modalbody.appendChild(document.createElement("br"));
