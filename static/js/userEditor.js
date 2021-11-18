@@ -100,15 +100,15 @@ class MapInfo {
 
   // edit map chip
   putChip = (x, y, type) => {
-    if(this.#jsondata["stage"].length > y){
-      if(this.#jsondata["stage"][y].length > x){
+    if (this.#jsondata["stage"].length > y) {
+      if (this.#jsondata["stage"][y].length > x) {
         this.#jsondata["stage"][y][x] = type;
       }
     }
   }
   putParam = (x, y, param) => {
-    if(this.#jsondata["param"].length > y){
-      if(this.#jsondata["param"][y].length > x){
+    if (this.#jsondata["param"].length > y) {
+      if (this.#jsondata["param"][y].length > x) {
         this.#jsondata["param"][y][x] = param;
       }
     }
@@ -202,7 +202,7 @@ class MapInfo {
           case 3:
           case 9:
             if (this.#jsondata["param"][y][x] !== 0) {
-              errors += "上から" + y + "行目、左から" + x + "列目のマスのパラメータが範囲外です。";
+              errors += "上から" + (y + 1) + "行目、左から" + (x + 1) + "列目のマスのパラメータが範囲外です。";
             }
             break;
 
@@ -210,14 +210,14 @@ class MapInfo {
           case 6:
             if (this.#jsondata["param"][y][x] < 0
               || this.#jsondata["param"][y][x] >= 5) {
-              errors += "上から" + y + "行目、左から" + x + "列目のマスのパラメータが範囲外です。";
+              errors += "上から" + (y + 1) + "行目、左から" + (x + 1) + "列目のマスのパラメータが範囲外です。";
             }
             break;
 
           case 4:
             if (this.#jsondata["param"][y][x] < 0
               || this.#jsondata["param"][y][x] > 50) {
-              errors += "上から" + y + "行目、左から" + x + "列目のマスのパラメータが範囲外です。";
+              errors += "上から" + (y + 1) + "行目、左から" + (x + 1) + "列目のマスのパラメータが範囲外です。";
             }
             break;
         }
@@ -864,7 +864,12 @@ window.onload = async () => {
     const errors = mapInfo.verify();
     const modal = document.getElementsByClassName("modalback")[0];
     const modalbody = document.getElementById("modalbody");
-    
+    Array.from(document.getElementById("modalbody").childNodes)
+      .forEach(r => {
+        r.remove();
+      }
+      );
+
     if (errors) {
       modalbody.innerHTML += errors;
     } else {
@@ -882,11 +887,6 @@ window.onload = async () => {
     ok.onclick = async () => {
       modal.style.transform = "translateY(-500px)";
       modal.style.height = "0%";
-      Array.from(document.getElementById("modalbody").childNodes)
-        .forEach(r => {
-          r.remove();
-        }
-      );
     }
     modalbody.appendChild(ok);
 
@@ -899,7 +899,12 @@ window.onload = async () => {
   // テストプレイの実装
   document.getElementById("test").onclick = () => {
     // TODO 未保存のときに確認する
-    if(unsaved){
+    if (unsaved) {
+      Array.from(document.getElementById("modalbody").childNodes)
+        .forEach(r => {
+          r.remove();
+        }
+        );
       const modal = document.getElementsByClassName("modalback")[0];
       const modalbody = document.getElementById("modalbody");
       modalbody.appendChild(document.createTextNode(
@@ -911,11 +916,6 @@ window.onload = async () => {
       ok.onclick = async () => {
         modal.style.transform = "translateY(-500px)";
         modal.style.height = "0%";
-        Array.from(document.getElementById("modalbody").childNodes)
-          .forEach(r => {
-            r.remove();
-          }
-        );
       }
       modalbody.appendChild(ok);
 
@@ -923,12 +923,12 @@ window.onload = async () => {
       modal.style.transform = "translateY(0)";
       modal.style.height = "100%";
       modal.style.width = document.body.clientWidth + "px";
-    }else{
+    } else {
       localStorage.setItem("gameEnabled", "testplay");
       localStorage.setItem("testplayId", stageid);
       window.location.href = "testPlayer.html";
     }
-    
+
   }
 
   // 公開処理の実装
@@ -939,6 +939,11 @@ window.onload = async () => {
         "stagetext": JSON.stringify(mapInfo.getMapObject())
       })
     );
+    Array.from(document.getElementById("modalbody").childNodes)
+      .forEach(r => {
+        r.remove();
+      }
+      );
 
     const modal = document.getElementsByClassName("modalback")[0];
     const modalbody = document.getElementById("modalbody");
@@ -957,11 +962,6 @@ window.onload = async () => {
           "userid": localStorage.getItem("userid"),
           "stageid": stageid
         });
-        Array.from(document.getElementById("modalbody").childNodes)
-          .forEach(r => {
-            r.remove();
-          }
-        );
       }
       modalbody.appendChild(ok);
       const no = document.createElement("button");
@@ -969,11 +969,6 @@ window.onload = async () => {
       no.onclick = () => {
         modal.style.transform = "translateY(-500px)";
         modal.style.height = "0%";
-        Array.from(document.getElementById("modalbody").childNodes)
-          .forEach(r => {
-            r.remove();
-          }
-        );
       }
       modalbody.appendChild(no);
     } else {
@@ -986,11 +981,6 @@ window.onload = async () => {
       ok.onclick = () => {
         modal.style.transform = "translateY(-500px)";
         modal.style.height = "0%";
-        Array.from(document.getElementById("modalbody").childNodes)
-          .forEach(r => {
-            r.remove();
-          }
-        );
       }
       modalbody.appendChild(ok);
     }
