@@ -514,10 +514,12 @@ class Palette {
     this.#ctx.fillRect(0, 0, this.#paletteWidth, 32);
 
     // 描画
-    Palette.#enabledChips.forEach((v, i) => {
+    Palette.#enabledChips.forEach(async (v, i) => {
+      const icon = await this.#icons[v];
       this.#ctx.drawImage(
-        this.#icons[v],
-        0, 0, this.#icons[v].naturalHeight, this.#icons[v].naturalWidth,
+        icon,
+        0, 0,
+        icon.naturalHeight, icon.naturalWidth,
         this.#paletteWidth * i / 10 + (this.#paletteWidth / 10 - cellSize) / 2,
         0,
         cellSize, cellSize
@@ -692,11 +694,21 @@ window.onload = async () => {
     "switch1.png", "door_off1.png", "pushed1.png", "door_on1.png",
     "avoidCreate.png", "brush.png", "choose.png"
   ];
-  const icons = iconNames.map(r => {
-    const ret = new Image();
-    ret.src = "./img/" + r;
+  const icons = iconNames.map(async r => {
+    // const ret = new Image();
+    // ret.src = "./img/" + r;
+    // return ret;
+    const ret = await new Promise(
+      (res, rej) => {
+        const img = new Image();
+        img.src = "./img/" + r;
+        img.onload = () => res(img);
+        img.onerror = e => rej(e);
+      }
+    );
     return ret;
   });
+  console.log(icons);
   const palette = new Palette(document.getElementById("palette"), icons);
   palette.render();
 
