@@ -247,19 +247,19 @@ class MapInfo {
       errors += "カーソルの開始位置が不正です。<br>";
     }
     // コストの範囲
-    if(!isInRange(this.#jsondata["maxCost"], -1, 1001)){
+    if (!isInRange(this.#jsondata["maxCost"], -1, 1001)) {
       errors += "残りコストが 0 未満であるか、1000 より大きく設定されています。<br>";
     }
     // 歩数の範囲
-    if(!isInRange(this.#jsondata["maxStep"], -1, 1001)){
+    if (!isInRange(this.#jsondata["maxStep"], -1, 1001)) {
       errors += "残り歩数が 0 未満であるか、1000 より大きく設定されています。<br>";
     }
     // タイトル
-    if(!this.#jsondata["title"]){
+    if (!this.#jsondata["title"]) {
       errors += "タイトルが空です。入力して下さい。<br>";
     }
     // 開始メッセージ
-    if(!this.#jsondata["message"]){
+    if (!this.#jsondata["message"]) {
       errors += "開始メッセージが空です。入力して下さい。<br>";
     }
 
@@ -854,10 +854,10 @@ window.onload = async () => {
   // 保存機能の実装
   document.getElementById("save").onclick = async () => {
     const errors = mapInfo.verify();
-    if(errors){
+    if (errors) {
       // エラー
       console.log(errors);
-    }else{
+    } else {
       await fetchJSON("api/create/update", {
         userid: localStorage.getItem("userid"),
         stageid: stageid,
@@ -869,9 +869,80 @@ window.onload = async () => {
 
   // テストプレイの実装
   document.getElementById("test").onclick = () => {
+    // TODO 未保存のときに確認する
     localStorage.setItem("gameEnabled", "testplay");
     localStorage.setItem("testplayId", stageid);
     window.location.href = "testPlayer.html";
+  }
+
+  // 公開処理の実装
+  document.getElementById("publish").onclick = async () => {
+    const isPublishable = JSON.parse(
+      await fetchJSON("api/create/cleared", {
+        "userid": localStorage.getItem("userid"),
+        "stagetext": JSON.stringify(mapInfo.getMapObject())
+      })
+    );
+
+    const modal = document.getElementsByClassName("modalback")[0];
+    const modalbody = document.getElementById("modalbody");
+
+    if (isPublishable) {
+      modalbody.appendChild(document.createTextNode(
+        "このマップはテストクリアされています。公開しますか？"
+      ));
+      modalbody.appendChild(document.createElement("br"));
+      const ok = document.createElement("button");
+      ok.innerText = "はい";
+      ok.onclick = async () => {
+        modal.style.transform = "translateY(-500px)";
+        modal.style.height = "0%";
+        await fetchJSON("api/create/publish", {
+          "userid": localStorage.getItem("userid"),
+          "stageid": stageid
+        });
+        Array.from(document.getElementById("modalbody").childNodes)
+          .forEach(r => {
+            r.remove();
+          }
+        );
+      }
+      modalbody.appendChild(ok);
+      const no = document.createElement("button");
+      no.innerText = "いいえ";
+      no.onclick = () => {
+        modal.style.transform = "translateY(-500px)";
+        modal.style.height = "0%";
+        Array.from(document.getElementById("modalbody").childNodes)
+          .forEach(r => {
+            r.remove();
+          }
+        );
+      }
+      modalbody.appendChild(no);
+    } else {
+      modalbody.appendChild(document.createTextNode(
+        "まだこの設定でこのマップをテストクリアしていません。"
+      ));
+      modalbody.appendChild(document.createElement("br"));
+      const ok = document.createElement("button");
+      ok.innerText = "閉じる";
+      ok.onclick = () => {
+        modal.style.transform = "translateY(-500px)";
+        modal.style.height = "0%";
+        Array.from(document.getElementById("modalbody").childNodes)
+          .forEach(r => {
+            r.remove();
+          }
+        );
+      }
+      modalbody.appendChild(ok);
+    }
+
+    modal.style.transition = "1s";
+    modal.style.transform = "translateY(0)";
+    modal.style.height = "100%";
+    modal.style.width = document.body.clientWidth + "px";
   }
 
   await mapRenderer.render(mapInfo.getMapObject(), canvas);

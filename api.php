@@ -497,7 +497,7 @@ switch(explode("/", $path)[1]){
         $stageid = $prm["stageid"];
         $stagetext = $prm["stagetext"];
         $uid = $prm["userid"];
-        $sql = "update create_stages set stagetext = :stagetext
+        $sql = "update create_stages set stagetext = :stagetext, is_public = 0
           where stageid = :stageid and userid = :userid";
         $stm = $pdo->prepare($sql);
         $stm->bindValue(":stagetext", $stagetext);
@@ -551,9 +551,32 @@ switch(explode("/", $path)[1]){
         break;
       }
 
-      case "hashing": {
+      case "cleared": {
+        $uid = $prm["userid"];
         $stagetext = $prm["stagetext"];
-        echo hash("sha512", $stagetext, false);
+        $hashedtext = hash("sha512", $stagetext, false);
+        $result = $pdo->query(
+          "select * from create_testlist
+          where userid = \"". $uid. "\"
+          and hashed = \"". $hashedtext. "\""
+        )->fetchAll(PDO::FETCH_ASSOC);
+        if(count($result)){
+          echo "true";
+        }else{
+          echo "false";
+        }
+        break;
+      }
+
+      case "publish": {
+        $uid = $prm["userid"];
+        $stageid = $prm["stageid"];
+        $pdo->query(
+          "update create_stages set is_public = 1
+          where userid = \"". $uid. "\"
+          and stageid = \"". $stageid. "\""
+        );
+        echo null;
         break;
       }
     }

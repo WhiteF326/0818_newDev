@@ -65,6 +65,40 @@
   textarea {
     height: 150px;
   }
+
+  .modalback {
+    transition: 0.5s;
+    position: fixed;
+    top: 0%;
+    transform: translateY(-500px);
+    display: block;
+    z-index: 9998;
+    background-color: rgba(234, 234, 254, 0.78);
+    height: 0%;
+    margin: 0 auto;
+  }
+
+  .modal {
+    position: relative;
+    display: flexbox;
+    z-index: 9999;
+    width: inherit;
+    height: fit-content;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(1, 2, 3, 1);
+    text-align: center;
+  }
+
+  .modal button {
+    height: 100px;
+    width: 100px;
+  }
+
+  .modal button+button {
+    margin-left: 100px;
+  }
 </style>
 
 <body>
@@ -157,6 +191,10 @@
     <div id="right">
       使えるブロックの設定<br>
       <canvas id="unlocker" height="300"></canvas>
+    </div>
+  </div>
+  <div class="modalback">
+    <div class="modal" id="modalbody">
     </div>
   </div>
 </body>
