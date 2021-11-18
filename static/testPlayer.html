@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>ぶろっくるん</title>
+
+  <link rel="stylesheet" href="css/sakura.css" type="text/css">
+  <link rel="stylesheet" href="css/userBoad.css">
+
+  <script src="./js/Const.js"></script>
+  <script src="./js/Chip.js"></script>
+  <script src="./js/ChipList.js"></script>
+  <script src="./js/CharaAuto.js"></script>
+  <script src="./js/CharaHand.js"></script>
+  <script src="./js/Doors.js"></script>
+  <script src="./js/TextList.js"></script>
+
+  <!-- blockly -->
+  <script src="./block_module/blockly_compressed.js"></script>
+  <script src="./block_module/blocks_compressed.js"></script>
+  <script src="./block_module/javascript_compressed.js"></script>
+  <script src="./block_module/msg/js/ja.js"></script>
+
+  <script src="./block_module/myblock.js"></script>
+  <script src="./js/CostCalculator.js"></script>
+  <script src="./js/ProgBoad.js"></script>
+
+  <!-- webfont -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css?family=M+PLUS+1p" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600&display=swap" rel="stylesheet">
+
+  <!-- Audio -->
+  <!-- <audio src="https://raw.githubusercontent.com/WhiteF326/0818_newDev/master/static/audio/forest.mp3" loop id="forest"></audio> -->
+</head>
+
+<style>
+  canvas {
+    border-style: ridge;
+    border-width: 4px;
+    border-radius: 40px;
+    border-block-color: rgb(255, 255, 255);
+    border-inline-color: rgba(255, 255, 255, 0.63);
+    filter: brightness(90%);
+    transform: translateY(40px);
+  }
+
+  img[src$="img/costtable.png"] {
+    margin: 0;
+    height: 64px;
+  }
+
+  img[src$="img/move.png"] {
+    margin: 0;
+  }
+
+  img[src$="img/retry.png"] {
+    margin: 0;
+  }
+
+  img[src$="img/decide_continue.png"] {
+    width: 0;
+  }
+
+  body {
+    background-image: url("img/background.png");
+    background-size: cover;
+  }
+
+  html {
+    height: 100%;
+  }
+
+  .cost {
+    font: 1.5em serif;
+    font-family: "M PLUS 1p";
+    font-weight: 600;
+  }
+
+  .move {
+    border-style: outset;
+    min-width: 55px;
+    width: 15.5%;
+  }
+
+  .retry {
+    border-style: outset;
+    min-width: calc(55px * 120 / 77);
+    width: calc(15% * 120 / 77);
+  }
+
+  .costTable,
+  .costTable tr,
+  .costTable td {
+    border-collapse: collapse;
+    border: 2px rgb(44, 38, 38) solid;
+    background-image: url("img/blockBorder.png");
+    background-size: cover;
+    color: rgba(0, 0, 0, 0.808);
+    text-shadow: 1px 1px 1px white;
+    font-family: cursive;
+    font-weight: 600;
+  }
+
+  .costTable tr,
+  .costTable td {
+    padding: 2px 8px;
+    width: 120px;
+    filter: brightness(105%);
+  }
+
+  .costTable {
+    min-width: fit-content;
+    width: fit-content;
+  }
+
+  .account-info {
+    position: absolute;
+    bottom: 0;
+    background-color: #ffffff3a;
+    color: black;
+    display: block;
+    height: fit-content;
+    z-index: 10000;
+  }
+
+  .left {
+    float: left;
+  }
+
+  .right {
+    float: right;
+  }
+
+  .blocklyComputeCanvas {
+    display: none;
+    position: relative;
+    z-index: 1;
+  }
+
+  .modalback {
+    transition: 0.5s;
+    position: absolute;
+    bottom: 0%;
+    display: block;
+    z-index: 9998;
+    background-color: rgba(234, 254, 234, 0.94);
+    height: 100%;
+    width: 0%;
+    margin: 0 auto;
+    font-size: 0px;
+    text-align: center;
+  }
+
+  .modal {
+    position: relative;
+    display: flexbox;
+    z-index: 9999;
+    width: fit-content;
+    height: fit-content;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .fmodalback {
+    transition: 0.5s;
+    position: absolute;
+    bottom: 0%;
+    display: block;
+    z-index: 9998;
+    background-color: rgba(254, 234, 234, 0.94);
+    height: 100%;
+    width: 0%;
+    margin: 0 auto;
+  }
+
+  .fmodal {
+    position: relative;
+    width: fit-content;
+    height: fit-content;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-500%);
+    text-align: center;
+  }
+
+  .smodalback {
+    transition: 0.5s;
+    position: absolute;
+    top: 0%;
+    display: block;
+    z-index: 9998;
+    background-color: rgba(234, 254, 254, 0.94);
+    height: 0%;
+    width: 85%;
+    margin: 0 auto;
+    transform: translateY(-500px);
+    text-align: center;
+  }
+
+  .smodal {
+    transition: 0.5s;
+    position: relative;
+    display: flexbox;
+    color: #980098;
+    font-size: 2em;
+  }
+
+  .buttons {
+    display: inline;
+    align-items: flex-end;
+  }
+
+  img {
+    margin: 0%;
+  }
+
+  #help {
+    position: absolute;
+    margin: 5px;
+    transform: translateY(-5px);
+    border-style: outset;
+  }
+
+  #helpimg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .helpmodal {
+    transition: 0.5s;
+    position: absolute;
+    bottom: 0%;
+    display: block;
+    z-index: -810;
+    background-color: rgba(234, 234, 234, 0.94);
+    height: 100%;
+    width: 85%;
+    opacity: 0;
+  }
+
+  #backToEditor {
+    position: absolute;
+    display: inline;
+  }
+
+  .plus {
+    color: blue;
+  }
+
+  .minus {
+    color: red;
+  }
+
+  .scoreTable {
+    margin-top: 50px;
+    transform: translateY(50px);
+    transition: 0.5s;
+    font-size: 16px;
+    opacity: 100%;
+  }
+
+  .scoreTable * {
+    font-family: "Nunito";
+  }
+
+  .scoreTable tbody td,
+  .scoreTable tbody th {
+    border: solid 2px #808080;
+    padding-left: 2px;
+    padding-right: 2px;
+  }
+
+  .center {
+    text-align: center;
+  }
+
+  .tRight {
+    text-align: right;
+  }
+
+  .finalCell {
+    font-size: 3em;
+    color: #322e32;
+    height: 3em;
+  }
+
+  .bigScore {
+    font-size: 1.5em;
+  }
+
+  .failed {
+    margin: 0;
+    opacity: 0;
+    z-index: -10000;
+    background: #2B8797;
+    align-items: flex-end;
+  }
+
+  .failed+.failed {
+    margin-left: 100px;
+  }
+
+  .fmodal img {
+    opacity: 0;
+    z-index: -10000;
+  }
+
+  #blocklyDiv,
+  #infos {
+    transform: translateY(40px);
+  }
+</style>
+
+<script>
+  window.addEventListener("load", () => {
+    if (localStorage.getItem("userid") === "") {
+      window.location.href = "accountError.html";
+    }
+  });
+</script>
+
+<body id="body">
+  <a id="backToEditor">エディタに戻る</a>
+  <script type="module" src="./js/testPlayer.js"></script>
+  <div id="stages">
+    <canvas id="canvas"></canvas>
+    <div style="display: inline-block;" id="infos">
+      <table class="costTable">
+        <caption><img src="img/costtable.png"></caption>
+        <tbody id="costList">
+        </tbody>
+      </table>
+      <div class="horizontal">
+        <span id="cost" class="cost" style="display: inline-block;"></span><br>
+        <span id="step" class="cost" style="display: inline-block;"></span><br>
+        <div class="buttons">
+          <button id="move" class="move"><img src="img/move.png"></button>
+          <button id="retry" class="retry"><img src="img/retry.png"></button>
+        </div>
+        <button id="help" class="help" style="display: none;">
+          <img src="img/help.png" id="helpimg">
+        </button>
+      </div>
+    </div>
+    <div id="blocklyDiv"></div>
+    <xml id="toolbox"></xml>
+  </div>
+  <div class="modalback">
+    <div class="modal">
+      <img src="img/stageclear_take.png" id="yj"><br>
+      <span id="scoreFormula">ここにスコア計算式を挿入</span>
+    </div>
+  </div>
+  <div class="fmodalback">
+    <div class="fmodal">
+      <img src="img/stagefailed_take.png"><br><br>
+      <img src="img/decide_continue.png" id="ct"><br>
+      <button id="failedRetry" class="failed" onclick="location.reload()">
+        <img src="img/decide_retry.png">
+      </button>
+      <button id="failedRetire" class="failed">
+        <img src="img/decide_giveup.png">
+      </button>
+    </div>
+  </div>
+  <div class="smodalback">
+    <div class="smodal"></div>
+  </div>
+  <div class="helpmodal"></div>
+  <iframe name="dummy" style="display: none;"></iframe>
+</body>
+
+</html>

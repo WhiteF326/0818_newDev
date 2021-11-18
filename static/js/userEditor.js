@@ -857,6 +857,11 @@ window.onload = async () => {
   }
 
   // テストプレイの実装
+  document.getElementById("test").onclick = () => {
+    localStorage.setItem("gameEnabled", "testplay");
+    localStorage.setItem("testplayId", stageid);
+    window.location.href = "testPlayer.html";
+  }
 
   await mapRenderer.render(mapInfo.getMapObject(), canvas);
 }
