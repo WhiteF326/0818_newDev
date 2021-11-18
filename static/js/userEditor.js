@@ -829,7 +829,7 @@ window.onload = async () => {
   document.getElementById("message").innerText
     = mapInfo.getMapObject()["message"];
   document.getElementById("message").onchange = () => {
-    mapInfo.setMessage(document.getElementById("message").innerText);
+    mapInfo.setMessage(document.getElementById("message").value);
     unsaved = true;
   }
 
