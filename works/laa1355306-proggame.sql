@@ -40,8 +40,8 @@ CREATE TABLE `create_stages` (
 --
 
 INSERT INTO `create_stages` (`stageid`, `userid`, `is_public`, `stagetext`) VALUES
-(6, 'test', 0, '{\n  \"stage\": [\n    [0, 0, 0, 0, 0, 0, 0, 0, 0],\n    [0, 1, 1, 1, 2, 1, 1, 1, 0],\n    [0, 0, 0, 0, 0, 0, 0, 0, 0]\n  ],\n  \"param\": [\n    [0, 0, 0, 0, 0, 0, 0, 0, 0],\n    [0, 0, 0, 0, 0, 0, 0, 0, 0],\n    [0, 0, 0, 0, 0, 0, 0, 0, 0]\n  ],\n  \n  \"start\": [1, 1, \"right\"],\n  \"goal\": [1, 7],\n  \"controll\": [1, 5],\n  \"costList\": {\n    \"move\": \"3\",\n    \"destroy\": \"5\",\n    \"create\": \"5\",\n    \"loop\": \"1\",\n    \"if\": \"1\",\n    \"repair\": \"10\"\n  },\n  \"maxCost\": 27,\n  \"maxStep\": 21,\n  \"unlocked\": [\n    \"move\",\n    \"destroy\"\n  ],\n  \"message\": \"デフォルトのステージです。\",\n  \"title\": \"無題\",\n  \"bgm\": \"forest_ver2\"\n}\n'),
-(7, 'test', 0, '{\"stage\":[[0,0,0,0,0,0,0,0,0],[0,1,1,1,2,1,1,1,0],[0,0,0,0,0,0,0,0,0]],\"param\":[[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]],\"start\":[1,1,\"right\"],\"goal\":[1,7],\"controll\":[1,5],\"costList\":{\"move\":\"3\",\"destroy\":\"5\",\"create\":\"5\",\"loop\":\"1\",\"if\":\"1\",\"repair\":\"10\"},\"maxCost\":27,\"maxStep\":21,\"unlocked\":[\"move\",\"destroy\"],\"message\":\"デフォルトのステージです。\",\"title\":\"無題 - コピー\",\"bgm\":\"forest_ver2\"}');
+(9, 'test', 0, '{\r\n  \"stage\": [\r\n    [0, 0, 0, 0, 0, 0, 0, 0, 0],\r\n    [0, 1, 1, 1, 2, 1, 1, 1, 0],\r\n    [0, 0, 0, 0, 0, 0, 0, 0, 0]\r\n  ],\r\n  \"param\": [\r\n    [0, 0, 0, 0, 0, 0, 0, 0, 0],\r\n    [0, 0, 0, 0, 0, 0, 0, 0, 0],\r\n    [0, 0, 0, 0, 0, 0, 0, 0, 0]\r\n  ],\r\n  \r\n  \"start\": [1, 1, \"right\"],\r\n  \"goal\": [1, 7],\r\n  \"controll\": [1, 5],\r\n  \"costList\": {\r\n    \"move\": \"3\",\r\n    \"destroy\": \"5\",\r\n    \"create\": \"5\",\r\n    \"loop\": \"1\",\r\n    \"if\": \"1\",\r\n    \"repair\": \"10\"\r\n  },\r\n  \"maxCost\": 27,\r\n  \"maxStep\": 21,\r\n  \"unlocked\": [\r\n    \"move\",\r\n    \"destroy\"\r\n  ],\r\n  \"message\": \"デフォルトのステージです。\",\r\n  \"title\": \"無題\",\r\n  \"bgm\": \"forest_ver2\"\r\n}\r\n'),
+(10, 'test', 0, '{\r\n  \"stage\": [\r\n    [0, 0, 0, 0, 0, 0, 0, 0, 0],\r\n    [0, 1, 1, 1, 2, 1, 1, 1, 0],\r\n    [0, 0, 0, 0, 0, 0, 0, 0, 0]\r\n  ],\r\n  \"param\": [\r\n    [0, 0, 0, 0, 0, 0, 0, 0, 0],\r\n    [0, 0, 0, 0, 0, 0, 0, 0, 0],\r\n    [0, 0, 0, 0, 0, 0, 0, 0, 0]\r\n  ],\r\n  \r\n  \"start\": [1, 1, \"right\"],\r\n  \"goal\": [1, 7],\r\n  \"controll\": [1, 5],\r\n  \"costList\": {\r\n    \"move\": \"3\",\r\n    \"destroy\": \"5\",\r\n    \"create\": \"5\",\r\n    \"loop\": \"1\",\r\n    \"if\": \"1\",\r\n    \"repair\": \"10\"\r\n  },\r\n  \"maxCost\": 27,\r\n  \"maxStep\": 21,\r\n  \"unlocked\": [\r\n    \"move\",\r\n    \"destroy\"\r\n  ],\r\n  \"message\": \"デフォルトのステージです。\",\r\n  \"title\": \"無題\",\r\n  \"bgm\": \"forest_ver2\"\r\n}\r\n');
 
 -- --------------------------------------------------------
 
@@ -50,9 +50,20 @@ INSERT INTO `create_stages` (`stageid`, `userid`, `is_public`, `stagetext`) VALU
 --
 
 CREATE TABLE `create_testlist` (
+  `id` int(100) NOT NULL,
   `userid` varchar(16) NOT NULL,
   `hashed` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `create_testlist`
+--
+
+INSERT INTO `create_testlist` (`id`, `userid`, `hashed`) VALUES
+(1, 'test', '1484fece84be1ac040939dcb3d79e1b99d7cad1e4c7120a734cc51afaa09685cd989639b0e910a332444ff7514cb4f92894dc1257c6524513798a0d29fcb9912'),
+(3, 'test', 'e0a2db617fdf4f3e7a92cc014a4d23425605002c0a1eb344b288f794e4fe0b0964e7ecd7ff00178c78e9c61038d528dee32728d09a7253fd657a2350a0daf476'),
+(4, 'test', '63bad8f94f96bbffe6c976c3dac0221325641776731476dd82ef4265d7c1c2b0c9811d99f0daac5c96353fbe463c15e154a925683ee518930a5063893f9fffd6'),
+(5, 'test', 'df9e381ba335fa367ca3bf0ef424be4ac0fd82ecb02d46adbf59a714319768cc4e87ec8970caa9c75531c4579c8dc54337b08eb3245692358beeab22c982cd42');
 
 -- --------------------------------------------------------
 
@@ -520,6 +531,12 @@ ALTER TABLE `create_stages`
   ADD PRIMARY KEY (`stageid`);
 
 --
+-- テーブルのインデックス `create_testlist`
+--
+ALTER TABLE `create_testlist`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- テーブルのインデックス `false_serif`
 --
 ALTER TABLE `false_serif`
@@ -559,7 +576,13 @@ ALTER TABLE `users`
 -- テーブルのAUTO_INCREMENT `create_stages`
 --
 ALTER TABLE `create_stages`
-  MODIFY `stageid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `stageid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- テーブルのAUTO_INCREMENT `create_testlist`
+--
+ALTER TABLE `create_testlist`
+  MODIFY `id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- テーブルのAUTO_INCREMENT `false_serif`
