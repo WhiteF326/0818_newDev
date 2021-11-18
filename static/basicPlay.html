@@ -32,7 +32,7 @@
 <body>
   <h4>基本の遊び方</h4>
   「ぶろっくるん」では、あなたはキャラクターには直接関わることができません。<br>
-  <b>キャラクターがゴールに行けるように、画面上のカーソルをうまく操ってステージを書き換える</b>
+  <b>キャラクターがゴールに行けるように、画面上のカーソルをうまく操ってステージを書きかえる</b>
   真新しいルールのゲームです。
   <hr>
   <h5 id="headList">目次</h5>
@@ -59,9 +59,9 @@
       </span>
     </li>
     <li id="currentcost">
-      現在のコスト<br>
+      残りコスト<br>
       <span class="bitsmall">
-        プログラム (8.) の、今のコストを表示しています。<br>
+        プログラム (8.) の、残りのコストを表示しています。<br>
         プログラムブロックを置いたり消すと、それに応じて計算し直されます。
       </span>
     </li>
@@ -84,7 +84,7 @@
     <li id="restartbutton">
       やり直しボタン<br>
       <span class="bitsmall">
-        カーソルやキャラクターが動いている間に押すと、まだ動いていないときの状態まで戻ります。
+        カーソルやキャラクターが動いている間におすと、まだ動いていないときの状態までもどります。
       </span>
     </li>
     <li id="proglist">
@@ -101,21 +101,21 @@
       </span>
     </li>
   </ol>
-  <button onclick='window.location.href="basicPlay.html#headList"'>目次に戻る</button>
+  <button onclick='window.location.href="basicPlay.html#headList"'>目次にもどる</button>
   <hr>
   <h5 id="mapItems">マップ上にあるもの</h5>
   <table>
     <tbody>
       <tr>
-        <th>名称</th>
+        <th>名しょう</th>
         <th>見た目</th>
-        <th>とくちょう</th>
+        <th>特ちょう</th>
       </tr>
       <tr>
         <td class="bitsmall">カーソル</td>
         <td><img src="help/cursor.png"></td>
         <td class="bitsmall">
-          行く先が木でも床でも、移動できます。<br>
+          行く先が『木』でも『ゆか』でも、移動できます。<br>
           プログラム次第で、岩をこわすことなどもできます。
         </td>
       </tr>
@@ -127,7 +127,7 @@
         </td>
       </tr>
       <tr>
-        <td class="bitsmall">床</td>
+        <td class="bitsmall">ゆか</td>
         <td><img src="img/map02.png"></td>
         <td class="bitsmall">
           キャラクターもこのマスに入れます。<br>
@@ -138,7 +138,7 @@
         <td><img src="img/map01.png"></td>
         <td class="bitsmall">
           キャラクターはこのマスに入れません。<br>
-          カーソルのプログラムでも壊せません。
+          カーソルのプログラムでもこわせません。
         </td>
       </tr>
       <tr>
@@ -162,19 +162,19 @@
         <td><img src="img/spring.png"></td>
         <td class="bitsmall">
           このマスを踏んだキャラクターは、<br>木や岩でも1マスなら飛びこせます。<br>
-          カーソルはバネを踏みません<br>
+          カーソルはバネをふみません<br>
         </td>
       </tr>
     </tbody>
   </table>
-  他にもなんかいろいろあります<br>
-  <button onclick='window.location.href="basicPlay.html#headList"'>目次に戻る</button>
+  他にもなんかいろいろあります…<br>
+  <button onclick='window.location.href="basicPlay.html#headList"'>目次にもどる</button>
   <hr>
   <h5 id="gameFlow">ゲームの流れ</h5>
   <h6>全体の流れ</h6>
   <ol>
     <li>プログラムを作成する</li>
-    <li>開始ボタンを押す</li>
+    <li>開始ボタンをおす</li>
     <li>カーソルがプログラムに従って動く</li>
     <li>キャラクターが動き始める</li>
   </ol>
@@ -184,18 +184,18 @@
     以前に選んだことのないステージでは、真っ白なキャンバスが表示されます。<br>
     左側の<a href="#proglist">プログラムブロックのリスト</a>から、ブロックをひとつ置いてみましょう。<br>
     ブロックをクリックしたまま、<img src="help/body2.png">
-    右側にカーソルを移動してマウスボタンを離します。<img src="help/body3.png">
+    右側にカーソルを移動してマウスボタンをはなします。<img src="help/body3.png">
     これによって、ブロックを1つ置けました。<br>
     <a href="#costlist">コスト表</a>を見てみましょう。「進む」に対応する数は3です。<img src="help/costtable.png"><br>
-    じっさいに、<a href="#currentcost">現在のコスト</a>が0から3になりました。<br><img src="help/costmodified.png"><br>
-    現在のコストが最大のコストを超えない限り、ブロックをいくつでも置くことができます。<br>
+    実際に、<a href="#currentcost">残りコスト</a>が27から24に3減りました。<br><img src="help/costmodified_before.png"> <img src="help/arrow.png"> <img src="help/costmodified_after.png"><br>
+    残りコストがある限り、ブロックをいくつでも置くことができます。<br>
     また、ブロックを置くとき、すでにあるブロックの前後につなげて置くことができます。
   </p>
   <h6>2.開始ボタンを押す</h6>
   <p>
     自分がつくったプログラムでカーソルを動かすには、<a href="#startbutton">開始ボタン</a>を押してください。<br>
     <ul class="bitsmall">
-      <li>プログラムの「現在コスト」が「最大コスト」をこえて、赤色で表示されている</li>
+      <li>プログラムの「残りコスト」の上限をこえ、赤色で表示されている</li>
       <li>繰り返しの回数が合計で50以上になっている</li>
       <li>プログラムブロック「判定する条件」の右上に、条件のプログラムブロックがついていないものがある</li>
     </ul>
@@ -210,7 +210,7 @@
   </p>
   <p>
     カーソルは、プログラムから読み取った指示をそのまま行動に移します。<br>
-    あなたは、カーソルの動きを見ている途中で、作ったプログラムの間違いに気づくかもしれません。<br>
+    あなたは、カーソルの動きを見ているとちゅうで、作ったプログラムの間違いに気づくかもしれません。<br>
     <a href="#restartbutton">やり直しボタン</a>を押すと、カーソルが動き出す前までまき戻ってプログラムを作り直すことが出来ます。
   </p>
   <h6>4.キャラクターが動き始める</h6>
@@ -246,9 +246,8 @@
     <li>
       基本スコア<br>
       <span class="bitsmall">
-        クリア時に、プログラムの最大コスト－現在コストを「残りコスト」とします。<br>
-        クリア時のキャラクターの残り歩数と、プログラムの残りコストを掛け算したものが基本スコアです。<br>
-        この画像の例では、残りコストは (54 - 9) × 24 = 1080 です。<img src="help/prog3stat.png">
+        クリア時のキャラクターの残り歩数と、プログラムの残りコストをかけ算したものが基本スコアです。<br>
+        この画像の例では、基本スコアは 27 × 24 = 648 です。<img src="help/prog3stat.png">
       </span>
     </li>
     <li>
