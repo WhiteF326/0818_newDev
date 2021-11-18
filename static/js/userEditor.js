@@ -100,10 +100,18 @@ class MapInfo {
 
   // edit map chip
   putChip = (x, y, type) => {
-    this.#jsondata["stage"][y][x] = type;
+    if(this.#jsondata["stage"].length > y){
+      if(this.#jsondata["stage"][y].length > x){
+        this.#jsondata["stage"][y][x] = type;
+      }
+    }
   }
   putParam = (x, y, param) => {
-    this.#jsondata["param"][y][x] = param;
+    if(this.#jsondata["param"].length > y){
+      if(this.#jsondata["param"][y].length > x){
+        this.#jsondata["param"][y][x] = param;
+      }
+    }
   }
 
   // edit icon positions
