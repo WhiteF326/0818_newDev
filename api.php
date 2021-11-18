@@ -533,6 +533,12 @@ switch(explode("/", $path)[1]){
         echo null;
         break;
       }
+
+      case "hashing": {
+        $stagetext = $prm["stagetext"];
+        echo hash("sha512", $stagetext, false);
+        break;
+      }
     }
   }
 }
