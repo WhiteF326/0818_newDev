@@ -40,7 +40,7 @@ class Body {
     for (let y = 0; y < this.mapY; y++) {
       for (let x = 0; x < this.mapX; x++) {
         if (this.map[y][x] === 5) firstSwitchs[this.param[y][x]]++;
-        if (this.map[y][x] === 6) this.doorPos[this.param[y][x]] = [y, x];
+        if (this.map[y][x] === 6) this.doorPos[this.param[y][x]].push([y, x]);
       }
     }
     this.doors = new Doors(firstSwitchs);
@@ -371,7 +371,9 @@ class Body {
             )) {
               const doorNo = this.param[this.currentY][this.currentX];
               if (this.doorPos[doorNo].length) {
-                this.map[this.doorPos[doorNo][0]][this.doorPos[doorNo][1]] = 8;
+                this.doorPos[doorNo].forEach(r => {
+                  this.map[r[0]][r[1]] = 8;
+                });
               }
             }
           }
