@@ -545,7 +545,7 @@ switch(explode("/", $path)[1]){
         $hashedtext = hash("sha512", $stagetext, false);
         $pdo->query(
           "insert into create_testlist
-          values(\"". $userid. "\", \"". $hashedtext. "\")"
+          values(null, \"". $userid. "\", \"". $hashedtext. "\")"
         );
         echo null;
         break;
