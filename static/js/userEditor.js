@@ -172,7 +172,7 @@ class MapInfo {
       || this.#jsondata["stage"][
         this.#jsondata["stage"].length - 1
       ].map(r => r !== 0).reduce((a, b) => (a | b))
-      || this.jsondata["stage"].map(r => {
+      || this.#jsondata["stage"].map(r => {
         r.map((v, i) => {
           if ((i === 0 || i === r.length - 1) && v !== 0) {
             return 1;
@@ -180,7 +180,7 @@ class MapInfo {
             return 0;
           }
         }).reduce((a, b) => (a | b))
-      })
+      }).reduce((a, b) => a | b)
     ) {
       errors += "マップの最も上の行、下の行、左の列、右の列のいずれかに木でないマスがあります。<br>";
     }
@@ -223,27 +223,27 @@ class MapInfo {
       if (
         this.#jsondata["stage"]
         [this.#jsondata["start"][1]][this.#jsondata["start"][0]]
-        !== 0
+        !== 1
       ) {
         errors += "キャラクターの開始位置が床ではありません。<br>";
       }
     }
     // ゴールの位置
-    if (this.#jsondata["goal"][0] >= this.#jsondata["stage"][0].length
-      || this.#jsondata["goal"][1] >= this.#jsondata["stage"].length) {
+    if (this.#jsondata["goal"][1] >= this.#jsondata["stage"][0].length
+      || this.#jsondata["goal"][0] >= this.#jsondata["stage"].length) {
       errors += "ゴールの開始位置が不正です。<br>";
     } else {
       if (
         this.#jsondata["stage"]
-        [this.#jsondata["goal"][1]][this.#jsondata["goal"][0]]
-        !== 0
+        [this.#jsondata["goal"][0]][this.#jsondata["goal"][1]]
+        !== 1
       ) {
         errors += "ゴールの開始位置が床ではありません。<br>";
       }
     }
     // カーソルの位置
-    if (this.#jsondata["controll"][0] >= this.#jsondata["stage"][0].length
-      || this.#jsondata["controll"][1] >= this.#jsondata["stage"].length) {
+    if (this.#jsondata["controll"][1] >= this.#jsondata["stage"][0].length
+      || this.#jsondata["controll"][0] >= this.#jsondata["stage"].length) {
       errors += "カーソルの開始位置が不正です。<br>";
     }
     // コストの範囲
@@ -825,12 +825,17 @@ window.onload = async () => {
 
   // 保存機能の実装
   document.getElementById("save").onclick = async () => {
-
-    await fetchJSON("api/create/update", {
-      userid: localStorage.getItem("userid"),
-      stageid: stageid,
-      stagetext: JSON.stringify(mapInfo.getMapObject())
-    });
+    const errors = mapInfo.verify();
+    if(errors){
+      // エラー
+      console.log(errors);
+    }else{
+      await fetchJSON("api/create/update", {
+        userid: localStorage.getItem("userid"),
+        stageid: stageid,
+        stagetext: JSON.stringify(mapInfo.getMapObject())
+      });
+    }
   }
 
   await mapRenderer.render(mapInfo.getMapObject(), canvas);
