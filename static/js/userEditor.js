@@ -84,7 +84,15 @@ class MapInfo {
   removeRow = () => {
     if (this.#jsondata["stage"].length > 3) {
       this.#jsondata["stage"].pop();
+      this.#jsondata["stage"].pop();
+      this.#jsondata["stage"].push(
+        new Array(this.#jsondata["stage"][0].length).fill(0)
+      );
       this.#jsondata["param"].pop();
+      this.#jsondata["param"].pop();
+      this.#jsondata["param"].push(
+        new Array(this.#jsondata["stage"][0].length).fill(0)
+      );
 
       // キャラなどのはみ出し回避
       if (this.#jsondata["start"][0] >= this.#jsondata["stage"].length) {
@@ -105,7 +113,12 @@ class MapInfo {
   removeColumn = () => {
     if (this.#jsondata["stage"][0].length > 3) {
       this.#jsondata["stage"].forEach(row => row.pop());
+      this.#jsondata["stage"].forEach(row => row.pop());
+      this.#jsondata["stage"].forEach(row => row.push(0));
+      
       this.#jsondata["param"].forEach(row => row.pop());
+      this.#jsondata["param"].forEach(row => row.pop());
+      this.#jsondata["param"].forEach(row => row.push(0));
 
       // キャラなどのはみ出し回避
       if (this.#jsondata["start"][1] >= this.#jsondata["stage"][0].length) {
