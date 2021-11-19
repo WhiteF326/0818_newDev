@@ -200,13 +200,24 @@ class MapInfo {
       errors += "マップ内に押されたスイッチや開かれたドアがあります。<br>";
     }
     // 外周が木ではない
+    console.log(
+      this.#jsondata["stage"].map(r => {
+        return r.map((v, i) => {
+          if ((i === 0 || i === r.length - 1) && v !== 0) {
+            return 1;
+          } else {
+            return 0;
+          }
+        })
+      })
+    )
     if (
       this.#jsondata["stage"][0].map(r => r !== 0).reduce((a, b) => (a | b))
       || this.#jsondata["stage"][
         this.#jsondata["stage"].length - 1
       ].map(r => r !== 0).reduce((a, b) => (a | b))
       || this.#jsondata["stage"].map(r => {
-        r.map((v, i) => {
+        return r.map((v, i) => {
           if ((i === 0 || i === r.length - 1) && v !== 0) {
             return 1;
           } else {
