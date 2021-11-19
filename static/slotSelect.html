@@ -107,6 +107,10 @@
     slotList.forEach(r => {
       const row = document.createElement("tr");
 
+      const copyMarkCell = document.createElement("td");
+      if(Number(r["parent"]) !== -1) copyMarkCell.innerText = "*";
+      row.appendChild(copyMarkCell);
+
       const titleCell = document.createElement("td");
       titleCell.innerText = r["stagetext"]["title"];
       row.appendChild(titleCell);

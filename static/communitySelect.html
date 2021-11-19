@@ -168,6 +168,11 @@
       playButtonCell.appendChild(playButton);
       row.appendChild(playButtonCell);
 
+      // コピーマーク
+      const copyMarkCell = document.createElement("td");
+      if(Number(r["parent"]) !== -1) copyMarkCell.innerText = "*";
+      row.appendChild(copyMarkCell);
+
       // タイトル
       const titleCell = document.createElement("td");
       titleCell.innerText = JSON.parse(r["stagetext"])["title"];
@@ -206,7 +211,7 @@
         const favoriteButton = document.createElement("button");
 
         if (favoritecheck) {
-          favoriteButton.innerText = "お気に入りを解除";
+          favoriteButton.innerText = "お気に入り解除";
         } else {
           favoriteButton.innerText = "お気に入りにする";
         }
@@ -226,6 +231,25 @@
 
       row.appendChild(buttonCell);
 
+      // コピー
+      const copyButtonCell = document.createElement("td");
+      const copyButton = document.createElement("button");
+      copyButton.innerText = "コピー";
+      copyButton.onclick = async () => {
+        const copyText = JSON.parse(r["stagetext"]);
+        copyText["title"] += " - コピー";
+        await fetchJSON("api/create/create", {
+          "userid": localStorage.getItem("userid"),
+          "parent": r["stageid"],
+          "stagetext": JSON.stringify(copyText)
+        });
+        window.location.href = "slotSelect.html";
+      }
+
+      copyButtonCell.appendChild(copyButton);
+      row.appendChild(copyButtonCell);
+
+      // 追加処理
       if (sorttype === "fav_only") {
         const favoritecheck = JSON.parse(
           await fetchJSON("api/create/favoritecheck", {
@@ -252,7 +276,7 @@
     <caption id="sort"></caption>
     <tbody id="stages">
       <tr>
-        <th>
+        <th colspan="2">
           <select id="sorttype">
             <option value="title_asc">タイトルの昇順</option>
             <option value="title_desc">タイトルの降順</option>
@@ -265,7 +289,7 @@
         <th>タイトル</th>
         <th>制作者</th>
         <th>「お気に入り」数</th>
-        <th></th>
+        <th colspan="2"></th>
       </tr>
     </tbody>
   </table>
