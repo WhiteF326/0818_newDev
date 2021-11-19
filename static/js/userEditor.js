@@ -852,6 +852,9 @@ window.onload = async () => {
     await paintOut(e);
     painting = false;
   }
+  document.getElementById("map").onmouseleave = () => {
+    painting = false;
+  }
 
   // 右クリックの禁止
   document.getElementById("map").oncontextmenu = e => {
