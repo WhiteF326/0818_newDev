@@ -85,6 +85,17 @@ class MapInfo {
     if (this.#jsondata["stage"].length > 3) {
       this.#jsondata["stage"].pop();
       this.#jsondata["param"].pop();
+
+      // キャラなどのはみ出し回避
+      if (this.#jsondata["start"][0] >= this.#jsondata["stage"].length) {
+        this.#jsondata["start"][0]--;
+      }
+      if (this.#jsondata["controll"][0] >= this.#jsondata["stage"].length) {
+        this.#jsondata["controll"][0]--;
+      }
+      if (this.#jsondata["goal"][0] >= this.#jsondata["stage"].length) {
+        this.#jsondata["goal"][0]--;
+      }
     }
   }
   addColumn = () => {
@@ -95,6 +106,17 @@ class MapInfo {
     if (this.#jsondata["stage"][0].length > 3) {
       this.#jsondata["stage"].forEach(row => row.pop());
       this.#jsondata["param"].forEach(row => row.pop());
+
+      // キャラなどのはみ出し回避
+      if (this.#jsondata["start"][1] >= this.#jsondata["stage"][0].length) {
+        this.#jsondata["start"][1]--;
+      }
+      if (this.#jsondata["controll"][1] >= this.#jsondata["stage"][0].length) {
+        this.#jsondata["controll"][1]--;
+      }
+      if (this.#jsondata["goal"][1] >= this.#jsondata["stage"][0].length) {
+        this.#jsondata["goal"][1]--;
+      }
     }
   }
 
