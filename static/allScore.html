@@ -9,33 +9,44 @@
   <link rel="stylesheet" href="css/destyle.css" type="text/css">
   <link rel="stylesheet" href="css/sakura.css" type="text/css">
   <link rel="stylesheet" href="css/message.css" type="text/css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js" integrity="sha512-GMGzUEevhWh8Tc/njS0bDpwgxdCJLQBWG3Z2Ct+JGOpVnEmjvNx6ts4v6A2XJf1HOrtOsfhv3hBKpK9kE5z8AQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <style>
-    a {
-      color: #1e2c32;
-      text-decoration: none !important;
-    }
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js"
+    integrity="sha512-GMGzUEevhWh8Tc/njS0bDpwgxdCJLQBWG3Z2Ct+JGOpVnEmjvNx6ts4v6A2XJf1HOrtOsfhv3hBKpK9kE5z8AQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="./js/Const.js"></script>
+  <script src="./block_module/blockly_compressed.js"></script>
+  <script src="./block_module/blocks_compressed.js"></script>
+  <script src="./block_module/javascript_compressed.js"></script>
+  <script src="./block_module/msg/js/ja.js"></script>
 
-    a:hover {
-      color: #701616;
-      text-decoration: none !important;
-    }
+  <script src="./block_module/myblock.js"></script>
+</head>
 
-    .account-info {
-      position: absolute;
-      bottom: 0;
-      background-color: #ffffff3a;
-      color: black;
-      display: block;
-      height: fit-content;
-      max-width: 100%;
-    }
+<style>
+  a {
+    color: #1e2c32;
+    text-decoration: none !important;
+  }
 
-    body {
-      background-color: #eafcfa;
-    }
+  a:hover {
+    color: #701616;
+    text-decoration: none !important;
+  }
 
-    .modalback {
+  .account-info {
+    position: absolute;
+    bottom: 0;
+    background-color: #ffffff3a;
+    color: black;
+    display: block;
+    height: fit-content;
+    max-width: 100%;
+  }
+
+  body {
+    background-color: #eafcfa;
+  }
+
+  .modalback {
     transition: 0.5s;
     position: fixed;
     top: 0%;
@@ -63,15 +74,12 @@
     margin-left: 50px;
     font-size: 0.5em;
   }
-  </style>
-  <script src="./js/Const.js"></script>
-  <script src="./block_module/blockly_compressed.js"></script>
-  <script src="./block_module/blocks_compressed.js"></script>
-  <script src="./block_module/javascript_compressed.js"></script>
-  <script src="./block_module/msg/js/ja.js"></script>
 
-  <script src="./block_module/myblock.js"></script>
-</head>
+  iframe {
+    height: 540px;
+    width: 100%;
+  }
+</style>
 
 <script type="module">
   import { fetchJSON } from './js/fetchP.js';
@@ -85,12 +93,11 @@
     // どうにかする
     const scores = JSON.parse(
       await fetchJSON("api/ranking/all", {
-        "userid": localStorage.getItem("userid"),
         "stageNo": stage
       })
     ).map(r => Number(r.score));
 
-    if(scores.length === 0){
+    if (scores.length === 0) {
       document.getElementById("maxScore").innerText += "0";
       document.getElementById("uncleared").style.display = "block";
       return;
@@ -102,20 +109,20 @@
     // 区間として用意する範囲を計算する
     const low = Math.floor(Math.min(...scores) / 100) * 100;
     const high = Math.ceil(Math.max(...scores) / 100) * 100;
-    
+
     // 10 個の区間に分ける
     const ranges
-      = (new Array(10)).fill(0).map((_, i) => 
-      [Math.floor(low + ((high - low) * i) / 10),
-      Math.floor(low + ((high - low) * (i  + 1)) / 10),
-      0]
-    );
+      = (new Array(10)).fill(0).map((_, i) =>
+        [Math.floor(low + ((high - low) * i) / 10),
+        Math.floor(low + ((high - low) * (i + 1)) / 10),
+          0]
+      );
     // 区間に所属するデータの件数を検索する
     const cnt = new Array(10).fill(0);
-    for(let i in scores){
+    for (let i in scores) {
       const score = scores[i];
-      for(let i = 0; i < 10; i++){
-        if(ranges[i][0] <= score && score < ranges[i][1]){
+      for (let i = 0; i < 10; i++) {
+        if (ranges[i][0] <= score && score < ranges[i][1]) {
           ranges[i][2]++;
         }
       }
@@ -164,14 +171,9 @@
       modal.style.height = "0%";
     }
 
-    allBlocks.forEach(r => {
-      const block = document.createElement("block");
-      block.setAttribute("type", r);
-      document.getElementById("toolbox").appendChild(block);
-    });
-    const toolbox = document.getElementById("toolbox")
-    const workspace = Blockly.inject("blocklyDiv",
-      { toolbox: toolbox });
+    document.getElementById("programView").src
+      = "./programView.html?stageid=" + String(stage)
+      + "&score=" + String(...scores);
 
     document.getElementById("maxScore").appendChild(bestProgramButton);
   }
@@ -188,8 +190,7 @@
   <canvas id="graph" height="150"></canvas>
   <div class="modalback">
     <div class="modal">
-      <div id="blocklyDiv"></div>
-      <xml id="toolbox"></xml>
+      <iframe src="./programView.html" id="programView"></iframe>
     </div>
   </div>
 </body>

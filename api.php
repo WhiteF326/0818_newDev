@@ -365,6 +365,23 @@ switch(explode("/", $path)[1]){
         echo json_encode($result);
         break;
       }
+
+      case "seek": {
+        $stageNo = $prm["stageNo"] + 1;
+        $score = $prm["score"];
+        $sql = "select program from freemode_results
+          where stagename = :stagename
+          and date >= \"2021/10/29 11:04:00\"
+          and score = :score";
+        $stm = $pdo->prepare($sql);
+        $stm->bindValue(":stagename", $stageNo);
+        $stm->bindValue(":score", $score);
+        $stm->execute();
+        $result = $stm->fetchAll(PDO::FETCH_ASSOC);
+
+        echo json_encode($result[0]);
+        break;
+      }
     break;
     }
   }

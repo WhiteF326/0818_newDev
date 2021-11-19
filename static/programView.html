@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>トップ画面</title>
+  <link rel="stylesheet" href="css/destyle.css" type="text/css">
+  <link rel="stylesheet" href="css/sakura.css" type="text/css">
+  <link rel="stylesheet" href="css/message.css" type="text/css">
+
+  <script src="./js/Const.js"></script>
+  <script src="./block_module/blockly_compressed.js"></script>
+  <script src="./block_module/blocks_compressed.js"></script>
+  <script src="./block_module/javascript_compressed.js"></script>
+  <script src="./block_module/msg/js/ja.js"></script>
+
+  <script src="./block_module/myblock.js"></script>
+</head>
+
+<style>
+  a {
+    color: #1e2c32;
+    text-decoration: none !important;
+  }
+
+  a:hover {
+    color: #701616;
+    text-decoration: none !important;
+  }
+
+  .account-info {
+    position: absolute;
+    bottom: 0;
+    background-color: #ffffff3a;
+    color: black;
+    display: block;
+    height: fit-content;
+    max-width: 100%;
+  }
+
+  .modalback {
+    transition: 0.5s;
+    position: fixed;
+    top: 0%;
+    transform: translateY(-500px);
+    display: block;
+    z-index: 9998;
+    background-color: rgba(234, 234, 234, 0.78);
+    height: 0%;
+    margin: 0 auto;
+  }
+
+  .modal {
+    position: relative;
+    display: flexbox;
+    z-index: 9999;
+    width: inherit;
+    height: fit-content;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+  }
+
+  button {
+    margin-left: 50px;
+    font-size: 0.5em;
+  }
+
+  #blocklyDiv {
+    height: 500px;
+    width: 100%;
+  }
+</style>
+
+<script type="module">
+  import { fetchJSON } from './js/fetchP.js';
+  window.onload = async () => {
+    const toolbox = document.getElementById("toolbox");
+    const workspace = Blockly.inject("blocklyDiv",
+      { toolbox: toolbox });
+
+    const stage = new URL(window.location.href).searchParams.get("stageid");
+    const score = new URL(window.location.href).searchParams.get("score");
+    const program = JSON.parse(
+      await fetchJSON("api/ranking/seek",
+        {
+          "stageNo": stage,
+          "score": score
+        }
+      )
+    )["program"];
+    Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(program), workspace);
+  }
+</script>
+
+<body>
+  <div id="blocklyDiv"></div>
+  <xml id="toolbox"></xml>
+</body>
+
+</html>
