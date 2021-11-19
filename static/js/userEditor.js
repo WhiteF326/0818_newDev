@@ -200,6 +200,14 @@ class MapInfo {
     return [this.#jsondata["stage"][0].length, this.#jsondata["stage"].length];
   }
 
+  // 選択マスをマップ内に修正したものを返す
+  fixSelection = (x, y) => {
+    return [
+      Math.min(x, this.#jsondata["stage"][0].length - 1),
+      Math.min(y, this.#jsondata["stage"].length - 1)
+    ];
+  }
+
   // verify stage
   verify = () => {
     let errors = "";
@@ -496,6 +504,12 @@ class MapRenderer {
       this.#selecty = toy;
     }
   }
+  
+  // マス数単位の x, y を選択する
+  selectByCell = (x, y) => {
+    this.#selectx = x;
+    this.#selecty = y;
+  }
 
   // 実座標をマス数に治す
   exchangeToStep = (x, y) => {
@@ -723,6 +737,9 @@ window.onload = async () => {
   // マップサイズの変更ボタン
   document.getElementById("verticalDecrement").onclick = async () => {
     mapInfo.removeRow();
+    mapRenderer.selectByCell(
+      ...mapInfo.fixSelection(...mapRenderer.getSelection())
+    );
     await mapRenderer.render(mapInfo.getMapObject(), canvas);
     unsaved = true;
   }
@@ -733,6 +750,9 @@ window.onload = async () => {
   }
   document.getElementById("horizontalDecrement").onclick = async () => {
     mapInfo.removeColumn();
+    mapRenderer.selectByCell(
+      ...mapInfo.fixSelection(...mapRenderer.getSelection())
+    );
     await mapRenderer.render(mapInfo.getMapObject(), canvas);
     unsaved = true;
   }
