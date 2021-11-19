@@ -449,7 +449,9 @@ class MapRenderer {
         mapInfo["stage"][this.#selecty][this.#selectx]
       );
     document.getElementById("selectedTitle").innerText
-      = selectInfo.getExplainTitle();
+      = selectInfo.getExplainTitle()
+      + " 縦" + String(this.#selecty + 1)
+      + "行目、横" + String(this.#selectx + 1) + "列目";
     document.getElementById("selectedExplain").innerText
       = selectInfo.getExplainBody();
     document.getElementById("selectedParamRange").innerText
