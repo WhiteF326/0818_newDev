@@ -889,14 +889,15 @@ window.onload = async () => {
 
     const clientRect
       = document.getElementById("unlocker").getBoundingClientRect();
-    const positionY = clientRect.left + window.scrollY;
+    const positionY = clientRect.top + window.scrollY;
 
     const y = clickY - positionY;
 
     const ysel = Math.floor(
       y / (document.getElementById("unlocker").clientHeight / 11)
     );
-    unlockManager.toggle(ysel - 1);
+
+    unlockManager.toggle(ysel);
 
     mapInfo.setUnlockStatus(unlockManager.getUnlockList());
 
