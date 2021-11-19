@@ -176,6 +176,10 @@
       silen.pause();
       silen.currentTime = 0;
     });
+
+    document.getElementById("community").onclick = () => {
+      window.location.href = "communitySelect.html";
+    }
   }
 </script>
 <script type="text/javascript" src="js/AccountStatus.js"></script>
@@ -287,6 +291,7 @@
   </form>
   <h1><img src="img/stageselect.png"></h1>
   <button id="reset">クリア状況をリセットする</button>
+  <button id="community">ユーザー制作ステージ</button>
   <div id="stages" class="stages"></div>
   <div class="account-info" id="accountInfo"></div>
   <div class="modalback">
