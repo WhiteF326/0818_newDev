@@ -182,6 +182,12 @@
         } else {
           return null;
         }
+      } else if (sorttype === "default") {
+        if (r["userid"] !== localStorage.getItem("userid")){
+          return row;
+        }else{
+          return null;
+        }
       } else {
         return row;
       }
@@ -205,6 +211,7 @@
         <th colspan="2">
           <select id="sorttype">
             <option value="default">通常</option>
+            <option value="any">自分のステージも表示</option>
             <option value="fav_only">お気に入りだけ表示</option>
           </select>
         </th>
