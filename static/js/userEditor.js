@@ -492,14 +492,13 @@ class Palette {
   #icons;
   #choosenImage;
 
-  constructor(canvas, icons) {
+  constructor(canvas, icons, checkmark) {
     this.#selectedChipType = 0;
     this.#selectedMode = "select";
     this.#ctx = canvas.getContext("2d");
     this.#paletteWidth = canvas.clientWidth;
     this.#icons = icons;
-    this.#choosenImage = new Image();
-    this.#choosenImage.src = "./img/choosen.png";
+    this.#choosenImage = checkmark;
 
     // パレットクリック時の処理
     canvas.onclick = e => {
@@ -618,11 +617,10 @@ class UnlockManager {
     "足元がこわれるゆかである"
   ];
 
-  constructor(canvas, unlockArray) {
+  constructor(canvas, unlockArray, checkmark) {
     this.#canvas = canvas;
     this.#unlockArray = unlockArray;
-    this.#choosenImage = new Image();
-    this.#choosenImage.src = "./img/choosen.png";
+    this.#choosenImage = checkmark;
   }
 
   toggle = typeNumber => {
@@ -718,6 +716,16 @@ window.onload = async () => {
     unsaved = true;
   }
 
+  // チェックマーク
+  const checkmark = await new Promise(
+    (res, rej) => {
+      const ret = new Image();
+      ret.src = "./img/choosen.png";
+      ret.onload = () => res(ret);
+      ret.onerror = e => rej(e);
+    }
+  );
+
   // パレット
   document.getElementById("palette").width
     = document.getElementById("map").width;
@@ -741,7 +749,9 @@ window.onload = async () => {
     );
     return ret;
   });
-  const palette = new Palette(document.getElementById("palette"), icons);
+  const palette = new Palette(
+    document.getElementById("palette"), icons, checkmark
+  );
   palette.render();
 
   // 選択モード時の、マップ上でのクリックイベント
@@ -871,7 +881,8 @@ window.onload = async () => {
   // ブロック解放状態の管理
   const unlockManager = new UnlockManager(
     document.getElementById("unlocker"),
-    mapInfo.getMapObject()["unlocked"]
+    mapInfo.getMapObject()["unlocked"],
+    checkmark
   );
   document.getElementById("unlocker").onclick = e => {
     const clickY = e.pageY;
