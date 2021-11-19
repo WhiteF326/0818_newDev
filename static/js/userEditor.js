@@ -145,6 +145,9 @@ class MapInfo {
       this.#jsondata["start"][1] = x;
     }
   }
+  setCharaVector = (vector) => {
+    this.#jsondata["start"][2] = vector;
+  }
   setCursorPosition = (x, y) => {
     this.#jsondata["controll"][0] = y;
     this.#jsondata["controll"][1] = x;
@@ -826,6 +829,16 @@ window.onload = async () => {
     await mapRenderer.render(mapInfo.getMapObject(), canvas);
     unsaved = true;
   }
+
+  // キャラ向き変更
+  document.getElementById("charaVector").onchange = async () => {
+    mapInfo.setCharaVector(document.getElementById("charaVector").value);
+    await mapRenderer.render(mapInfo.getMapObject(), canvas);
+    unsaved = true;
+  }
+
+  document.getElementById("charaVector").value
+    = mapInfo.getMapObject()["start"][2];
 
   // コストと歩数の設定
   document.getElementById("cost").value
