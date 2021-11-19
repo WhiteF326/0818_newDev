@@ -514,6 +514,11 @@ window.onload = async () => {
     location.reload();
   });
 
+  document.getElementById("failedRetire").onclick = () => {
+    window.location.href
+      = "./userEditor.html?stageid=" + localStorage.getItem("testplayId");
+  }
+
   const settings = JSON.parse(await fetchJSON("api/user/settings/read", {
     "userid": localStorage.getItem("userid"),
   }))[0];
