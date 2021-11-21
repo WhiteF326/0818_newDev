@@ -129,6 +129,9 @@
         }
       }
     }
+    document.getElementById("moveToStage").onclick = () => {
+      window.parent.location.href = "freeStageSelect.html";
+    }
   }
 </script>
 
@@ -154,6 +157,7 @@
     </select>
     を
     <button id="choose">選択</button>
+    <button id="moveToStage">プレイ</button>
   </div>
   <hr>
   <iframe src="userScore.html" id="mainFrame"></iframe>
