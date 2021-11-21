@@ -98,7 +98,7 @@
           tile.onclick = () => {
             localStorage.setItem("storyStage", String(moveTo));
             localStorage.setItem("gameEnabled", "story");
-            if(callStory){
+            if(callStory === Number(s) + 1){
               window.location.href
                 = "./story/opening.php?scenarioNo=" + callStory;
             }else{
