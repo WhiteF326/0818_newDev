@@ -54,6 +54,10 @@
     height: 100%;
     border: 1px solid #ccc;
   }
+
+  #moveToStage {
+    vertical-align: top;
+  }
 </style>
 
 <script type="module">
@@ -183,9 +187,9 @@
           return null;
         }
       } else if (sorttype === "default") {
-        if (r["userid"] !== localStorage.getItem("userid")){
+        if (r["userid"] !== localStorage.getItem("userid")) {
           return row;
-        }else{
+        } else {
           return null;
         }
       } else {
