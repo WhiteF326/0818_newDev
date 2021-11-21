@@ -509,6 +509,9 @@ window.onload = async () => {
     progBoad.save();
     location.reload();
   });
+  document.getElementById("failedRetire").onclick = () => {
+    window.location.href = "communitySelect.html";
+  }
 
   const settings = JSON.parse(await fetchJSON("api/user/settings/read", {
     "userid": localStorage.getItem("userid"),
