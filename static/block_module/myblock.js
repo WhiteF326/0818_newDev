@@ -188,64 +188,6 @@ Blockly.defineBlocksWithJsonArray(
     "tooltip": "二つの条件がどちらも正しいかを判定します。",
     "helpUrl": ""
   },
-  {
-    "type": "and",
-    "message0": "%1 または %2 %3",
-    "args0": [
-      {
-        "type": "input_statement",
-        "name": "LEFT"
-      },
-      {
-        "type": "input_dummy"
-      },
-      {
-        "type": "input_statement",
-        "name": "RIGHT",
-        "align": "RIGHT"
-      }
-    ],
-    "output": null,
-    "colour": 255,
-    "tooltip": "二つの条件のどちらか、またはどちらもが正しいかを判定します。",
-    "helpUrl": ""
-  },
-  {
-    "type": "or",
-    "message0": "%1 または %2 %3",
-    "args0": [
-      {
-        "type": "input_statement",
-        "name": "LEFT"
-      },
-      {
-        "type": "input_dummy"
-      },
-      {
-        "type": "input_statement",
-        "name": "RIGHT",
-        "align": "RIGHT"
-      }
-    ],
-    "output": null,
-    "colour": 255,
-    "tooltip": "二つの条件のどちらか、またはどちらもが正しいかを判定します。",
-    "helpUrl": ""
-  },
-  {
-    "type": "not",
-    "message0": "ではない %1",
-    "args0": [
-      {
-        "type": "input_value",
-        "name": "CODE"
-      }
-    ],
-    "output": null,
-    "colour": 255,
-    "tooltip": "右の条件を真逆の意味にします",
-    "helpUrl": ""
-  },
   ],
 );
 
@@ -312,23 +254,3 @@ Blockly.JavaScript['sensor_loop'] = function (block) {
   const code = 'sensor_loop ' + number_name;
   return code;
 }
-
-Blockly.JavaScript['and'] = function(block) {
-  var statements_left = Blockly.JavaScript.statementToCode(block, 'LEFT');
-  var statements_right = Blockly.JavaScript.statementToCode(block, 'RIGHT');
-  var code = "( " + statements_left + " and " + statements_right + " )";
-  return code;
-};
-
-Blockly.JavaScript['or'] = function(block) {
-  var statements_left = Blockly.JavaScript.statementToCode(block, 'LEFT');
-  var statements_right = Blockly.JavaScript.statementToCode(block, 'RIGHT');
-  var code = "( " + statements_left + " or " + statements_right + " )";
-  return code;
-};
-
-Blockly.JavaScript['not'] = function(block) {
-  var value_code = Blockly.JavaScript.valueToCode(block, 'CODE', Blockly.JavaScript.ORDER_ATOMIC);
-  var code = 'not (' + value_code + " )";
-  return code;
-};
