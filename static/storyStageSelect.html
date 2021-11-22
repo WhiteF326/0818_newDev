@@ -98,10 +98,10 @@
           tile.onclick = () => {
             localStorage.setItem("storyStage", String(moveTo));
             localStorage.setItem("gameEnabled", "story");
-            if(callStory === Number(s) + 1){
+            if (callStory === Number(s) + 1) {
               window.location.href
                 = "./story/opening.php?scenarioNo=" + callStory;
-            }else{
+            } else {
               window.location.href = "gameBody.html";
             }
           }
@@ -159,11 +159,12 @@
   body {
     height: 100%;
     background-color: #eafcfa;
-    background-image: url("img/forest.png");
+    background-image: url("img/storySelectBackground.png");
     background-size: cover;
+
     width: 100%;
   }
-
+  
   .stages {
     display: block;
     overflow-y: scroll;
