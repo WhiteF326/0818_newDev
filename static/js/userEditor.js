@@ -287,7 +287,7 @@ class MapInfo {
     } else {
       if (
         this.#jsondata["stage"]
-        [this.#jsondata["start"][1]][this.#jsondata["start"][0]]
+        [this.#jsondata["start"][0]][this.#jsondata["start"][1]]
         !== 1
       ) {
         errors += "キャラクターの開始位置が床ではありません。<br>";
