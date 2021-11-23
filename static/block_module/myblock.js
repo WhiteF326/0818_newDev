@@ -173,7 +173,7 @@ Blockly.defineBlocksWithJsonArray(
       {
         "type": "input_value",
         "name": "STATE1",
-        "align": "RIGHT"
+        "align": "LEFT"
       },
       {
         "type": "field_dropdown",
@@ -197,7 +197,7 @@ Blockly.defineBlocksWithJsonArray(
       {
         "type": "input_statement",
         "name": "TRUE",
-        "align": "RIGHT"
+        "align": "LEFT"
       },
       {
         "type": "input_statement",
