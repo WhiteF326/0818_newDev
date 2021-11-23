@@ -679,7 +679,7 @@ class UnlockManager {
   render = () => {
     const ctx = this.#canvas.getContext("2d");
     ctx.clearRect(0, 0, this.#canvas.clientWidth, this.#canvas.clientHeight);
-    ctx.font = "27px serif";
+    ctx.font = "25px serif";
     for (let i = 0; i < 12; i++) {
       if (this.#unlockArray.find(r => r === UnlockManager.#allBlocks[i])) {
         ctx.drawImage(
