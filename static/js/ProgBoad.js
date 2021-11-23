@@ -175,6 +175,46 @@ class ProgBoad {
         i = codel.indexOf("endif " + ifid);
       } else if (line.startsWith("repair")) {
         this.gameBody.cAction("repair");
+      } else if (line.startsWith("twoif")) {
+        const ifid = line.split(" ").slice(-1)[0];
+        let judge = new Array(2).fill(false);
+        for(let i = 0; i < 2; i++){
+          switch (line.split(" ")[1 + i * 2]) {
+            case "sensor_foot_dest":
+              judge[i] = this.gameBody.sensor_foot([2, 10]);
+              // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
+              break;
+            case "sensor_foot_stab":
+              judge[i] = this.gameBody.sensor_foot([0]);
+              // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
+              break;
+            case "sensor_foot_floor":
+              judge[i] = this.gameBody.sensor_foot([1]);
+              // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
+              break;
+            case "sensor_foot_colp":
+              judge[i] = this.gameBody.sensor_foot([4]);
+              // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
+              break;
+            case "sensor_loop":
+              const comp = Number(line.split(" ")[2]);
+              judge[i] = comp - 1 <= this.loopCounters.slice(-1)[0];
+              break;
+          }
+        }
+        const total = judge.reduce((a, b) => {
+          if(line.split(" ")[2] === "AND") return a & b;
+          else return a | b;
+        });
+        console.log(judge, total);
+        if (total) {
+          this.parse(codel.slice(i + 1, codel.indexOf("else " + ifid)));
+        } else {
+          this.parse(codel.slice(
+            codel.indexOf("else " + ifid), codel.indexOf("endif " + ifid)
+          ));
+        }
+        i = codel.indexOf("endif " + ifid);
       }
     }
   }
