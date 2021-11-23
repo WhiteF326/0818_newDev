@@ -677,18 +677,18 @@ class UnlockManager {
   render = () => {
     const ctx = this.#canvas.getContext("2d");
     ctx.clearRect(0, 0, this.#canvas.clientWidth, this.#canvas.clientHeight);
-    ctx.font = "27px serif";
-    for (let i = 0; i < 11; i++) {
+    ctx.font = "25px serif";
+    for (let i = 0; i < 12; i++) {
       if (this.#unlockArray.find(r => r === UnlockManager.#allBlocks[i])) {
         ctx.drawImage(
           this.#choosenImage,
           0, 0, 32, 32,
-          0, 27 * i, 27, 27
+          0, 25 * i, 25, 25
         );
       }
       ctx.fillText(
         UnlockManager.#allNames[i],
-        27, 27 * (i + 1), 273
+        25, 25 * (i + 1), 273
       );
     }
   }
