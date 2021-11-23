@@ -115,7 +115,7 @@ class MapInfo {
       this.#jsondata["stage"].forEach(row => row.pop());
       this.#jsondata["stage"].forEach(row => row.pop());
       this.#jsondata["stage"].forEach(row => row.push(0));
-      
+
       this.#jsondata["param"].forEach(row => row.pop());
       this.#jsondata["param"].forEach(row => row.pop());
       this.#jsondata["param"].forEach(row => row.push(0));
@@ -504,7 +504,7 @@ class MapRenderer {
       this.#selecty = toy;
     }
   }
-  
+
   // マス数単位の x, y を選択する
   selectByCell = (x, y) => {
     this.#selectx = x;
@@ -641,7 +641,8 @@ class UnlockManager {
     "sensor_foot_dest",
     "sensor_foot_stab",
     "sensor_foot_floor",
-    "sensor_foot_colp"
+    "sensor_foot_colp",
+    "twoif"
   ];
   static #allNames = [
     "進む",
@@ -654,7 +655,8 @@ class UnlockManager {
     "足元が岩である",
     "足元が木である",
     "足元がゆかである",
-    "足元がこわれるゆかである"
+    "足元がこわれるゆかである",
+    "2個の条件分岐"
   ];
 
   constructor(canvas, unlockArray, checkmark) {
@@ -943,7 +945,7 @@ window.onload = async () => {
     const y = clickY - positionY;
 
     const ysel = Math.floor(
-      y / (document.getElementById("unlocker").clientHeight / 11)
+      y / (document.getElementById("unlocker").clientHeight / 12)
     );
 
     unlockManager.toggle(ysel);
