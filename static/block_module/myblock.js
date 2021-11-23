@@ -167,27 +167,49 @@ Blockly.defineBlocksWithJsonArray(
     'helpUrl': '',
   },
   {
-    "type": "and",
-    "message0": "%1 かつ %2 %3",
+    "type": "twoif",
+    "message0": "条件 %1 %2 %3 正しい時の処理 %4 正しくない時の処理 %5",
     "args0": [
       {
-        "type": "input_statement",
-        "name": "LEFT"
-      },
-      {
-        "type": "input_dummy"
-      },
-      {
-        "type": "input_statement",
-        "name": "RIGHT",
+        "type": "input_value",
+        "name": "STATE1",
         "align": "RIGHT"
+      },
+      {
+        "type": "field_dropdown",
+        "name": "MIX",
+        "options": [
+          [
+            "かつ",
+            "AND"
+          ],
+          [
+            "または",
+            "OR"
+          ]
+        ]
+      },
+      {
+        "type": "input_value",
+        "name": "STATE2",
+        "align": "RIGHT"
+      },
+      {
+        "type": "input_statement",
+        "name": "TRUE",
+        "align": "RIGHT"
+      },
+      {
+        "type": "input_statement",
+        "name": "FALSE"
       }
     ],
-    "output": null,
-    "colour": 255,
-    "tooltip": "二つの条件がどちらも正しいかを判定します。",
-    "helpUrl": ""
-  },
+    'previousStatement': null,
+    'nextStatement': null,
+    'colour': 240,
+    'tooltip': '条件により分岐します。',
+    'helpUrl': '',
+  }
   ],
 );
 
@@ -247,10 +269,19 @@ Blockly.JavaScript['sensor_foot_colp'] = function (block) {
   const code = 'sensor_foot_colp';
   return code;
 }
-
-
 Blockly.JavaScript['sensor_loop'] = function (block) {
   const number_name = block.getFieldValue('COUNTER');
   const code = 'sensor_loop ' + number_name;
   return code;
 }
+
+Blockly.JavaScript['twoif'] = function(block) {
+  var statements_state1 = Blockly.JavaScript.statementToCode(block, 'STATE1');
+  var dropdown_mix = block.getFieldValue('MIX');
+  var statements_state2 = Blockly.JavaScript.statementToCode(block, 'STATE2');
+  var statements_true = Blockly.JavaScript.statementToCode(block, 'TRUE');
+  var statements_false = Blockly.JavaScript.statementToCode(block, 'FALSE');
+  const ifid = String(Math.random());
+  var code = 'twoif ' + statements_state1 + ' ' + dropdown_mix + ' ' + statements_state2 + ' ' + ifid + '\n' + statements_true + 'else ' + ifid + '\n' + statements_false + 'endif ' + ifid + '\n';
+  return code;
+};
