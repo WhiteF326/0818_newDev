@@ -642,6 +642,7 @@ class UnlockManager {
     "sensor_foot_stab",
     "sensor_foot_floor",
     "sensor_foot_colp",
+    "sensor_foot_spring",
     "twoif"
   ];
   static #allNames = [
@@ -656,6 +657,7 @@ class UnlockManager {
     "足元が木である",
     "足元がゆかである",
     "足元がこわれるゆかである",
+    "足元がバネである",
     "2個の条件分岐"
   ];
 
@@ -680,17 +682,17 @@ class UnlockManager {
     const ctx = this.#canvas.getContext("2d");
     ctx.clearRect(0, 0, this.#canvas.clientWidth, this.#canvas.clientHeight);
     ctx.font = "25px serif";
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 13; i++) {
       if (this.#unlockArray.find(r => r === UnlockManager.#allBlocks[i])) {
         ctx.drawImage(
           this.#choosenImage,
           0, 0, 32, 32,
-          0, 25 * i, 25, 25
+          0, 23 * i, 23, 23
         );
       }
       ctx.fillText(
         UnlockManager.#allNames[i],
-        25, 25 * (i + 1), 273
+        23, 23 * (i + 1), 273
       );
     }
   }
@@ -945,7 +947,7 @@ window.onload = async () => {
     const y = clickY - positionY;
 
     const ysel = Math.floor(
-      y / (document.getElementById("unlocker").clientHeight / 12)
+      y / (document.getElementById("unlocker").clientHeight / 13)
     );
 
     unlockManager.toggle(ysel);

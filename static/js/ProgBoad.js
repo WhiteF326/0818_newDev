@@ -196,6 +196,10 @@ class ProgBoad {
               judge[i] = this.gameBody.sensor_foot([4]);
               // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
               break;
+            case "sensor_foot_spring":
+              judge[i] = this.gameBody.sensor_foot([3]);
+              // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
+              break;
             case "sensor_loop":
               const comp = Number(line.split(" ")[2]);
               judge[i] = comp - 1 <= this.loopCounters.slice(-1)[0];
