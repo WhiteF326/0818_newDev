@@ -108,9 +108,11 @@ const allBlocks = [
   "loop",
   "if",
   "sensor_loop",
+  "sensor_loop_multiple",
   "sensor_foot_dest",
   "sensor_foot_stab",
   "sensor_foot_floor",
   "sensor_foot_colp",
-  "twoif"
+  "sensor_foot_spring",
+  "twoif",
 ];

@@ -638,10 +638,12 @@ class UnlockManager {
     "loop",
     "if",
     "sensor_loop",
+    "sensor_loop_multiple",
     "sensor_foot_dest",
     "sensor_foot_stab",
     "sensor_foot_floor",
     "sensor_foot_colp",
+    "sensor_foot_spring",
     "twoif"
   ];
   static #allNames = [
@@ -652,10 +654,12 @@ class UnlockManager {
     "くりかえし実行",
     "条件分岐",
     "くりかえし〇回目～",
+    "くりかえし回数が〇の倍数",
     "足元が岩である",
     "足元が木である",
     "足元がゆかである",
     "足元がこわれるゆかである",
+    "足元がバネである",
     "2個の条件分岐"
   ];
 
@@ -679,18 +683,18 @@ class UnlockManager {
   render = () => {
     const ctx = this.#canvas.getContext("2d");
     ctx.clearRect(0, 0, this.#canvas.clientWidth, this.#canvas.clientHeight);
-    ctx.font = "25px serif";
-    for (let i = 0; i < 12; i++) {
+    ctx.font = "21px serif";
+    for (let i = 0; i < 14; i++) {
       if (this.#unlockArray.find(r => r === UnlockManager.#allBlocks[i])) {
         ctx.drawImage(
           this.#choosenImage,
           0, 0, 32, 32,
-          0, 25 * i, 25, 25
+          0, 21 * i, 21, 21
         );
       }
       ctx.fillText(
         UnlockManager.#allNames[i],
-        25, 25 * (i + 1), 273
+        21, 21 * (i + 1), 273
       );
     }
   }
@@ -945,7 +949,7 @@ window.onload = async () => {
     const y = clickY - positionY;
 
     const ysel = Math.floor(
-      y / (document.getElementById("unlocker").clientHeight / 12)
+      y / (document.getElementById("unlocker").clientHeight / 14)
     );
 
     unlockManager.toggle(ysel);

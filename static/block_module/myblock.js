@@ -135,6 +135,26 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   },
   {
+    "type": "sensor_loop_multiple",
+    "message0": "くりかえし回数が %1 の倍数である %2",
+    "args0": [
+      {
+        "type": "field_number",
+        "name": "COUNTER",
+        "value": 0,
+        "min": 0
+      },
+      {
+        "type": "input_value",
+        "name": "LOOP_COUNT"
+      }
+    ],
+    "output": "Boolean",
+    "colour": 300,
+    "tooltip": "今回っているくりかえしのループが指定した数の倍数ならば真を返します。",
+    "helpUrl": ""
+  },
+  {
     'type': 'sensor_foot_dest',
     'message0': '足元が岩である',
     'output': 'Boolean',
@@ -164,6 +184,14 @@ Blockly.defineBlocksWithJsonArray(
     'output': 'Boolean',
     'colour': 300,
     'tooltip': 'カーソルの真下がこわれるゆかならば真を返します。',
+    'helpUrl': '',
+  },
+  {
+    'type': 'sensor_foot_spring',
+    'message0': '足元がバネである',
+    'output': 'Boolean',
+    'colour': 300,
+    'tooltip': 'カーソルの真下がバネならば真を返します。',
     'helpUrl': '',
   },
   {
@@ -269,19 +297,28 @@ Blockly.JavaScript['sensor_foot_colp'] = function (block) {
   const code = 'sensor_foot_colp';
   return code;
 }
+Blockly.JavaScript['sensor_foot_spring'] = function (block) {
+  const code = 'sensor_foot_spring';
+  return code;
+}
 Blockly.JavaScript['sensor_loop'] = function (block) {
   const number_name = block.getFieldValue('COUNTER');
   const code = 'sensor_loop ' + number_name;
   return code;
 }
+Blockly.JavaScript['sensor_loop_multiple'] = function (block) {
+  const number_name = block.getFieldValue('COUNTER');
+  const code = 'sensor_loop_multiple ' + number_name;
+  return code;
+}
 
 Blockly.JavaScript['twoif'] = function(block) {
-  var statements_state1 = Blockly.JavaScript.statementToCode(block, 'STATE1');
-  var dropdown_mix = block.getFieldValue('MIX');
-  var statements_state2 = Blockly.JavaScript.statementToCode(block, 'STATE2');
-  var statements_true = Blockly.JavaScript.statementToCode(block, 'TRUE');
-  var statements_false = Blockly.JavaScript.statementToCode(block, 'FALSE');
+  const statements_state1 = Blockly.JavaScript.statementToCode(block, 'STATE1');
+  const dropdown_mix = block.getFieldValue('MIX');
+  const statements_state2 = Blockly.JavaScript.statementToCode(block, 'STATE2');
+  const statements_true = Blockly.JavaScript.statementToCode(block, 'TRUE');
+  const statements_false = Blockly.JavaScript.statementToCode(block, 'FALSE');
   const ifid = String(Math.random());
-  var code = 'twoif ' + statements_state1 + ' ' + dropdown_mix + ' ' + statements_state2 + ' ' + ifid + '\n' + statements_true + 'else ' + ifid + '\n' + statements_false + 'endif ' + ifid + '\n';
+  const code = 'twoif ' + statements_state1 + ' ' + dropdown_mix + ' ' + statements_state2 + ' ' + ifid + '\n' + statements_true + 'else ' + ifid + '\n' + statements_false + 'endif ' + ifid + '\n';
   return code;
 };
