@@ -33,9 +33,9 @@ class ProgBoad {
         cost, gameBody.mapinfo["maxCost"]
       );
       document.getElementById("cost").style.fontFamily = "cursive";
-      document.getElementById("cost").style.textShadow="1px 1px 1px white";
-      document.getElementById("cost").style.borderBlockEndStyle="dashed";
-      document.getElementById("cost").style.borderBlockColor="grey";
+      document.getElementById("cost").style.textShadow = "1px 1px 1px white";
+      document.getElementById("cost").style.borderBlockEndStyle = "dashed";
+      document.getElementById("cost").style.borderBlockColor = "grey";
       if (cost > gameBody.mapinfo["maxCost"]) {
         document.getElementById("cost").style.color = "Red";
       } else {
@@ -86,9 +86,9 @@ class ProgBoad {
         this.gameBody.endFlg = true;
         document.getElementById("move").disabled = true;
         document.getElementById("help").disabled = true;
-        if(localStorage.getItem("gameEnabled") === "free"){
+        if (localStorage.getItem("gameEnabled") === "free") {
           document.getElementById("backToSelect").disabled = true;
-        }else if(localStorage.getItem("gameEnabled") === "story"){
+        } else if (localStorage.getItem("gameEnabled") === "story") {
           document.getElementById("backToTop").disabled = true;
         }
         document.getElementById("blocklyDiv").disabled = true;
@@ -160,10 +160,19 @@ class ProgBoad {
             judge = this.gameBody.sensor_foot([4]);
             // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
             break;
+          case "sensor_foot_spring":
+            judge = this.gameBody.sensor_foot([3]);
+            // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
+            break;
           case "sensor_loop":
             const comp = Number(line.split(" ")[2]);
             judge = comp - 1 <= this.loopCounters.slice(-1)[0];
             break;
+          case "sensor_loop_multiple": {
+            const comp = Number(line.split(" ")[2]);
+            judge = ((this.loopCounters.slice(-1)[0] + 1) % comp) === 0;
+            break;
+          }
         }
         if (judge) {
           this.parse(codel.slice(i + 1, codel.indexOf("else " + ifid)));
@@ -178,7 +187,7 @@ class ProgBoad {
       } else if (line.startsWith("twoif")) {
         const ifid = line.split(" ").slice(-1)[0];
         let judge = new Array(2).fill(false);
-        for(let i = 0; i < 2; i++){
+        for (let i = 0; i < 2; i++) {
           switch (line.split(" ")[1 + i * 2]) {
             case "sensor_foot_dest":
               judge[i] = this.gameBody.sensor_foot([2, 10]);
@@ -200,14 +209,20 @@ class ProgBoad {
               judge[i] = this.gameBody.sensor_foot([3]);
               // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
               break;
-            case "sensor_loop":
+            case "sensor_loop": {
               const comp = Number(line.split(" ")[2]);
               judge[i] = comp - 1 <= this.loopCounters.slice(-1)[0];
               break;
+            }
+            case "sensor_loop_multiple": {
+              const comp = Number(line.split(" ")[2]);
+              judge[i] = ((this.loopCounters.slice(-1)[0] + 1) % comp) === 0;
+              break;
+            }
           }
         }
         const total = judge.reduce((a, b) => {
-          if(line.split(" ")[2] === "AND") return a & b;
+          if (line.split(" ")[2] === "AND") return a & b;
           else return a | b;
         });
         console.log(judge, total);

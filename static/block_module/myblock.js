@@ -135,6 +135,26 @@ Blockly.defineBlocksWithJsonArray(
     "helpUrl": ""
   },
   {
+    "type": "sensor_loop_multiple",
+    "message0": "くりかえし回数が %1 の倍数である %2",
+    "args0": [
+      {
+        "type": "field_number",
+        "name": "COUNTER",
+        "value": 0,
+        "min": 0
+      },
+      {
+        "type": "input_value",
+        "name": "LOOP_COUNT"
+      }
+    ],
+    "output": "Boolean",
+    "colour": 300,
+    "tooltip": "今回っているくりかえしのループが指定した数の倍数ならば真を返します。",
+    "helpUrl": ""
+  },
+  {
     'type': 'sensor_foot_dest',
     'message0': '足元が岩である',
     'output': 'Boolean',
@@ -284,6 +304,11 @@ Blockly.JavaScript['sensor_foot_spring'] = function (block) {
 Blockly.JavaScript['sensor_loop'] = function (block) {
   const number_name = block.getFieldValue('COUNTER');
   const code = 'sensor_loop ' + number_name;
+  return code;
+}
+Blockly.JavaScript['sensor_loop_multiple'] = function (block) {
+  const number_name = block.getFieldValue('COUNTER');
+  const code = 'sensor_loop_multiple ' + number_name;
   return code;
 }
 
