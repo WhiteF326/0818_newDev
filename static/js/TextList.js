@@ -9,5 +9,6 @@ const progListText = {
   "sensor_foot_dest": "足元が岩",
   "sensor_foot_stab": "足元が木",
   "sensor_foot_floor": "足元がゆか",
-  "sensor_foot_colp": "足元がこわれるゆか"
+  "sensor_foot_colp": "足元がこわれるゆか",
+  "twoif": "条件2個判定"
 };

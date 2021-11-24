@@ -97,20 +97,22 @@ class ProgBoad {
 
     // コスト表の作成
     Object.keys(defaultCost).forEach(eachType => {
-      const value = this.gameBody.costList[eachType];
-      const tr = document.createElement("tr");
-      const typeD = document.createElement("td");
-      typeD.appendChild(document.createTextNode(progListText[eachType]));
-      tr.appendChild(typeD);
-      const valueD = document.createElement("td");
-      if (typeof value === 'undefined') {
-        valueD.appendChild(document.createTextNode(defaultCost[eachType]));
-      } else {
-        valueD.appendChild(document.createTextNode(value));
+      if(eachType !== "twoif"){
+        const value = this.gameBody.costList[eachType];
+        const tr = document.createElement("tr");
+        const typeD = document.createElement("td");
+        typeD.appendChild(document.createTextNode(progListText[eachType]));
+        tr.appendChild(typeD);
+        const valueD = document.createElement("td");
+        if (typeof value === 'undefined') {
+          valueD.appendChild(document.createTextNode(defaultCost[eachType]));
+        } else {
+          valueD.appendChild(document.createTextNode(value));
+        }
+        valueD.setAttribute("align", "right");
+        tr.appendChild(valueD);
+        document.getElementById("costList").appendChild(tr);
       }
-      valueD.setAttribute("align", "right");
-      tr.appendChild(valueD);
-      document.getElementById("costList").appendChild(tr);
     });
   }
 
