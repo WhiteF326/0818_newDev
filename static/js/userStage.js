@@ -161,10 +161,6 @@ class Body {
   }
   cAction = (type) => {
     this.charaHand.addCursorAction(type);
-    if (type === "create"
-      && this.map[this.futureCursorY][this.futureCursorX] === 1) {
-      this.map[this.futureCursorY][this.futureCursorX] = 10;
-    }
   }
 
   sensor_foot = (targ) => {

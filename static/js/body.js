@@ -161,10 +161,6 @@ class Body {
   }
   cAction = (type) => {
     this.charaHand.addCursorAction(type);
-    if (type === "create"
-      && this.map[this.futureCursorY][this.futureCursorX] === 1) {
-      this.map[this.futureCursorY][this.futureCursorX] = 10;
-    }
   }
 
   sensor_foot = (targ) => {
@@ -180,7 +176,7 @@ class Body {
     }
   }
   createCursor = (y, x) => {
-    if ((this.map[y][x] === 1 || this.map[y][x] === 10)
+    if (this.map[y][x] === 1
       && !(this.currentY === y && this.currentX === x)
       && !(this.goal[0] === y && this.goal[1] === x)) {
       console.log(y, x);
@@ -283,6 +279,7 @@ class Body {
       && this.charaHand.isWaitFor()
       && !this.goaled && this.lastStep) {
       moving = true;
+      console.log(this.map);
     }
 
     if (this.currentY === this.goal[0] && this.currentX === this.goal[1] &&
