@@ -95,7 +95,8 @@ const defaultCost = {
   "create": 5,
   "repair": 10,
   "loop": 1,
-  "if": 1
+  "if": 1,
+  "twoif": 1,
 }
 
 const defaultStep = 100;
