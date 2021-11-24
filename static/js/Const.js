@@ -111,5 +111,6 @@ const allBlocks = [
   "sensor_foot_dest",
   "sensor_foot_stab",
   "sensor_foot_floor",
-  "sensor_foot_colp"
+  "sensor_foot_colp",
+  "twoif"
 ];
