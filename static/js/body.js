@@ -60,11 +60,11 @@ class Body {
     this.progSize = this.mapinfo['progSize'];
 
     // ウィンドウサイズを取得
-    this.sh = window.innerHeight;
+    this.sh = window.innerHeight - 34;
 
     // tile size
     this.tilesize = min(
-      64, floor(this.sh / 2.1 / Math.max(this.map.length, this.map[0].length)));
+      64, floor(this.sh / 2.4 / Math.max(this.map.length, this.map[0].length)));
 
     // キャラ情報の取得
     this.charaAuto = new CharaAuto(this.start[2], this.tilesize, settings);
