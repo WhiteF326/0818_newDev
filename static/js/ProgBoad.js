@@ -266,10 +266,9 @@ class ProgBoad {
     );
   }
 
-  save() {
-    const stageNo = localStorage.getItem("selectedStage");
+  save(type, stageNo) {
     localStorage.setItem(
-      "savedProgram" + stageNo,
+      type + "SavedProgram" + stageNo,
       Blockly.Xml.domToPrettyText(
         Blockly.Xml.workspaceToDom(this.workspace)
       )

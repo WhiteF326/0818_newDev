@@ -572,13 +572,13 @@ window.onload = async () => {
   const progBoad = new ProgBoad(gameBody);
   gameBody.assignProgBoad(progBoad);
   const stageNo = localStorage.getItem("selectedStage");
-  if (localStorage.getItem("savedProgram" + stageNo)
+  if (localStorage.getItem("selectSavedProgram" + stageNo)
     && localStorage.getItem("gameEnabled") === "free") {
-    progBoad.loadFromText(localStorage.getItem("savedProgram" + stageNo));
+    progBoad.loadFromText(localStorage.getItem("selectSavedProgram" + stageNo));
   }
 
   window.onbeforeunload = () => {
-    progBoad.save();
+    progBoad.save("select", stageNo);
   }
 
   const modal = document.getElementsByClassName("modalback")[0];

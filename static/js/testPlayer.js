@@ -537,9 +537,13 @@ window.onload = async () => {
 
   const progBoad = new ProgBoad(gameBody);
   gameBody.assignProgBoad(progBoad);
+  const stageNo = localStorage.getItem("testplayId");
+  if (localStorage.getItem("testSavedProgram" + stageNo)) {
+    progBoad.loadFromText(localStorage.getItem("testSavedProgram" + stageNo));
+  }
 
   window.onbeforeunload = () => {
-    progBoad.save();
+    progBoad.save("test", stageNo);
   }
 
   const modal = document.getElementsByClassName("modalback")[0];
