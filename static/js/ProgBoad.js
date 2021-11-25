@@ -206,8 +206,9 @@ class ProgBoad {
       } else if (line.startsWith("twoif")) {
         const ifid = line.split(" ").slice(-1)[0];
         let judge = new Array(2).fill(false);
+        let diff = 0;
         for (let i = 0; i < 2; i++) {
-          switch (line.split(" ")[1 + i * 2]) {
+          switch (line.split(" ")[1 + i * 2 + diff]) {
             case "sensor_foot_dest":
               judge[i] = this.gameBody.sensor_foot([2, 10]);
               // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
@@ -229,22 +230,23 @@ class ProgBoad {
               // console.log(this.gameBody.cursorX, this.gameBody.cursorY, judge);
               break;
             case "sensor_loop": {
-              const comp = Number(line.split(" ")[2]);
+              const comp = Number(line.split(" ")[2 + i * 2 + diff]);
               judge[i] = comp - 1 <= this.loopCounters.slice(-1)[0];
+              diff += (1 << i);
               break;
             }
             case "sensor_loop_multiple": {
-              const comp = Number(line.split(" ")[2]);
+              const comp = Number(line.split(" ")[2 + i * 2 + diff]);
               judge[i] = ((this.loopCounters.slice(-1)[0] + 1) % comp) === 0;
+              diff += (1 << i);
               break;
             }
           }
         }
         const total = judge.reduce((a, b) => {
-          if (line.split(" ")[2] === "AND") return a & b;
+          if (line.split(" ")[2 + (diff & 1 ? 1 : 0)] === "AND") return a & b;
           else return a | b;
         });
-        console.log(judge, total);
         if (total) {
           this.parse(codel.slice(i + 1, codel.indexOf("else " + ifid)));
         } else {
