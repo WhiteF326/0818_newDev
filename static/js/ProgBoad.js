@@ -72,7 +72,24 @@ class ProgBoad {
       const illegalIf = [...code.matchAll("if[0-1]")];
       if (illegalIf.length) {
         runnable = false;
-        alert("条件が指定されていないifがあります。");
+        alert("条件が指定されていない条件ブロックがあります。");
+      }
+      let twoIf = false;
+      Array.from(
+        Blockly.Xml.workspaceToDom(this.workspace).getElementsByTagName("block")
+      ).forEach(r => {
+        if (r.attributes.type.nodeValue === "twoif") {
+          if (
+            Array.from(r.childNodes)
+              .filter(v => v.nodeName === "value").length !== 2
+          ) {
+            twoIf = true;
+          }
+        }
+      });
+      if(twoIf){
+        runnable = false;
+        alert("条件が不足している条件ブロックがあります。");
       }
       const cost = this.costCalculator.calc(
         Blockly.JavaScript.workspaceToCode(this.workspace)
@@ -97,7 +114,7 @@ class ProgBoad {
 
     // コスト表の作成
     Object.keys(defaultCost).forEach(eachType => {
-      if(eachType !== "twoif"){
+      if (eachType !== "twoif") {
         const value = this.gameBody.costList[eachType];
         const tr = document.createElement("tr");
         const typeD = document.createElement("td");
