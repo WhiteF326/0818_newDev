@@ -281,8 +281,8 @@ class MapInfo {
       }
     }
     // キャラクターの開始位置
-    if (this.#jsondata["start"][0] >= this.#jsondata["stage"][0].length
-      || this.#jsondata["start"][1] >= this.#jsondata["stage"].length) {
+    if (this.#jsondata["start"][1] >= this.#jsondata["stage"][0].length
+      || this.#jsondata["start"][0] >= this.#jsondata["stage"].length) {
       errors += "キャラクターの開始位置が不正です。<br>";
     } else {
       if (
