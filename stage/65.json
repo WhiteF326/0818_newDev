@@ -36,7 +36,6 @@
     "create",
     "repair",
     "loop",
-    "if",
     "twoif",
     "sensor_loop",
     "sensor_foot_dest",

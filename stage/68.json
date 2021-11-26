@@ -41,7 +41,6 @@
     "create",
     "repair",
     "loop",
-    "if",
     "twoif",
     "sensor_loop",
     "sensor_loop_multiple",
