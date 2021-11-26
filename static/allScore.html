@@ -173,7 +173,7 @@
 
     document.getElementById("programView").src
       = "./programView.html?stageid=" + String(stage)
-      + "&score=" + String(...scores);
+      + "&score=" + String(Math.max(...scores));
 
     document.getElementById("maxScore").appendChild(bestProgramButton);
   }
