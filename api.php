@@ -507,7 +507,9 @@ switch(explode("/", $path)[1]){
         //   and is_public = 1"
         // )->fetchAll(PDO::FETCH_ASSOC);
         $result = $pdo->query(
-          "select * from create_stages"
+          "select stageid, name, userid, is_public, stagetext
+          from create_stages, users
+          where create_stages.userid = users.id"
         )->fetchAll(PDO::FETCH_ASSOC);
         echo json_encode($result);
         break;
